@@ -1,2 +1,2 @@
-# cs245
+# Maestro
 Computer Science of Computer Games
