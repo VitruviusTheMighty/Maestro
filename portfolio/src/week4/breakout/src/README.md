@@ -1,46 +1,8 @@
 # Game 2: Breakout
 
-Implement an homage to the classic Atari game Breakout.  This game has spawned many clones and imitators.
-
-We will play test your games  once they have been turned in.
-
-Required Features:
-
-* A player controlled paddle
-* A bouncing ball
-* Destructable blocks
-* A score keeping mechanism
-* Object-oriented implementation
-* A README.md (replacing this one) with a description of the game.
-* A GameDev Diary on your process that includes:
-   * what new knowledge you learned 
-   * what old knowledge you dusted off
-   * what was easiest/most fun
-   * where did you struggle?
+  To Run: 
   
-
-Optional Features:
-
-* Splash and Game Over screens
-* Power ups / Negative effects
-* Multiple balls
-* Multiple game modes
-* Additional paddles
-* More advanced physics / collisions
-* Art assets / animation
-* Sound effects / music
-
-Hints:
-
-Start from the code in this repository! 
-
-Note that our ball-wall collision and bounce code does not require that the wall be axis aligned.  
-
-## Hand in
-
-Hand in all files associated with your project.  Name the main file breakout-game.py when I run this file in Python it should start your game.
-
-
+    python3 breakout-game.py
 
 ## DEV LOG:
 
