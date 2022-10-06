@@ -11,7 +11,7 @@ class Breakout3000:
     
     - Leonardo Ferrisi
     """
-    def __init__(self, width=1000, height=800, fullscreen=False, cheats=False, multiball=False, useSquares=False):
+    def __init__(self, width=1000, height=800, fullscreen=False, cheats=False, multiball=False, useSquares=False, music=False):
         pygame.init()
         
         self.score = 0
@@ -42,15 +42,17 @@ class Breakout3000:
         self.bounce_sound = pygame.mixer.Sound(r"portfolio\src\week4\breakout\src\music\vine-boom.mp3")
         self.brick_hit_sound = pygame.mixer.Sound(r"portfolio\src\week4\breakout\src\music\taco-bell-bong-sfx.mp3")
         pygame.mixer.init()
-        try:
-            # pygame.mixer.music.load(r"music/sevennation.mp3")
-            pygame.mixer.music.load(r"music\amogus.mp3")
-        except:
-            # pygame.mixer.music.load(r"portfolio/src/week4/breakout/src/music/sevennation.mp3")
-            pygame.mixer.music.load(r"portfolio\src\week4\breakout\src\music\amogus.mp3")
 
-        pygame.mixer.music.play()
-        pygame.mixer.music.set_volume(3)
+        if music:
+            try:
+                # pygame.mixer.music.load(r"music/sevennation.mp3")
+                pygame.mixer.music.load(r"music\amogus.mp3")
+            except:
+                # pygame.mixer.music.load(r"portfolio/src/week4/breakout/src/music/sevennation.mp3")
+                pygame.mixer.music.load(r"portfolio\src\week4\breakout\src\music\amogus.mp3")
+
+            pygame.mixer.music.play()
+            pygame.mixer.music.set_volume(3)
 
         self.center_coords = ( self.display.get_width() // 2, self.display.get_height() // 2 )
 
@@ -284,5 +286,5 @@ class Breakout3000:
         pygame.quit()
 
 if __name__ == "__main__":
-    b3k = Breakout3000(fullscreen=False, cheats=False, multiball=False, useSquares=False)
+    b3k = Breakout3000(fullscreen=False, cheats=False, multiball=False, useSquares=False, music=False)
     b3k.run()

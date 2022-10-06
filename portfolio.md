@@ -12,3 +12,10 @@
 
 - [Week 1](/portfolio/src/week1/)
 - [Week 2](/portfolio/src/week2/)
+- [Week 3](/portfolio/src/week3/)
+- [Week 4](/portfolio/src/week4/)
+
+
+#### Games
+
+- [Breakout3K](/portfolio/src/week4/breakout/src/)
