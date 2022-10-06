@@ -1,4 +1,3 @@
-from math import dist
 from paddle import Paddle
 import pygame
 from vector import Vector
@@ -92,15 +91,14 @@ class Ball(pygame.sprite.Sprite):
             self.position.y = h-self.radius
             self.velocity.y *= -1
 
-    def isIntersectingPaddle(self, paddle):
-        dist_y = self.position.y - paddle.y
+    # def isIntersectingPaddle(self, paddle):
+    #     dist_y = self.position.y - paddle.y
 
-        abs_dist_y = abs(dist_y)
+    #     abs_dist_y = abs(dist_y)
 
         
-
-    def bounce_object(self):
-        pass
+    # def bounce_object(self):
+    #     pass
 
     def isColliding(self, other):
 

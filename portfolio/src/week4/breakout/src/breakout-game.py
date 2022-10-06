@@ -26,18 +26,17 @@ class Breakout3000:
         self.WIDTH = width
         self.HEIGHT = height
 
-        print(info)
+        # print(info)
         if cheats: 
             self.lives = math.inf
             self.paddle_speed = 10
         if fullscreen: 
             info = pygame.display.Info()
-            print(f"Screen is {info.current_w} x {info.current_h}")
+            # print(f"Screen is {info.current_w} x {info.current_h}")
             self.display = pygame.display.set_mode((info.current_w, info.current_h), pygame.FULLSCREEN)
         else: self.display = pygame.display.set_mode((width, height), pygame.RESIZABLE)
         pygame.display.set_caption("Breakout3000")
 
-        # MUSIC
         if sfx:
             try:
                 self.bounce_sound = pygame.mixer.Sound(r"portfolio//src//week4//breakout//src//music//vine-boom.mp3")
@@ -47,16 +46,13 @@ class Breakout3000:
                 self.brick_hit_sound = pygame.mixer.Sound(r"portfolio//src//week4\breakout//src//music//taco-bell-bong-sfx.mp3")
             except:
                 self.brick_hit_sound = pygame.mixer.Sound(r"music//taco-bell-bong-sfx.mp3")
-
             pygame.mixer.init()
 
         if music:
             try:
-                # pygame.mixer.music.load(r"music/sevennation.mp3")
-                pygame.mixer.music.load(r"music\amogus.mp3")
+                pygame.mixer.music.load(r"music//amogus.mp3")
             except:
-                # pygame.mixer.music.load(r"portfolio/src/week4/breakout/src/music/sevennation.mp3")
-                pygame.mixer.music.load(r"portfolio\src\week4\breakout\src\music\amogus.mp3")
+                pygame.mixer.music.load(r"portfolio//src//week4//breakout//src//music//amogus.mp3")
 
             pygame.mixer.music.play()
             pygame.mixer.music.set_volume(3)
@@ -165,36 +161,16 @@ class Breakout3000:
             self.bricks_collisions = pygame.sprite.spritecollide(ball, self.bricks, False)
         
 
-            for brick in self.bricks_collisions:
-                
-                # play sound
+            for brick in self.bricks_collisions:                
                 pygame.mixer.Sound.play(self.brick_hit_sound)
-
                 ball.bounce()
                 self.score += 1
-                
                 brick.kill()
-                
-        # print(self.bricks_collisions)
-
-    # def process_ball_ball_collisions(self):
-    #     b_len 
-    #     for i, ball in range(0, len):
-            
-    #         ball_1 = 
-
 
     def process_paddle_ball_collisions(self):
-
-
-        # for ball in self.balls:
-
         for ball in self.balls:
-            # self.paddle.isMakingContact(self.display, ball)
             if pygame.sprite.collide_mask(ball, self.paddle):
-
                 pygame.mixer.Sound.play(self.bounce_sound)
-
                 ball.rect.x -= ball.velocity.x
                 ball.rect.y -= ball.velocity.y
                 ball.bounce()

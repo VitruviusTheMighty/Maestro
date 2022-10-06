@@ -48,38 +48,35 @@ class Paddle(pygame.sprite.Sprite):
         if self.rect.x > self.right_boundry-self.width:
           self.rect.x = self.right_boundry-self.width
 
-
-
     # def isMakingContact(self, display, ball):
-    def isMakingContact(self, display, ball):
 
-        r = ball.radius
+    #     r = ball.radius
         
-        pos_x = self.rect.x
-        pos_y = self.rect.y
+    #     pos_x = self.rect.x
+    #     pos_y = self.rect.y
 
-        # print(f"Pos: {pos_x, pos_y}")
+    #     # print(f"Pos: {pos_x, pos_y}")
         
-        self.sides = {
-            "left": ((pos_x, pos_y), (pos_x, pos_y+self.height)),
-            "top": ((pos_x, pos_y), (pos_x+self.width, pos_y)),
-            "right": ((pos_x+self.width, pos_y), (pos_x+self.width, pos_y+self.height)),
-            "bottom": ((pos_x, pos_y+self.height), (pos_x+self.width, pos_y+self.height))
-        }
+    #     self.sides = {
+    #         "left": ((pos_x, pos_y), (pos_x, pos_y+self.height)),
+    #         "top": ((pos_x, pos_y), (pos_x+self.width, pos_y)),
+    #         "right": ((pos_x+self.width, pos_y), (pos_x+self.width, pos_y+self.height)),
+    #         "bottom": ((pos_x, pos_y+self.height), (pos_x+self.width, pos_y+self.height))
+    #     }
 
-        self.bounds = {
+    #     self.bounds = {
             
-            "left": ((pos_x-r, pos_y-r), (pos_x-r, pos_y+self.height+r)),
-            "top": ((pos_x-r, pos_y-r), (pos_x+self.width+r, pos_y-r)),
-            "right": ((pos_x+self.width+r, pos_y-r), (pos_x+self.width+r, pos_y+self.height+r)),
-            "bottom": ((pos_x-r, pos_y+self.height+r), (pos_x+self.width+r, pos_y+self.height+r))
+    #         "left": ((pos_x-r, pos_y-r), (pos_x-r, pos_y+self.height+r)),
+    #         "top": ((pos_x-r, pos_y-r), (pos_x+self.width+r, pos_y-r)),
+    #         "right": ((pos_x+self.width+r, pos_y-r), (pos_x+self.width+r, pos_y+self.height+r)),
+    #         "bottom": ((pos_x-r, pos_y+self.height+r), (pos_x+self.width+r, pos_y+self.height+r))
 
-        }
+    #     }
 
     
 
-        # x = ball.position.x
-        # y = ball.position.y
+    #     # x = ball.position.x
+    #     # y = ball.position.y
 
 
 
