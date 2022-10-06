@@ -30,7 +30,7 @@ def main():
 
     active_sprite_list = pygame.sprite.Group()
     # Create the player
-    player = Player()
+    player = Player(screen)
     platform = Box(pygame.color.Color("blue"),50,50) 
     platform.rect.x = 400
     platform.rect.y = HEIGHT - platform.rect.h
@@ -61,7 +61,7 @@ def main():
 
                 if event.key == pygame.K_UP:
                     # player.jump()
-                    player.fly()
+                    player.jump()
                     
                 if event.key == pygame.K_DOWN:
                     player.descend()
