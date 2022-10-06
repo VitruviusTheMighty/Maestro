@@ -1,10 +1,8 @@
 # Game 2: Breakout
 
-# BREAKOUT3K
-## Leonardo Ferrisi
-
   To Run: 
-    python breakout-game.py
+  
+    python3 breakout-game.py
 
 ## DEV LOG:
 
