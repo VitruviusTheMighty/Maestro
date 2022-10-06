@@ -11,7 +11,7 @@ class Breakout3000:
     
     - Leonardo Ferrisi
     """
-    def __init__(self, width=1000, height=800, fullscreen=False, cheats=False, multiball=False, useSquares=False, music=False):
+    def __init__(self, width=1000, height=800, fullscreen=False, cheats=False, multiball=False, useSquares=False, sfx=True, music=False):
         pygame.init()
         
         self.score = 0
@@ -38,10 +38,17 @@ class Breakout3000:
         pygame.display.set_caption("Breakout3000")
 
         # MUSIC
+        if sfx:
+            try:
+                self.bounce_sound = pygame.mixer.Sound(r"portfolio\src\week4\breakout\src\music\vine-boom.mp3")
+            except:
+                self.bounce_sound = pygame.mixer.Sound(r"\music\vine-boom.mp3")
+            try:
+                self.brick_hit_sound = pygame.mixer.Sound(r"portfolio\src\week4\breakout\src\music\taco-bell-bong-sfx.mp3")
+            except:
+                self.brick_hit_sound = pygame.mixer.Sound(r"\music\taco-bell-bong-sfx.mp3")
 
-        self.bounce_sound = pygame.mixer.Sound(r"portfolio\src\week4\breakout\src\music\vine-boom.mp3")
-        self.brick_hit_sound = pygame.mixer.Sound(r"portfolio\src\week4\breakout\src\music\taco-bell-bong-sfx.mp3")
-        pygame.mixer.init()
+            pygame.mixer.init()
 
         if music:
             try:
@@ -286,5 +293,5 @@ class Breakout3000:
         pygame.quit()
 
 if __name__ == "__main__":
-    b3k = Breakout3000(fullscreen=False, cheats=False, multiball=False, useSquares=False, music=False)
+    b3k = Breakout3000(fullscreen=False, cheats=False, multiball=False, useSquares=False, sfx=True, music=False)
     b3k.run()
