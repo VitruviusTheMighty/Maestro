@@ -40,13 +40,13 @@ class Breakout3000:
         # MUSIC
         if sfx:
             try:
-                self.bounce_sound = pygame.mixer.Sound(r"portfolio\src\week4\breakout\src\music\vine-boom.mp3")
+                self.bounce_sound = pygame.mixer.Sound(r"portfolio//src//week4//breakout//src//music//vine-boom.mp3")
             except:
-                self.bounce_sound = pygame.mixer.Sound(r"music\vine-boom.mp3")
+                self.bounce_sound = pygame.mixer.Sound(r"music//vine-boom.mp3")
             try:
-                self.brick_hit_sound = pygame.mixer.Sound(r"portfolio\src\week4\breakout\src\music\taco-bell-bong-sfx.mp3")
+                self.brick_hit_sound = pygame.mixer.Sound(r"portfolio//src//week4\breakout//src//music//taco-bell-bong-sfx.mp3")
             except:
-                self.brick_hit_sound = pygame.mixer.Sound(r"music\taco-bell-bong-sfx.mp3")
+                self.brick_hit_sound = pygame.mixer.Sound(r"music//taco-bell-bong-sfx.mp3")
 
             pygame.mixer.init()
 
