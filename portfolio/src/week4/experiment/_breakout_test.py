@@ -1,5 +1,5 @@
 import pygame
-from paddle import Paddle
+from _paddle import Paddle
 
 def update_paddle(self):
         """
@@ -34,7 +34,7 @@ if __name__ == "__main__":
 
     all_sprites_list = pygame.sprite.Group()
 
-    paddle = Paddle(LIGHTBLUE, 100, 10)
+    paddle = Paddle(LIGHTBLUE, 100, 10, screen)
     paddle.rect.x = 350
     paddle.rect.y = 560
 

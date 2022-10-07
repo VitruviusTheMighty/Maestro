@@ -131,7 +131,7 @@ To earn an A I will additionally:
 | path planning | _ | x | _ |
 | sprites | _ | _ | x |
 | sprite sheets and animation | _ | x | _ |
-| pygame API | _ | _ | x |
+| pygame API | _ | x | _ |
 | alternative inputs for games | _ | x | _ |
 | standards for game design | _ | x | _ |
 | sensory feedback for games | _ | x | _ |
