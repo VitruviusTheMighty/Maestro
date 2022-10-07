@@ -19,7 +19,7 @@ class Player(pygame.sprite.Sprite):
 
         self.display = display
         x, y = display.get_size()
-        self.floor = y
+        self.floor = y - 1
 
         self.v = Vector(0,0)
 
@@ -28,19 +28,18 @@ class Player(pygame.sprite.Sprite):
 
         sprite_sheet = SpriteSheet(filename)
 
-        god_dimensions = (220, 306)
-        self.gdv = Vector(god_dimensions[0], god_dimensions[1])
-        gd = god_dimensions
+        # god_dimensions = (220, 306)
+        self.size = Vector(220, 306)
 
         self.walking_frames = []
         self.walking_reverse_frames = []
 
-        img = sprite_sheet.get_image(0, 0, gd[0], gd[1])
+        img = sprite_sheet.get_image(0, 0, self.size.x, self.size.y)
         self.walking_frames.append(img)
         self.walking_reverse_frames.append(pygame.transform.flip(img.convert_alpha(), flip_x=True, flip_y=False))
 
         for i in range(1,31):
-            image = sprite_sheet.get_image((gd[0]*i)+5, 0, gd[0], gd[1])
+            image = sprite_sheet.get_image((self.size.x*i)+5, 0, self.size.x, self.size.y)
             self.walking_frames.append(image)
             self.walking_reverse_frames.append(pygame.transform.flip(image.convert_alpha(), flip_x=True, flip_y=False))
             self.image = self.walking_frames[0]
@@ -49,7 +48,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
         self.facing = 1 # 1 indicates right, 0 is left
-        self.jump_height = self.floor - (self.gdv.y // 2)
+        self.jump_height = self.floor - (self.size.y // 2)
         self.falling = False
         self.rising = False
         self.is_colliding = False
@@ -57,103 +56,104 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         """ Move the player. """
-        # Gravity etc
         self.simulate()
 
-        # Move left/right
-        # What is the division thing?
         frame = (self.rect.x // 5) % len(self.walking_frames)
         if self.facing == 1: self.image = self.walking_frames[frame]
         elif self.facing == 0: 
-            # if frame < 0: frame = len(self.walking_reverse_frames) - frame
             try:
                 self.image = self.walking_reverse_frames[frame]
             except:
                 raise IndexError(f"List Index out of range. Tried to find image at index: {frame}. List len is: {len(self.walking_reverse_frames)}")
         self.mask = pygame.mask.from_surface(self.image)
-            
-        
         # print(f"Frame: {frame}. Facing: {self.facing}")
 
-    def at_ground(self):
-        bottom_corner = self.rect.y+self.gdv.y
-        return bottom_corner+1 >= self.floor
+    # Changer
+    def change_yv(self, mode=1, val=0, msg=""):
+        """
+        mode 0: add
+        mode 1: set
+        """
+        if mode>0:self.v.y = val
+        else: self.v.y = val
+        if msg!="":
+            self.debugmsg(msg, "green")
 
-    def apply_gravity(self):
-        pass
+    def change_xv(self, mode=1,val=0, msg=""):
+        """
+        mode 0: add
+        mode 1: set
+        """
+        if mode>0: self.v.x = val
+        else: self.v.x += val
+        if msg!="":
+            self.debugmsg(msg, "yellow")
+
+    # Checkers ---------------------------------------
+    def at_ground(self):
+        bottom_corner = self.rect.y+self.size.y
+        return bottom_corner >= self.floor
     
     def above_jump_height(self)->bool:
-        bottom_corner = self.rect.y+self.gdv.y
+        bottom_corner = self.rect.y+self.size.y
         return self.above_ground() and bottom_corner <= self.jump_height
 
     def above_ground(self)->bool:
         """
         Check if is above ground
         """
-        bottom_corner = self.rect.y+self.gdv.y
+        bottom_corner = self.rect.y+self.size.y
         return (bottom_corner < self.floor)
 
     def below_ground(self)->bool:
-        bottom_corner = self.rect.y+self.gdv.y
-        return (bottom_corner >= self.floor-1)
+        bottom_corner = self.rect.y+self.size.y
+        return (bottom_corner >= self.floor)
+
+    # --------------------------------------------------
 
     def simulate(self):
         """ Calculate effect of gravity. """
+        self.do_gravity()
+        self.eval_state()
         self.rect.x += self.v.x
-        self.rect.y += self.v.y
-        
-        # Check if above ground
-        if self.above_ground():
-            
-            # if self.above_jump_height() and not self.falling:
-            #     self.falling = True
-            #     self.descend()
+        self.rect.y += self.v.y        
+        # self.debugmsg(f"{self.size.y + self.rect.y }, {self.floor}")
 
+    def eval_state(self):
+        if self.below_ground():
+            self.rect.y = self.floor - self.size.y
+
+    def do_gravity(self):
+        """Apply gravity"""
+        if self.above_ground():
             if self.rising and self.above_jump_height():
                 self.descend()
 
             if self.falling:
                 if self.below_ground():
-                    self.rect.y = self.floor - self.gdv.y
+                    self.rect.y = self.floor - self.size.y
 
                     self.stop(x=False, y=True)
                     self.falling = False
-
-        self.debugmsg(f"{self.gdv.y + self.rect.y -1}, {self.floor}")
+        else:
+            if (self.below_ground() or self.at_ground()) and self.falling:
+                self.change_yv(mode=0, val=0, msg=f"Apparently is below or at ground and falling on line 135: {self.rect.y+self.size.y}, {self.floor}")
+                self.rect.y = self.floor - self.size.y
 
     def jump(self):
         """ Called when user hits 'jump' button. """
         # modify gravity temporarily
         if not self.above_jump_height():
-            self.v.y -= 1
+            print("SHOULD JUMP")
+            # self.v.y -= 1
+            self.change_yv(mode=0, val=-1, msg="Was not above jump height so we rising at line 144")
             self.rising = True
         else:
             self.v.y += 1
+            self.change_yv(mode=0, val=1, msg="Was above jump height so falling at line 148")
             self.falling = True
             self.rising = False
         self.debugmsg("JMP", "red")
-
-    def flip(self, desired_direction):
-        if self.facing != desired_direction: 
-            # self.image = pygame.transform.flip(surface=self.image.convert_alpha() ,flip_y=True, flip_x=False)
-            self.facing = desired_direction
-
-    # Player-controlled movement:
-    def go_left(self):
-        """ Called when the user hits the left arrow. """
-
-        self.flip(0)
-        self.v = Vector(-1, 0)
-
-    def go_right(self):
-        """ Called when the user hits the right arrow. """
-        
-        self.flip(1)
-        self.v = Vector(1,0)
-        # pass
-    
-    def fly(self):
-        self.v = Vector(self.v.x, -1)
 
     def descend(self):
         if not self.is_colliding:
@@ -162,17 +162,37 @@ class Player(pygame.sprite.Sprite):
             if self.above_ground():
                 self.stop(x=False, y=True)
                 self.v.y += 1
-        # self.v = Vector(self.v.x, 1)
+                self.change_yv(mode=0, val=1, msg="Was above ground in descend, dropping at line 160")
+
+    def flip(self, desired_direction):
+        if self.facing != desired_direction: 
+            self.facing = desired_direction
+
+    def go_left(self):
+        """ Called when the user hits the left arrow. """
+        self.flip(0)
+        # self.v = Vector(-1, 0)
+        self.change_xv(mode=1, val=-1, msg="Going left at line 170")
+
+    def go_right(self):
+        """ Called when the user hits the right arrow. """
+        self.flip(1)
+        # self.v = Vector(1,0)
+        self.change_xv(mode=1, val=1, msg="Going left at line 176")
 
     def stop(self, x=True, y=True):
         """ Called when the user lets off the keyboard. """
         if x and y:
-            self.v = Vector(0,0)
+            # self.v = Vector(0,0)
+            self.change_xv(mode=1, val=0)
+            self.change_yv(mode=1, val=0)
             self.falling = False
         elif x and not y:
-            self.v = Vector(0, self.v.y)
+            # self.v = Vector(0, self.v.y)
+            self.change_xv(mode=1, val=0)
         elif not x and y:
-            self.v = Vector(self.v.x, 0)
+            # self.v = Vector(self.v.x, 0)
+            self.change_yv(mode=1, val=0)
             self.falling = False
         else:
             self.v = self.v
@@ -189,8 +209,6 @@ class Player(pygame.sprite.Sprite):
         message = colored(text=msg, color=color)
         print(f"{timestamp}{file_opener} {message}")
         
-
-
 if __name__ == "__main__":
     size = (640,480)
     screen = pygame.display.set_mode(size)

@@ -16,16 +16,24 @@ import pygame
 from player import Player
 from simple_platform import Box
 
-def handle_collisions(player:Player, obj1):
-    if pygame.sprite.collide_mask(player,obj1):
+HEIGHT = 480
+
+def handle_collisions(player:Player, obj1:pygame.sprite.Sprite):
+    collision = pygame.sprite.collide_mask(player,obj1)
+    if collision:
         player.is_colliding = True
-        print(pygame.sprite.collide_mask(player,obj1))
-        if player.above_ground() and player.v.y != 0: player.stop(x=False, y=True)
+        # print(collision)
+        if collision[1] > player.size.y - 11:
+            print(f"Collision y: {player.size.y - 11}")
+            player.floor = HEIGHT - obj1.rect.h 
         else: 
             if not player.above_ground():
+                # player.floor = HEIGHT
                 player.stop(x=True, y=False)
     else:
         player.is_colliding = False
+        player.floor = HEIGHT
+
 
 def handle_key_events(event:pygame.event.Event, player:Player):
     if event.type == pygame.KEYDOWN:
@@ -36,6 +44,7 @@ def handle_key_events(event:pygame.event.Event, player:Player):
 
         if event.key == pygame.K_UP:
             if player.at_ground():
+                print("True")
                 player.jump()
             else:
                 player.descend()
@@ -62,7 +71,7 @@ def main():
     pygame.init()
 
     # Set the height and width of the screen
-    HEIGHT = 480
+    # HEIGHT = 480
     WIDTH = 1200
     size = [WIDTH,HEIGHT]
     screen = pygame.display.set_mode(size)
@@ -101,7 +110,6 @@ def main():
         active_sprite_list.update()
 
         handle_collisions(player, platform)
-
 
         # ALL CODE TO DRAW SHOULD GO BELOW THIS COMMENT
         #current_level.draw(screen)
