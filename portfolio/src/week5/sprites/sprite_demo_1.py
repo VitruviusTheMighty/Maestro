@@ -16,6 +16,47 @@ import pygame
 from player import Player
 from simple_platform import Box
 
+def handle_collisions(player:Player, obj1):
+    if pygame.sprite.collide_mask(player,obj1):
+        player.is_colliding = True
+        print(pygame.sprite.collide_mask(player,obj1))
+        if player.above_ground() and player.v.y != 0: player.stop(x=False, y=True)
+        else: 
+            if not player.above_ground():
+                player.stop(x=True, y=False)
+    else:
+        player.is_colliding = False
+
+def handle_key_events(event:pygame.event.Event, player:Player):
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_LEFT:
+            player.go_left()
+        if event.key == pygame.K_RIGHT:
+            player.go_right()
+
+        if event.key == pygame.K_UP:
+            if player.at_ground():
+                player.jump()
+            else:
+                player.descend()
+        if event.key == pygame.K_DOWN:
+            if not player.below_ground():
+                player.descend()
+
+        if player.above_ground() and player.above_jump_height():
+            player.descend()
+
+    if event.type == pygame.KEYUP:
+        if event.key == pygame.K_LEFT: 
+            player.stop()
+        if event.key == pygame.K_RIGHT:
+            player.stop()
+        
+        if player.above_ground():
+            if not player.falling: 
+                player.descend()
+                player.falling = True
+
 def main():
     """ Main Program """
     pygame.init()
@@ -49,37 +90,17 @@ def main():
 
     # -------- Main Program Loop -----------
     while not done:
+
         for event in pygame.event.get(): # User did something
             if event.type == pygame.QUIT: # If user clicked close
                 done = True # Flag that we are done so we exit this loop
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    player.go_left()
-                if event.key == pygame.K_RIGHT:
-                    player.go_right()
-
-                if event.key == pygame.K_UP:
-                    # player.jump()
-                    player.jump()
-                    
-                if event.key == pygame.K_DOWN:
-                    player.descend()
-
-                
-
-
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_LEFT: 
-                    player.stop()
-                if event.key == pygame.K_RIGHT:
-                    player.stop()
+            handle_key_events(event, player)
 
         # Update the player.
         active_sprite_list.update()
 
-        if pygame.sprite.collide_rect(player,platform):
-            print("hit!")
+        handle_collisions(player, platform)
 
 
         # ALL CODE TO DRAW SHOULD GO BELOW THIS COMMENT

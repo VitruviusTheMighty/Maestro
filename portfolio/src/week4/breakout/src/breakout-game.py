@@ -4,6 +4,7 @@ from ball import Ball
 from vector import Vector
 from brick import Brick
 import math
+import os
 
 class Breakout3000:
     """
@@ -26,7 +27,8 @@ class Breakout3000:
         self.WIDTH = width
         self.HEIGHT = height
 
-        # print(info)
+        dirname = os.path.dirname(__file__)
+
         if cheats: 
             self.lives = math.inf
             self.paddle_speed = 10
@@ -38,22 +40,16 @@ class Breakout3000:
         pygame.display.set_caption("Breakout3000")
 
         if sfx:
-            try:
-                self.bounce_sound = pygame.mixer.Sound(r"portfolio//src//week4//breakout//src//music//vine-boom.mp3")
-            except:
-                self.bounce_sound = pygame.mixer.Sound(r"music//vine-boom.mp3")
-            try:
-                self.brick_hit_sound = pygame.mixer.Sound(r"portfolio//src//week4\breakout//src//music//taco-bell-bong-sfx.mp3")
-            except:
-                self.brick_hit_sound = pygame.mixer.Sound(r"music//taco-bell-bong-sfx.mp3")
+            bounce_sound = os.path.join(dirname, f"music{os.sep}vine-boom.mp3")
+            self.bounce_sound = pygame.mixer.Sound(bounce_sound)
+
+            brick_hit_sound = os.path.join(dirname, f"music{os.sep}taco-bell-bong-sfx.mp3")
+            self.brick_hit_sound = pygame.mixer.Sound(brick_hit_sound)
             pygame.mixer.init()
 
         if music:
-            try:
-                pygame.mixer.music.load(r"music//amogus.mp3")
-            except:
-                pygame.mixer.music.load(r"portfolio//src//week4//breakout//src//music//amogus.mp3")
-
+            ost = os.path.join(dirname, f"music{os.sep}amogus.mp3")
+            pygame.mixer.music.load(ost)
             pygame.mixer.music.play()
             pygame.mixer.music.set_volume(3)
 

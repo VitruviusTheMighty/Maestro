@@ -1,2 +1,5 @@
 .progamer
 __pycache__/
+__pycache__
+
+/portfolio/src/week4/breakout/src/__pycache__/*
