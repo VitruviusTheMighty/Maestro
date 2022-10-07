@@ -16,117 +16,122 @@ import pygame
 from player import Player
 from simple_platform import Box
 
-HEIGHT = 480
+class Game:
 
-def handle_collisions(player:Player, obj1:pygame.sprite.Sprite):
-    collision = pygame.sprite.collide_mask(player,obj1)
-    if collision:
-        player.is_colliding = True
-        # print(collision)
-        if collision[1] > player.size.y - 11:
-            print(f"Collision y: {player.size.y - 11}")
-            player.floor = HEIGHT - obj1.rect.h 
-        else: 
-            if not player.above_ground():
-                # player.floor = HEIGHT
-                player.stop(x=True, y=False)
-    else:
-        player.is_colliding = False
-        player.floor = HEIGHT
+    def __init__(self, width=1200, height=480):
+        pygame.init()
+
+        # Instance VARS
+        self.HEIGHT = height
+        self.WIDTH = width
+
+        # Generate SPRITES
 
 
-def handle_key_events(event:pygame.event.Event, player:Player):
-    if event.type == pygame.KEYDOWN:
-        if event.key == pygame.K_LEFT:
-            player.go_left()
-        if event.key == pygame.K_RIGHT:
-            player.go_right()
+    def handle_collisions(self, player:Player, obj1:pygame.sprite.Sprite):
+        collision = pygame.sprite.collide_mask(player,obj1)
+        player.is_above(obj1)
 
-        if event.key == pygame.K_UP:
-            if player.at_ground():
-                print("True")
-                player.jump()
-            else:
+        if collision:
+            player.is_colliding = True
+            # print(collision)
+            if collision[1] > player.size.y - 11:
+                print(f"Collision y: {player.size.y - 11}")
+                player.floor = self.HEIGHT - obj1.rect.h 
+            else: 
+                if not player.above_ground():
+                    # player.floor = HEIGHT
+                    player.stop(x=True, y=False)
+        else:
+            player.is_colliding = False
+            player.floor = self.HEIGHT
+
+
+    def handle_key_events(self, event:pygame.event.Event, player:Player):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                player.go_left()
+            if event.key == pygame.K_RIGHT:
+                player.go_right()
+            if event.key == pygame.K_ESCAPE:
+                pygame.quit()
+
+            if event.key == pygame.K_UP:
+                if player.at_ground():
+                    player.jump()
+                else:
+                    player.descend()
+            if event.key == pygame.K_DOWN:
+                if not player.below_ground():
+                    player.descend()
+
+            if player.above_ground() and player.above_jump_height():
                 player.descend()
-        if event.key == pygame.K_DOWN:
-            if not player.below_ground():
-                player.descend()
 
-        if player.above_ground() and player.above_jump_height():
-            player.descend()
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT: 
+                player.stop()
+            if event.key == pygame.K_RIGHT:
+                player.stop()
+            
+            if player.above_ground():
+                if not player.falling: 
+                    player.descend()
+                    player.falling = True
 
-    if event.type == pygame.KEYUP:
-        if event.key == pygame.K_LEFT: 
-            player.stop()
-        if event.key == pygame.K_RIGHT:
-            player.stop()
-        
-        if player.above_ground():
-            if not player.falling: 
-                player.descend()
-                player.falling = True
+    def run(self):
+        size = [self.WIDTH, self.HEIGHT]
+        screen = pygame.display.set_mode(size)
 
-def main():
-    """ Main Program """
-    pygame.init()
+        pygame.display.set_caption("demo with sprite sheets")
 
-    # Set the height and width of the screen
-    # HEIGHT = 480
-    WIDTH = 1200
-    size = [WIDTH,HEIGHT]
-    screen = pygame.display.set_mode(size)
+        active_sprite_list = pygame.sprite.Group()
+        # Create the player
+        player = Player(screen)
+        platform = Box(pygame.color.Color("blue"),50,50) 
+        platform.rect.x = 400
+        platform.rect.y = self.HEIGHT - platform.rect.h
 
-    pygame.display.set_caption("demo with sprite sheets")
+        # Create all the levels
 
-    active_sprite_list = pygame.sprite.Group()
-    # Create the player
-    player = Player(screen)
-    platform = Box(pygame.color.Color("blue"),50,50) 
-    platform.rect.x = 400
-    platform.rect.y = HEIGHT - platform.rect.h
+        player.rect.x = 100 
+        player.rect.y = self.HEIGHT - player.rect.height
+        active_sprite_list.add(player,platform)
 
-    # Create all the levels
+        #Loop until the user clicks the close button.
+        done = False
 
-    player.rect.x = 100 
-    player.rect.y = HEIGHT - player.rect.height
-    active_sprite_list.add(player,platform)
+        # Used to manage how fast the screen updates
+        clock = pygame.time.Clock()
 
-    #Loop until the user clicks the close button.
-    done = False
+        # -------- Main Program Loop -----------
+        while not done:
 
-    # Used to manage how fast the screen updates
-    clock = pygame.time.Clock()
+            for event in pygame.event.get(): # User did something
+                if event.type == pygame.QUIT: # If user clicked close
+                    done = True # Flag that we are done so we exit this loop
 
-    # -------- Main Program Loop -----------
-    while not done:
+                self.handle_key_events(event, player)
 
-        for event in pygame.event.get(): # User did something
-            if event.type == pygame.QUIT: # If user clicked close
-                done = True # Flag that we are done so we exit this loop
+            # Update the player.
+            active_sprite_list.update()
 
-            handle_key_events(event, player)
+            self.handle_collisions(player, platform)
 
-        # Update the player.
-        active_sprite_list.update()
+            # ALL CODE TO DRAW SHOULD GO BELOW THIS COMMENT
+            #current_level.draw(screen)
+            screen.fill(pygame.color.Color("gray14")) 
+            active_sprite_list.draw(screen)
 
-        handle_collisions(player, platform)
+            # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
 
-        # ALL CODE TO DRAW SHOULD GO BELOW THIS COMMENT
-        #current_level.draw(screen)
-        screen.fill(pygame.color.Color("gray14")) 
-        active_sprite_list.draw(screen)
+            clock.tick(120)
 
-        # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
+            pygame.display.flip()
 
-        # Limit to 60 frames per second
-        clock.tick(120)
-
-        # Go ahead and update the screen with what we've drawn.
-        pygame.display.flip()
-
-    # Be IDLE friendly. If you forget this line, the program will 'hang'
-    # on exit.
-    pygame.quit()
+        pygame.quit()
 
 if __name__ == "__main__":
-    main()
+    
+    g = Game()
+    g.run()

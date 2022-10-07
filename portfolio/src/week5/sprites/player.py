@@ -19,6 +19,7 @@ class Player(pygame.sprite.Sprite):
 
         self.display = display
         x, y = display.get_size()
+        self.main_floor = y
         self.floor = y - 1
 
         self.v = Vector(0,0)
@@ -30,6 +31,7 @@ class Player(pygame.sprite.Sprite):
 
         # god_dimensions = (220, 306)
         self.size = Vector(220, 306)
+
 
         self.walking_frames = []
         self.walking_reverse_frames = []
@@ -53,11 +55,20 @@ class Player(pygame.sprite.Sprite):
         self.rising = False
         self.is_colliding = False
 
+        self.update_hitbox()
+
+    def update_hitbox(self):
+        self.hitbox = (self.rect.x+50, (self.rect.x+self.size.x)-50)
 
     def update(self):
         """ Move the player. """
         self.simulate()
+        self.update_hitbox()
 
+        if not self.is_colliding:
+            # bottom_corner = self.rect.y + self.size.y
+            if self.floor != self.main_floor:
+                self.floor = self.main_floor
         frame = (self.rect.x // 5) % len(self.walking_frames)
         if self.facing == 1: self.image = self.walking_frames[frame]
         elif self.facing == 0: 
@@ -109,6 +120,12 @@ class Player(pygame.sprite.Sprite):
         bottom_corner = self.rect.y+self.size.y
         return (bottom_corner >= self.floor)
 
+    def is_above(self, obj:pygame.sprite.Sprite):
+        if ((self.rect.x+self.size.x)-20 >= obj.rect.x ) and (self.rect.x+20 <= (obj.rect.x + obj.rect.h)):
+            self.debugmsg(msg=f"{obj.rect.x},{obj.rect.x+obj.rect.h}: IS ABOVE -> {self.rect.x+20}-{self.rect.x+self.size.x-20}, {self.rect.width}", color="green")
+            return True
+        return False
+
     # --------------------------------------------------
 
     def simulate(self):
@@ -137,7 +154,7 @@ class Player(pygame.sprite.Sprite):
                     self.falling = False
         else:
             if (self.below_ground() or self.at_ground()) and self.falling:
-                self.change_yv(mode=0, val=0, msg=f"Apparently is below or at ground and falling on line 135: {self.rect.y+self.size.y}, {self.floor}")
+                self.change_yv(mode=0, val=0, msg="")
                 self.rect.y = self.floor - self.size.y
 
     def jump(self):
