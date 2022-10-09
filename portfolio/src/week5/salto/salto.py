@@ -8,6 +8,7 @@ import pygame
 
 from player import Player
 from simple_platform import Box
+import os
 
 class Salto:
 
@@ -17,27 +18,29 @@ class Salto:
         # Instance VARS
         self.HEIGHT = height
         self.WIDTH = width
-        
-        self.bg = pygame.image.load("bg.png")
+
+        dirname = os.path.dirname(__file__)
+        filename = os.path.join(dirname, "bg.png")
+        self.bg = pygame.image.load(filename)
 
     def handle_collisions(self, player:Player, obj1:pygame.sprite.Sprite):
-        collision = pygame.sprite.collide_mask(player,obj1)
-        player.is_above(obj1)
+        # collision = pygame.sprite.collide_mask(player,obj1)
+        # player.is_above(obj1)
 
-        if collision:
-            player.is_colliding = True
-            # print(collision)
-            if collision[1] > player.size.y - 11:
-                print(f"Collision y: {player.size.y - 11}")
-                player.floor = self.HEIGHT - obj1.rect.h 
-            else: 
-                if not player.above_ground():
-                    # player.floor = HEIGHT
-                    player.stop(x=True, y=False)
-        else:
-            player.is_colliding = False
-            player.floor = self.HEIGHT
-
+        # if collision:
+        #     player.is_colliding = True
+        #     # print(collision)
+        #     if collision[1] > player.size.y - 11:
+        #         print(f"Collision y: {player.size.y - 11}")
+        #         player.floor = self.HEIGHT - obj1.rect.h 
+        #     else: 
+        #         if not player.above_ground():
+        #             # player.floor = HEIGHT
+        #             player.stop(x=True, y=False)
+        # else:
+        #     player.is_colliding = False
+        #     player.floor = self.HEIGHT
+        pass
 
     def handle_key_events(self, event:pygame.event.Event, player:Player):
 
