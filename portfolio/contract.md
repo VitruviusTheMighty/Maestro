@@ -87,7 +87,6 @@ To earn a C I will need to :
 - [] complete a final game project that demonstrates 70% of the concepts I've learned in the class
 - [] Contribute to any neccessary manadory revisions to submitted work. I understand that work not approved does not count as complete.
   
-
 To earn a B, I will additionally:
 
 - [] Meet 80% of my KWL objectives
@@ -105,8 +104,7 @@ To earn an A I will additionally:
 - [] submit clearly documented revisions of all programming assignments
 - [] complete at least three challenges (on average) for each programming assignment
 - [] complete a final game project that demonstrates S of the concepts I've learned in the class
-- [] Write a minumum of 1 python add-ons or packages utilizing some concept I've mastered independently of course material to be 
-     applied to game development
+- [] Write a minumum of 1 python add-ons or packages utilizing some concept I've mastered independently of course material to be applied to game development
 - [] Assist a minimum of 2 students in software development related tasks
 - [] Complete a game demonstrating my expertise in using bioactity with real-time systems, while also have a good game design, and being in an engaging, playable state 
  
