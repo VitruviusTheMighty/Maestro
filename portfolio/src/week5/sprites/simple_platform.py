@@ -1,6 +1,7 @@
 import pygame
 
 class Box(pygame.sprite.Sprite):
+
     def __init__(self, color, height, width):
         super().__init__()
   
@@ -12,4 +13,6 @@ class Box(pygame.sprite.Sprite):
                          pygame.Rect(0, 0, width, height))
   
         self.rect = self.image.get_rect()
+
+        
 

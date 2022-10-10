@@ -53,7 +53,8 @@ class Salto:
             if event.key == pygame.K_RIGHT:
                 player.go_right()
 
-
+            if event.key == pygame.K_UP:
+                player.jump()
 
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
@@ -79,11 +80,11 @@ class Salto:
         #     if player.above_ground() and player.above_jump_height():
         #         player.descend()
 
-        # if event.type == pygame.KEYUP:
-        #     if event.key == pygame.K_LEFT: 
-        #         player.stop()
-        #     if event.key == pygame.K_RIGHT:
-        #         player.stop()
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT: 
+                player.stop()
+            if event.key == pygame.K_RIGHT:
+                player.stop()
             
         #     if player.above_ground():
         #         if not player.falling: 
@@ -105,8 +106,8 @@ class Salto:
 
         # Create all the levels
 
-        player.rect.x = 100 
-        player.rect.y = self.HEIGHT - player.rect.height
+        player.rect.x = 200
+        player.rect.y = self.HEIGHT - player.rect.height - 200
         active_sprite_list.add(player,platform)
 
         #Loop until the user clicks the close button.

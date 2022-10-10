@@ -1,7 +1,3 @@
-"""
-Derived from code provided at
-http://programarcadegames.com/
-"""
 from tkinter.tix import DisplayStyle
 from numpy import disp
 import pygame
@@ -31,7 +27,7 @@ class Player(pygame.sprite.Sprite):
         filename = os.path.join(dirname, "sprite/mr_salto.png")
         sprite_sheet = SpriteSheet(filename)
         
-        size = Vector(16, 21)
+        size = Vector(14, 23)
         self.load_mrsalto(sprite_sheet, size.x, size.y)
 
         self.image = self.walking_frames[0] # starter image
@@ -44,7 +40,7 @@ class Player(pygame.sprite.Sprite):
         # Constants
         self.maxh = size.y * 3
 
-    def load_mrsalto(self, spritesheet:SpriteSheet, size_x, size_y, padding=7, scale=10):
+    def load_mrsalto(self, spritesheet:SpriteSheet, size_x, size_y, padding=5, scale=10):
         
         p = padding
 
@@ -60,51 +56,25 @@ class Player(pygame.sprite.Sprite):
 
         # self.size = Vector(14, 23) # TBD will need to be updated
 
+
+        self.size = Vector(220, 306)
+        
         # regular walk sequence
-        img = spritesheet.get_image(0, 0, size_x+p, size_y+p)
-        img.set_colorkey(green)
-        if scale > 1: img = pygame.transform.scale(img.convert_alpha(), ((size_x)*scale, (size_y)*scale))
-        self.walking_frames.append(img.convert_alpha())
+        self.walking_frames = []
+        self.walking_reverse_frames = []
+
+        img = spritesheet.get_image(0, 0, self.size.x, self.size.y)
+        self.walking_frames.append(img)
         self.walking_reverse_frames.append(pygame.transform.flip(img.convert_alpha(), flip_x=True, flip_y=False))
 
-        img = spritesheet.get_image(size_x*2, size_y*2, size_x+p, size_y+p)
-        img.set_colorkey(green)
-        if scale > 1: img = pygame.transform.scale(img.convert_alpha(), ((size_x)*scale, (size_y)*scale))
-        self.walking_frames.append(img.convert_alpha())
-        self.walking_reverse_frames.append(pygame.transform.flip(img.convert_alpha(), flip_x=True, flip_y=False))
-        
-
-        
-        # Crouching frames
-        img = spritesheet.get_image(size_x*6, size_y*6, size_x+p, size_y+p)
-        img.set_colorkey(green)
-        if scale > 1: img = pygame.transform.scale(img.convert_alpha(), ((size_x)*scale, (size_y)*scale))
-        self.crouching_frames.append(img.convert_alpha())
-
-        img = spritesheet.get_image(size_x*5, size_y*5, size_x+p, size_y+p)
-        img.set_colorkey(green)
-        if scale > 1: img = pygame.transform.scale(img.convert_alpha(), ((size_x)*scale, (size_y)*scale))
-        self.crouching_frames.append(img.convert_alpha())
-
-        img = spritesheet.get_image(size_x*9, size_y*9, size_x+p, size_y+p)
-        img.set_colorkey(green)
-        if scale > 1: img = pygame.transform.scale(img.convert_alpha(), ((size_x)*scale, (size_y)*scale))
-        self.crouching_frames.append(img.convert_alpha())
-
-        # Crouching walk
-        img = spritesheet.get_image(size_x*9, size_y*9, size_x+p, size_y+p)
-        img.set_colorkey(green)
-        if scale > 1: img = pygame.transform.scale(img.convert_alpha(), ((size_x)*scale, (size_y)*scale))
-        self.crouch_walk.append(img.convert_alpha())
-
-        img = spritesheet.get_image(size_x*10, size_y*10, size_x+p, size_y+p)
-        img.set_colorkey(green)
-        if scale > 1: img = pygame.transform.scale(img.convert_alpha(), ((size_x)*scale, (size_y)*scale))
-        self.crouch_walk.append(img.convert_alpha())
-        self.crouch_walk_left.append(pygame.transform.flip(img.convert_alpha(), flip_x=True, flip_y=False))
-
+        for i in range(1,31):
+            image = spritesheet.get_image((self.size.x*i)+5, 0, self.size.x, self.size.y)
+            self.walking_frames.append(image)
+            self.walking_reverse_frames.append(pygame.transform.flip(image.convert_alpha(), flip_x=True, flip_y=False))
+            self.image = self.walking_frames[0]
         self.walking_reverse_frames.reverse()
-        self.crouch_walk_left.reverse()
+        # Set a referance to the image rect.
+        self.rect = self.image.get_rect()
 
     
         self.size = Vector(size_x, size_y)
@@ -206,11 +176,3 @@ class Player(pygame.sprite.Sprite):
         self.jumping = True
         print("JMP")
         self.change_yv(1, -1, "jumping")
-
-
-
-        
-        
-
-
-

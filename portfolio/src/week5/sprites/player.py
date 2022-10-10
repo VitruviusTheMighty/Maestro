@@ -64,7 +64,7 @@ class Player(pygame.sprite.Sprite):
         """ Move the player. """
         self.simulate()
         self.update_hitbox()
-
+        
         if not self.is_colliding:
             # bottom_corner = self.rect.y + self.size.y
             if self.floor != self.main_floor:
@@ -77,7 +77,6 @@ class Player(pygame.sprite.Sprite):
             except:
                 raise IndexError(f"List Index out of range. Tried to find image at index: {frame}. List len is: {len(self.walking_reverse_frames)}")
         self.mask = pygame.mask.from_surface(self.image)
-        # print(f"Frame: {frame}. Facing: {self.facing}")
 
     # Changer
     def change_yv(self, mode=1, val=0, msg=""):
@@ -131,14 +130,9 @@ class Player(pygame.sprite.Sprite):
     def simulate(self):
         """ Calculate effect of gravity. """
         self.do_gravity()
-        self.eval_state()
         self.rect.x += self.v.x
         self.rect.y += self.v.y        
-        # self.debugmsg(f"{self.size.y + self.rect.y }, {self.floor}")
-
-    def eval_state(self):
-        if self.below_ground():
-            self.rect.y = self.floor - self.size.y
+        # self.debugmsg(f"{self.size.y + self.rect.y }, {self.floor}")        
 
     def do_gravity(self):
         """Apply gravity"""
@@ -152,6 +146,8 @@ class Player(pygame.sprite.Sprite):
 
                     self.stop(x=False, y=True)
                     self.falling = False
+        elif self.below_ground():
+            self.rect.y = self.floor - self.size.y
         else:
             if (self.below_ground() or self.at_ground()) and self.falling:
                 self.change_yv(mode=0, val=0, msg="")

@@ -27,6 +27,7 @@ class Game:
 
         # Generate SPRITES
 
+        # TODO: Fix hitbox
 
     def handle_collisions(self, player:Player, obj1:pygame.sprite.Sprite):
         collision = pygame.sprite.collide_mask(player,obj1)
@@ -88,15 +89,20 @@ class Game:
         active_sprite_list = pygame.sprite.Group()
         # Create the player
         player = Player(screen)
-        platform = Box(pygame.color.Color("blue"),50,50) 
-        platform.rect.x = 400
-        platform.rect.y = self.HEIGHT - platform.rect.h
+        platform = Box(pygame.color.Color("blue"),30,80) 
+        platform.rect.x = 800
+        platform.rect.y = 400
+
+        plat2 = Box(pygame.color.Color("white"), 30, 100)
+
+        plat2.rect.x = 600
+        plat2.rect.y = 400
 
         # Create all the levels
 
         player.rect.x = 100 
         player.rect.y = self.HEIGHT - player.rect.height
-        active_sprite_list.add(player,platform)
+        active_sprite_list.add(player,platform, plat2)
 
         #Loop until the user clicks the close button.
         done = False
@@ -116,7 +122,8 @@ class Game:
             # Update the player.
             active_sprite_list.update()
 
-            self.handle_collisions(player, platform)
+            for p in [platform, plat2]:
+                self.handle_collisions(player, p)
 
             # ALL CODE TO DRAW SHOULD GO BELOW THIS COMMENT
             #current_level.draw(screen)
