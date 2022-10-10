@@ -136,6 +136,13 @@ class Player(pygame.sprite.Sprite):
 
     def do_gravity(self):
         """Apply gravity"""
+        # if self.rect.y + self.size.y  >= self.floor:
+        #     # self.stop()
+        #     self.rect.y = self.floor - self.size.y
+
+        # elif self.rect.y + self.size.y < self.floor:
+        #     self.rect.y += self.v.y
+
         if self.above_ground():
             if self.rising and self.above_jump_height():
                 self.descend()

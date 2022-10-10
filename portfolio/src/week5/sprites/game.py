@@ -31,18 +31,23 @@ class Game:
 
     def handle_collisions(self, player:Player, obj1:pygame.sprite.Sprite):
         collision = pygame.sprite.collide_mask(player,obj1)
-        player.is_above(obj1)
 
-        if collision:
+        if player.is_above(obj1):
+            player.floor = obj1.rect.y
+            player.stop(x=False, y=True)
+
+        if collision and not player.is_above(obj1):
+            player.stop(x=True, y=False)
             player.is_colliding = True
-            # print(collision)
-            if collision[1] > player.size.y - 11:
-                print(f"Collision y: {player.size.y - 11}")
-                player.floor = self.HEIGHT - obj1.rect.h 
-            else: 
-                if not player.above_ground():
-                    # player.floor = HEIGHT
-                    player.stop(x=True, y=False)
+            # player.is_colliding = True
+            # # print(collision)
+            # if collision[1] > player.size.y - 11:
+            #     print(f"Collision y: {player.size.y - 11}")
+            #     player.floor = self.HEIGHT - obj1.rect.h 
+            # else: 
+            #     if not player.above_ground():
+            #         # player.floor = HEIGHT
+                    
         else:
             player.is_colliding = False
             player.floor = self.HEIGHT
