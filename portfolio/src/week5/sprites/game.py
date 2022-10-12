@@ -29,29 +29,33 @@ class Game:
 
         # TODO: Fix hitbox
 
-    def handle_collisions(self, player:Player, obj1:pygame.sprite.Sprite):
-        collision = pygame.sprite.collide_mask(player,obj1)
+    def handle_collisions(self, player:Player, obj:pygame.sprite.Sprite):
 
-        if player.is_above(obj1):
-            player.floor = obj1.rect.y
-            player.stop(x=False, y=True)
-
-        if collision and not player.is_above(obj1):
-            player.stop(x=True, y=False)
-            player.is_colliding = True
-            # player.is_colliding = True
-            # # print(collision)
-            # if collision[1] > player.size.y - 11:
-            #     print(f"Collision y: {player.size.y - 11}")
-            #     player.floor = self.HEIGHT - obj1.rect.h 
-            # else: 
-            #     if not player.above_ground():
-            #         # player.floor = HEIGHT
+        if player.isColliding(obj):
+            
+            if player.onTop(obj):
+                player.falling = False
+                player.onPlatform = True
+                bottom = player.rect.y + player.rect.h
+                obj_bottom = obj.rect.y + obj.rect.h
+                if bottom >= obj_bottom and player.v.y > 0:
+                    player.v.y = 0
+                    player.rect.y = obj.rect.y - player.rect.h
+                    # player.floor = obj.rect.y - player.rect.h
+            else:
+                if player.v.x > 0:
+                    player.v.x = 0
+                    player.rect.x = obj.rect.x+ obj.rect.w
                     
-        else:
-            player.is_colliding = False
-            player.floor = self.HEIGHT
+                elif player.v.x < 0:
+                    player.v.x = 0
+                    player.rect.x = obj.rect.x 
 
+        else:
+            # player.floor = self.HEIGHT
+            pass
+
+            
 
     def handle_key_events(self, event:pygame.event.Event, player:Player):
         if event.type == pygame.KEYDOWN:
@@ -80,7 +84,7 @@ class Game:
             if event.key == pygame.K_RIGHT:
                 player.stop()
             
-            if player.above_ground():
+            if player.above_ground() and not player.onPlatform:
                 if not player.falling: 
                     player.descend()
                     player.falling = True

@@ -44,7 +44,7 @@ class Player(pygame.sprite.Sprite):
         # Constants
         self.maxh = size.y * 3
 
-    def load_mrsalto(self, spritesheet:SpriteSheet, size_x, size_y, padding=7, scale=10):
+    def load_mrsalto(self, spritesheet:SpriteSheet, size_x, size_y, padding=5, scale=10):
         
         p = padding
 
@@ -67,7 +67,19 @@ class Player(pygame.sprite.Sprite):
         self.walking_frames.append(img.convert_alpha())
         self.walking_reverse_frames.append(pygame.transform.flip(img.convert_alpha(), flip_x=True, flip_y=False))
 
-        img = spritesheet.get_image(size_x*2, size_y*2, size_x+p, size_y+p)
+        img = spritesheet.get_image(size_x+p*2, size_y+p, size_x+p, size_y+p)
+        img.set_colorkey(green)
+        if scale > 1: img = pygame.transform.scale(img.convert_alpha(), ((size_x)*scale, (size_y)*scale))
+        self.walking_frames.append(img.convert_alpha())
+        self.walking_reverse_frames.append(pygame.transform.flip(img.convert_alpha(), flip_x=True, flip_y=False))
+
+        img = spritesheet.get_image(0, 0, size_x+p*3, size_y+p)
+        img.set_colorkey(green)
+        if scale > 1: img = pygame.transform.scale(img.convert_alpha(), ((size_x)*scale, (size_y)*scale))
+        self.walking_frames.append(img.convert_alpha())
+        self.walking_reverse_frames.append(pygame.transform.flip(img.convert_alpha(), flip_x=True, flip_y=False))
+
+        img = spritesheet.get_image(size_x+p*3, size_y+p, size_x+p, size_y+p)
         img.set_colorkey(green)
         if scale > 1: img = pygame.transform.scale(img.convert_alpha(), ((size_x)*scale, (size_y)*scale))
         self.walking_frames.append(img.convert_alpha())

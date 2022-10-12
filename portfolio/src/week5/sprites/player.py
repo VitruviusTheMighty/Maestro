@@ -2,12 +2,14 @@
 Derived from code provided at
 http://programarcadegames.com/
 """
+from numpy import isin
 import pygame
 import os
 from spritesheet_functions import SpriteSheet
 from vector import Vector
 from termcolor import colored
 import datetime
+from simple_platform import Box
 
 class Player(pygame.sprite.Sprite):
     """
@@ -54,7 +56,7 @@ class Player(pygame.sprite.Sprite):
         self.falling = False
         self.rising = False
         self.is_colliding = False
-
+        self.onPlatform = False
         self.update_hitbox()
 
     def update_hitbox(self):
@@ -119,6 +121,47 @@ class Player(pygame.sprite.Sprite):
         bottom_corner = self.rect.y+self.size.y
         return (bottom_corner >= self.floor)
 
+    def isColliding(self, obj:pygame.sprite.Sprite):
+        return pygame.sprite.collide_mask(self,obj)
+
+    def onTop(self, obj:Box):
+        """
+        If is colliding and bottom of player is at or above top pixel of obj   
+
+        Args:
+            obj(pygame.sprite.Sprite): Sprite we are checking if we are above
+        
+        Returns:
+            True if on top
+        """
+        print(f"isinstance Box?: {str(isinstance(obj, Box))}")
+        print(f"isColliding Box?: {self.isColliding(obj)}")
+        print(f"onTop?: {obj.objOnTop(self)}")
+
+
+        if isinstance(obj, Box)\
+            and self.isColliding(obj)\
+                and obj.objOnTop(self):
+                    print("On top")
+                    self.onPlatform = True
+                    return True
+
+        else:
+            self.onPlatform = False
+            return False
+
+    def isAbove(self, obj:pygame.sprite.Sprite):
+        """
+        Checks if is above a sprite object
+
+        Args:
+            obj(pygame.sprite.Sprite): Sprite we are checking if we are above
+
+        Returns:
+            bool: True if our bottom pixel is above the top pixel of the object
+        """
+        return self.rect.y+self.rect.h <= obj.rect.y
+
     def is_above(self, obj:pygame.sprite.Sprite):
         if ((self.rect.x+self.size.x)-20 >= obj.rect.x ) and (self.rect.x+20 <= (obj.rect.x + obj.rect.h)):
             self.debugmsg(msg=f"{obj.rect.x},{obj.rect.x+obj.rect.h}: IS ABOVE -> {self.rect.x+20}-{self.rect.x+self.size.x-20}, {self.rect.width}", color="green")
@@ -142,23 +185,28 @@ class Player(pygame.sprite.Sprite):
 
         # elif self.rect.y + self.size.y < self.floor:
         #     self.rect.y += self.v.y
+        
+        if self.onPlatform:
+            self.falling = False
 
-        if self.above_ground():
-            if self.rising and self.above_jump_height():
-                self.descend()
+        if not self.onPlatform:
+            self.falling = True
+            if self.above_ground():
+                if self.rising and self.above_jump_height():
+                    self.descend()
 
-            if self.falling:
-                if self.below_ground():
-                    self.rect.y = self.floor - self.size.y
+                if self.falling:
+                    if self.below_ground():
+                        self.rect.y = self.floor - self.size.y
 
-                    self.stop(x=False, y=True)
-                    self.falling = False
-        elif self.below_ground():
-            self.rect.y = self.floor - self.size.y
-        else:
-            if (self.below_ground() or self.at_ground()) and self.falling:
-                self.change_yv(mode=0, val=0, msg="")
+                        self.stop(x=False, y=True)
+                        self.falling = False
+            elif self.below_ground():
                 self.rect.y = self.floor - self.size.y
+            else:
+                if (self.below_ground() or self.at_ground()) and self.falling:
+                    self.change_yv(mode=0, val=0, msg="")
+                    self.rect.y = self.floor - self.size.y
 
     def jump(self):
         """ Called when user hits 'jump' button. """
@@ -169,7 +217,7 @@ class Player(pygame.sprite.Sprite):
             self.change_yv(mode=0, val=-1, msg="Was not above jump height so we rising at line 144")
             self.rising = True
         else:
-            self.v.y += 1
+            self.v.y += 2
             self.change_yv(mode=0, val=1, msg="Was above jump height so falling at line 148")
             self.falling = True
             self.rising = False
