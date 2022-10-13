@@ -1,7 +1,11 @@
 from re import S
 import pygame
-from vector import Vector
 import random
+
+try:
+    from vector import Vector
+except:
+    from salto.vector import Vector
 
 class Box(pygame.sprite.Sprite):
 

@@ -1,6 +1,11 @@
 import pygame
-from vector import Vector
-from spriteref import CatParams
+
+try:
+    from vector import Vector
+    from spriteref import CatParams
+except:
+    from salto.vector import Vector
+    from salto.spriteref import CatParams
 
 class Player(pygame.sprite.Sprite):
     

@@ -1,9 +1,14 @@
 from pickle import FALSE
 import pygame
 
-from box import Box
-from player import Player
-from vector import Vector
+try:
+    from box import Box
+    from player import Player
+    from vector import Vector
+except:
+    from salto.box import Box
+    from salto.player import Player
+    from salto.vector import Vector
 
 
 class Game:
@@ -17,29 +22,27 @@ class Game:
 
             self.player_speed = 15
 
-            self.boxes = []
+            self.boxes     = []
+            self.platforms = pygame.sprite.Group()
 
     def handle_collisions(self, player:Player):
-
-        for box in self.boxes:
-
-            collides = pygame.sprite.collide_mask(player, box)
-
-            # print(f"collides? {collides}")
-            if player.v.y > 0:
-                if collides:
-                    if player.onPlatform == False:  # TODO: Reimplement such that onPlatform is specific to box
-                        player.v.y = 0
-                        player.onPlatform = True
-                    player.pos.y = box.rect.y - player.rect.h + 1 # keep them colliding
-                else:
-                    if player.onPlatform: 
-                        player.onPlatform = False
-                        
-            elif player.v.y == 0 and not collides:
-                player.onPlatform = False
-
         
+        
+        hits = pygame.sprite.spritecollide(player , self.platforms, False)
+
+        if hits:
+            for box in self.boxes:
+                collides = pygame.sprite.collide_mask(player, box)
+                # print(f"collides? {collides}")
+                if player.v.y > 0:
+                    if collides:
+                        if not player.onPlatform:  # TODO: Reimplement such that onPlatform is specific to box
+                            player.v.y = 0
+                            player.onPlatform = True
+                        player.pos.y = box.rect.y - player.rect.h + 1 # keep them colliding
+
+        else:
+            player.onPlatform = False
 
     def handle_keypress_events(self, event:pygame.event.Event, player:Player):
         if event.type == pygame.KEYDOWN:
@@ -66,6 +69,7 @@ class Game:
         
         b = Box(color, size.y, size.x, pos.x, pos.y)
         # b.v.x = -1
+        self.platforms.add(b)
         self.boxes.append(b)
 
 
@@ -80,8 +84,8 @@ class Game:
         player.set_speed(self.player_speed)
 
         self.addbox('red', Vector(90, 20), Vector(500 ,750))
-        # self.addbox('blue', Vector(90, 20), Vector(700 ,650))
-        # self.addbox('green', Vector(90, 20), Vector(300 ,350))
+        self.addbox('blue', Vector(90, 20), Vector(850 ,650))
+        self.addbox('green', Vector(90, 20), Vector(350 ,550))
 
 
 

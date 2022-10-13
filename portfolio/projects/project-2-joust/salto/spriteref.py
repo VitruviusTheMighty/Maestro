@@ -1,11 +1,16 @@
 import pygame
 from pygame.transform import scale
 
-from spritesheet_functions import SpriteSheet
+try:
+    from spritesheet_functions import SpriteSheet
+    from vector import Vector
+except:
+    from salto.spritesheet_functions import SpriteSheet
+    from salto.vector import Vector
+
 import time
 import os
 
-from vector import Vector
 
 WHITE = (255,255,255)
 BLACK = (0,0,0)
