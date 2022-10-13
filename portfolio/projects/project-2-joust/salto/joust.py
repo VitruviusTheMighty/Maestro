@@ -25,10 +25,10 @@ class Game:
 
             collides = pygame.sprite.collide_mask(player, box)
 
-            print(f"collides? {collides}")
+            # print(f"collides? {collides}")
             if player.v.y > 0:
                 if collides:
-                    if player.onPlatform == False: 
+                    if player.onPlatform == False:  # TODO: Reimplement such that onPlatform is specific to box
                         player.v.y = 0
                         player.onPlatform = True
                     player.pos.y = box.rect.y - player.rect.h + 1 # keep them colliding
@@ -64,7 +64,9 @@ class Game:
 
     def addbox(self, color, size:Vector, pos:Vector):
         
-        self.boxes.append(Box(color, size.y, size.x, pos.x, pos.y))
+        b = Box(color, size.y, size.x, pos.x, pos.y)
+        # b.v.x = -1
+        self.boxes.append(b)
 
 
     def run(self):
@@ -78,6 +80,10 @@ class Game:
         player.set_speed(self.player_speed)
 
         self.addbox('red', Vector(90, 20), Vector(500 ,750))
+        # self.addbox('blue', Vector(90, 20), Vector(700 ,650))
+        # self.addbox('green', Vector(90, 20), Vector(300 ,350))
+
+
 
         active_sprite_list.add(player)
 
