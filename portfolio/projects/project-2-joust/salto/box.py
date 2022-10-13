@@ -1,13 +1,18 @@
 from re import S
 import pygame
 from vector import Vector
+import random
 
 class Box(pygame.sprite.Sprite):
 
-    def __init__(self, color, height, width):
+    def __init__(self, color, height, width, posx, posy):
         super().__init__()
   
         self.image = pygame.Surface([width, height])
+
+
+        if type(color) == str: color = pygame.color.Color(color)
+
         self.image.fill(color)
   
         pygame.draw.rect(self.image,
@@ -16,6 +21,9 @@ class Box(pygame.sprite.Sprite):
 
         self.v = Vector(0,0)
         self.rect = self.image.get_rect()
+        self.rect.x = posx
+        self.rect.y = posy
+        self.id = str(''.join(["{}".format(random.randint(0, 9)) for num in range(0, 10)]))
 
     def isColliding(self, obj:pygame.sprite.Sprite):
         """
@@ -29,6 +37,7 @@ class Box(pygame.sprite.Sprite):
         if pygame.sprite.collide_mask(self, obj):
             return True
         return False
+
 
     def objOnTop(self, obj:pygame.sprite.Sprite):
         """
@@ -66,6 +75,13 @@ class Box(pygame.sprite.Sprite):
     
     def stop(self):
         self.v = Vector(0,0)
+
+    def update(self):
+        self.simulate()
+
+    def simulate(self):
+        self.rect.x += self.v.x
+        self.rect.y += self.v.y
 
 if __name__ == "__main__":
     b = Box(color="red", height=10, width=10)
