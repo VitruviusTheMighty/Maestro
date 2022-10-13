@@ -22,24 +22,23 @@ class Game:
     def handle_collisions(self, player:Player):
 
         for box in self.boxes:
-            if box.objOnTop(player):
-                player.on_obj = True
-                player.on_obj_id = box.id
-                player.platform = box
-                
 
-                print(f"On platform floor? {player.onPlatform()}, {player.pos.y}, {player.rect.y}, {player.rect.h}, {box.rect.y}, {box.rect.y + box.rect.h}")
-                
-            else:   
-                print(f"On platform floor? {player.onPlatform()}")
+            collides = pygame.sprite.collide_mask(player, box)
 
-                if ( player.on_obj_id == box.id ) and not (player.onPlatform()):
-                    # print(f"On platform floor? {player.onPlatform()}")
-                    player.on_obj = False
-                    player.platform_floor = None
-                    player.on_obj_id = None
-                    player.platform = None
-            
+            print(f"collides? {collides}")
+            if player.v.y > 0:
+                if collides:
+                    if player.onPlatform == False: 
+                        player.v.y = 0
+                        player.onPlatform = True
+                    player.pos.y = box.rect.y - player.rect.h + 1 # keep them colliding
+                else:
+                    if player.onPlatform: 
+                        player.onPlatform = False
+                        
+            elif player.v.y == 0 and not collides:
+                player.onPlatform = False
+
         
 
     def handle_keypress_events(self, event:pygame.event.Event, player:Player):

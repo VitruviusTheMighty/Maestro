@@ -41,10 +41,11 @@ class Player(pygame.sprite.Sprite):
         self.jump_decay = 1
         self.gravitational_acceleration = 10
         
-        self.on_obj         = False
-        self.on_obj_id      = None
-        self.platform_floor = None
-        self.platform       = None
+        # self.on_obj         = False
+        # self.on_obj_id      = None
+        # self.platform_floor = None
+        # self.platform       = None
+        self.onPlatform     = False
     # Loading methods
 
     def set_speed(self, val):
@@ -83,9 +84,11 @@ class Player(pygame.sprite.Sprite):
         self.change_xv(-self.speed)
 
     def jump(self):
-        if self.onGround() or self.onPlatform():
+        if self.onGround() or self.onPlatform:
             self.jumping = True
-            self.change_yv(-30)
+            self.change_yv(-20)
+
+            if self.onPlatform: self.onPlatform = False
         
     # Position cases
 
@@ -95,11 +98,11 @@ class Player(pygame.sprite.Sprite):
     def onGround(self):
         return self.bottom >= self.main_floor 
 
-    def onPlatform(self):
-        if self.platform!=None: 
-            return (self.pos.y == self.platform.rect.y - self.rect.h) and self.platform.isColliding(self)
-        else: 
-            return False
+    # def onPlatform(self):
+    #     if self.platform!=None: 
+    #         return (self.pos.y == self.platform.rect.y - self.rect.h) and self.platform.isColliding(self)
+    #     else: 
+    #         return False
 
     def flip(self):
         if self.facing == 'right':
@@ -185,14 +188,9 @@ class Player(pygame.sprite.Sprite):
     def gravitate(self):
         # print(f"Jumping? {self.jumping}")
 
-        if self.onGround() and not self.jumping and self.platform == None: # If we are on the ground and not trying to jump stop at the floor
+        if self.onGround() and not self.jumping: # If we are on the ground and not trying to jump stop at the floor
             self.set_yv(val=0)
             self.pos.y = self.main_floor - self.rect.h
-
-        if self.platform != None:
-            self.set_yv(val=0)
-            self.on_obj == True
-            self.pos.y = self.platform.rect.y - self.rect.h
 
 
         else:
@@ -200,7 +198,7 @@ class Player(pygame.sprite.Sprite):
                 # print("Setting jump to false")
                 self.jumping = False
             
-            elif not self.jumping and not self.onPlatform():  # MAIN GRAVITY METHOD
+            elif not self.jumping and not self.onPlatform:  # MAIN GRAVITY METHOD
                 self.set_yv(val=self.gravitational_acceleration)
 
             else:
