@@ -1,6 +1,5 @@
 ##
-## Author: Kristina Striegnitz
-## Author: John Rieffel 
+## Author: Leonardo Ferrisi
 ##
 ## Version: Fall 2022 
 ##
@@ -15,6 +14,19 @@ from vector import Vector
 from steering_ball import SteeringBall
 from moving_ball_2d import MovingBall
 from world import World
+import math
+
+# def getDistance(v1:Vector, v2:Vector) -> float:
+#     """
+#     Gets the distance between two vectors
+#     """
+#     distx = (v2.x - v1.x)
+#     disty = (v2.y - v1.y)
+
+#     return math.sqrt(distx**2) + (math.sqrt(disty**2))
+
+# def getDistance(mb1, mb2):
+
 
 def run_game():
     
@@ -53,6 +65,7 @@ def run_game():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 keepGoing = False
+
 ##            if event.type == pygame.MOUSEBUTTONDOWN:
 ##                mousepos = pygame.mouse.get_pos()
 ##                mousepos = Vector(mousepos[0],mousepos[1])
@@ -69,7 +82,21 @@ def run_game():
         target.collide_edge (world)
 
         c.steering = []
-        c.seek (target, 1.0/30)
+
+        # have a distance based method
+
+
+        print(f"Distance: {target.getDistance(c)}. Target: {target.p}, Ball: {c.p}")
+
+        dist_thres = 200.0
+
+        if target.getDistance(c) > dist_thres:
+            c.seek (target, 1.0/30)
+            c.speedlimit = c.defaultspeed
+        else:
+            c.flee(target, 1.0/30, dt, world)
+            c.speedlimit = c.fleespeed * math.sqrt((target.getDistance(c) - dist_thres)**2) #TODO: make relative to distance
+
 
         c.apply_steering()
         c.move(dt, world)

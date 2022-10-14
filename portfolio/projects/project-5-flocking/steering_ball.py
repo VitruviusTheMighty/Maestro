@@ -8,10 +8,29 @@ class SteeringBall (MovingBall):
 
     beak_tip = Vector(0,20)
 
-    speedlimit = Vector(500,500)
+    def __init__ (self, x, y, r, m, color, xv, yv):
 
+        super().__init__(x,y,r,m,color,xv,yv)
+        self.speedlimit = Vector(500,500)
+        self.defaultspeed = self.speedlimit
+        self.fleespeed = Vector(5000,5000)
+
+
+        
+    # fleespeed = Vector(1000, 1000)
+        
+        
+    
     # All steering inputs
     steering = []
+
+    # def change_speed(self, mode):
+    #     if mode > 1:
+    #         speedlimit = Vector(1000, 1000)
+    #     else:
+    #         speedlimit
+
+
 
     def draw (self, window):
         # draw the body
@@ -40,8 +59,7 @@ class SteeringBall (MovingBall):
             self.v += s
 
 
-    def seek (self, target, weight):
-
+    def seek (self, target:MovingBall, weight):
         #find difference between my location and target location 
         desired_direction = (target.p - self.p).normalize()
         #multiply direction by max speed
@@ -50,4 +68,18 @@ class SteeringBall (MovingBall):
         ## first find the "error" between current velocity and desired velocity, and then multiply that error 
         ## by the weight, and then add it to steering inputs
         self.steering += [(desired_velocity - self.v)*weight]
+
+
+
+    def flee(self, target:MovingBall, weight, dt, world):
+        desired_direction = (self.p - target.p).normalize()
+        max_speed = self.speedlimit.length()
+        desired_velocity = desired_direction * max_speed
+        self.steering += [(desired_velocity - self.v)*weight]
+
+        self.move(dt, world)
+
+        self.speedlimit *= 5
+        
+
 
