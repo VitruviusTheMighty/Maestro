@@ -14,6 +14,7 @@ class SteeringBall (MovingBall):
         self.speedlimit = Vector(500,500)
         self.defaultspeed = self.speedlimit
         self.fleespeed = Vector(5000,5000)
+        self.fleeing = False
 
 
         
@@ -69,17 +70,41 @@ class SteeringBall (MovingBall):
         ## by the weight, and then add it to steering inputs
         self.steering += [(desired_velocity - self.v)*weight]
 
+    def arrive(self, target:MovingBall, weight=1.0/30):
+        """
+        Alters the speed relative to distance
+        """
+        threshold = (target.r + self.r)*10
 
+        if not self.fleeing:
+            dist = self.getDistance(target)
+            if dist < threshold:
+                # print(f"should decrease speed: threshold: {threshold}")
+                # self.speedlimit *= dist/threshold
+                newspeed = self.speedlimit.x * ( (dist/threshold)**1.1 )
+                ns = Vector(newspeed, newspeed)
+                self.speedlimit = ns
 
-    def flee(self, target:MovingBall, weight, dt, world):
+                # print(f"New speed: {self.speedlimit}")
+            self.seek (target, weight)
+
+        else:
+            pass
+
+    def flee(self, target:MovingBall, weight, dt, world, dist_thres):
+        """
+        Evaluate the position and flee from a target
+        """
         desired_direction = (self.p - target.p).normalize()
         max_speed = self.speedlimit.length()
         desired_velocity = desired_direction * max_speed
         self.steering += [(desired_velocity - self.v)*weight]
 
+        # while self.getDistance(target) < dist_thres*2:
         self.move(dt, world)
 
-        self.speedlimit *= 5
+        self.speedlimit *= 1.0125
+        # self.speedlimit *= round(( dist_thres - (self.getDistance(target)) ) *  0.0125, 1)
         
 
 

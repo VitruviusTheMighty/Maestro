@@ -77,6 +77,8 @@ def run_game():
         mousepos = Vector(mousepos[0],mousepos[1])
         target.p = mousepos
         
+        
+
         ## Simulate game world
         target.move (dt, world)
         target.collide_edge (world)
@@ -86,16 +88,22 @@ def run_game():
         # have a distance based method
 
 
-        print(f"Distance: {target.getDistance(c)}. Target: {target.p}, Ball: {c.p}")
+        # print(f"Distance: {target.getDistance(c)}. Target: {target.p}, Ball: {c.p}")
 
-        dist_thres = 200.0
 
-        if target.getDistance(c) > dist_thres:
-            c.seek (target, 1.0/30)
-            c.speedlimit = c.defaultspeed
+        # Seek - Fleeing behavior
+        dist_thres = 100.0
+
+        if not c.fleeing:
+            if target.getDistance(c) > dist_thres:
+                # Arrival
+                c.arrive(target, 1.0/30)
+                c.speedlimit = c.defaultspeed
+            else: c.fleeing = True
         else:
-            c.flee(target, 1.0/30, dt, world)
-            c.speedlimit = c.fleespeed * math.sqrt((target.getDistance(c) - dist_thres)**2) #TODO: make relative to distance
+            if c.fleeing and  target.getDistance(c) < dist_thres*8:
+                c.flee(target, 1.0/30, dt, world, dist_thres)
+            else: c.fleeing = False
 
 
         c.apply_steering()
