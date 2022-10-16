@@ -17,6 +17,9 @@
 - [Week 5](/portfolio/src/week5/) 
 
 
-#### Games
-
-- [Breakout3K](/portfolio/src/week4/breakout/src/)
+#### Projects
+- [Baselines](/portfolio/projects/week-1-baselines/)
+- [Collisions](/portfolio/projects/week-3-collisions/)
+- [Breakout3K](/portfolio/projects/project-1-breakout/)
+- [Joust](/portfolio/projects/project-2-joust/)
+- [Flocking](/portfolio/projects/project-3-flocking/)

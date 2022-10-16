@@ -9,9 +9,6 @@
 
 import pygame
 import random
-
-from sympy import EX
-
 from vector import Vector
 from steering_ball import SteeringBall
 from moving_ball_2d import MovingBall
@@ -36,7 +33,10 @@ def getCenteroid(flock:list):
 
     return center_of_mass
 
-def run_game():
+def run_game(numAgents=10):
+    """
+    Runs a steering flock game
+    """
     
     ## Initialize the pygame submodules and set up the display window.
     pygame.init()
@@ -52,9 +52,8 @@ def run_game():
     # our flock
 
     flock = []
-    num_agents = 5
 
-    for agent in range(num_agents):
+    for agent in range(numAgents):
         ## our character
         x = random.randint(0,width)
         y = random.randint(0,height)
