@@ -1,4 +1,4 @@
-Welcome to Lumache's documentation!
+Welcome to Leonardo's CSC245 documentation!
 ===================================
 
 **Maestro: An ensemble of games written from scratch to learn and teach computer game development**
