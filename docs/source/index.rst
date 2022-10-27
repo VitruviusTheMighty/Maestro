@@ -19,6 +19,7 @@ Contents
 
 .. toctree::
    :maxdepth: 10
-   usage.rst
-   api.rst
-   projects.rst
+
+   usage
+   api
+   projects
