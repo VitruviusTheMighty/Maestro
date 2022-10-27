@@ -12,11 +12,13 @@ how to :ref:`installation` the project.
 
    This project is under active development.
 
+For more info on the projects completed for this journey, checkout :doc:`Projects`
+
 Contents
 --------
 
 .. toctree::
    :maxdepth: 10
-   usage
-   api
-   projects
+   usage.rst
+   api.rst
+   projects.rst
