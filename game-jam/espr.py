@@ -99,15 +99,23 @@ class ESPPong:
     def connect_muse(self):
         params = BrainFlowInputParams ()
 
-        self.board = BoardShim(BoardIds.MUSE_2_BOARD.value, params)
-        self.master_board_id = self.board.get_board_id ()
-        self.sampling_rate = BoardShim.get_sampling_rate (self.master_board_id)
-        self.board.prepare_session ()
-        self.connected = True
+        try:
+            self.board = BoardShim(BoardIds.MUSE_2_BOARD.value, params)
+            self.master_board_id = self.board.get_board_id ()
+            self.sampling_rate = BoardShim.get_sampling_rate (self.master_board_id)
+            self.board.prepare_session ()
+            self.connected = True
 
-        self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg.png")), (0,0))
-        self.display_text("Connected to MUSE", size=10, pos=(350, 350))
-        pygame.display.update()
+            self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg.png")), (0,0))
+            self.display_text("Connected to MUSE", size=10, pos=(350, 350))
+            pygame.display.update()
+        except:
+            self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg.png")), (0,0))
+            self.display_text("Couldnt find any boards", size=10, pos=(350, 350))
+            pygame.display.update()
+            time.sleep(1)
+            pygame.quit()
+            sys.exit()
 
     def connect_cyton(self, serial_port="COM4"):
         params = BrainFlowInputParams ()
