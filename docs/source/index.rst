@@ -1,5 +1,5 @@
 Welcome to Leonardo's CSC245 documentation!
-===================================
+============================================
 
 **Maestro: An ensemble of games written from scratch to learn and teach computer game development**
 
@@ -12,7 +12,7 @@ how to :ref:`installation` the project.
 
    This project is under active development.
 
-For more info on the projects completed for this journey, checkout :doc:`Projects`
+For more info on the projects completed for this journey, checkout :doc:`projects`
 
 Contents
 --------
