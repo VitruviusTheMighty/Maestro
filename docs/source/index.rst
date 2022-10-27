@@ -16,7 +16,7 @@ Contents
 --------
 
 .. toctree::
-
+   :maxdepth: 10
    usage
    api
    projects
