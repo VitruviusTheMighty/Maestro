@@ -4,6 +4,8 @@ from socket import *
 import select
 import os
 
+DIRNAME = os.path.dirname(__file__)
+
 def clicked_image(mouse_x, mouse_y, x, y, w, h):
 
     if mouse_x >= x and mouse_x <= x+w and mouse_y >= y and mouse_y <= y+h:
@@ -64,8 +66,8 @@ def run_game():
     width = 800
     height = 600
 
-    dirname = os.path.dirname(__file__)
-    image_path = os.path.join(dirname, "red_balloon.gif")
+    
+    image_path = os.path.join(DIRNAME, "red_balloon.gif")
 
     balloon = pygame.image.load(image_path)
 
@@ -115,9 +117,9 @@ def run_game():
 
             if len(received_list) > 0:
                 if received_list[0] == "click" and len(received_list) >= 3:
-
-                    if clicked_image (int(received_list[1]), int(received_list[2]), b_x, b_y, b_w, b_h):
-                        
+                    # print(f"{int(received_list[1])}, {int(received_list[2])}, {b_x}, {b_y}, {b_w}, {b_h}")
+                    if clicked_image(int(received_list[1]), int(received_list[2]), b_x, b_y, b_w, b_h):
+                        # print("HIT")
                         client_d[client] = (client_d[client][0], client_d[client][1] + 1)
                         msg = "hit "+str(client_d[client][1])
                         msg = msg.encode('utf-8')
@@ -127,8 +129,10 @@ def run_game():
 
                     else:
                         client_d[client] = (client_d[client][0], client_d[client][1] - 1)
-                        UDP_sock.sendto("hit "+str(client_d[client][1]), client)
-                    
+                        miss_msg = "miss "+str(client_d[client][1])
+                        UDP_sock.sendto(miss_msg.encode('utf-8'), client)
+                        
+
                 elif received_list[0] == "connect" and len(received_list) >= 2:
                     name = received_list[1]
                     print("new connection from "+name+" at "+str(client))
@@ -145,6 +149,9 @@ def run_game():
 
 
         pos = "position "+str(int(b_x))+" "+str(int(b_y))+" "+str(float(b_speed_x))+" "+str(float(b_speed_y))+" "+str(num)
+
+        print(f"current_pos: {int(b_x)}, {int(b_y)}, dt: {float(b_speed_x)}, {float(b_speed_y)}")
+
         scores = make_scores_msg(client_d)
 
         if timer > 90:
@@ -154,6 +161,8 @@ def run_game():
             timer = 0
 
     pygame.quit()
+
+    
             
  
 run_game()

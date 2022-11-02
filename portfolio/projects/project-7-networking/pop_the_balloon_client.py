@@ -3,6 +3,9 @@
 
 import pygame, select
 import socket
+import os
+
+DIRNAME = os.path.dirname(__file__)
 
 def you_have_a_message (a_socket):
     """
@@ -15,6 +18,19 @@ def you_have_a_message (a_socket):
         return True
     else:
         return False
+
+def display_scores(my_win, height, width, font:pygame.font, scores:list):
+
+    index = 0
+    # assert len(scores)%2 ==0 # Needs to be an even set of pairs
+    if len(scores)%2==0:
+        while index < len(scores):
+            player = scores[index]
+            score = scores[index+1]
+            label = font.render(str(player)+"'s Score"+str(score), True, pygame.color.Color("white"))
+            my_win.blit(label, (height,width))
+            height+=10
+            index=index+2
 
 
 def run_game():
@@ -29,17 +45,22 @@ def run_game():
 
     UDP_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    server_host = "localhost"
+    # server_host = "localhost"
+    
+    server_host = "cslab-25.union.edu"
     server_port = 7000
     server_addr = (server_host, server_port)
 
     mouse_x, mouse_y = 0,0
     ## Load resources
+    # dirname = os.path.dirname(__file__)
+    image_path = os.path.join(DIRNAME, "red_balloon.gif")
 
-    balloon = pygame.image.load("red_balloon.gif")
+    balloon = pygame.image.load(image_path)
     balloon = balloon.convert()
 
-    pop_sound = pygame.mixer.Sound("pop.wav")
+    wav_path = os.path.join(DIRNAME, "pop.wav")
+    pop_sound = pygame.mixer.Sound(wav_path)
 
     myFont = pygame.font.Font(None,30)
 
@@ -109,6 +130,11 @@ def run_game():
         dt = clock.tick()
         
         ## Handle events.
+        
+        ## Update game objects
+
+        b_x = b_x + b_xv * dt
+        b_y = b_y + b_yv * dt
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -116,12 +142,27 @@ def run_game():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
                 print("i clicked at position ", mouse_x, mouse_y)
+                click_msg = "click "+str(mouse_x)+" "+str(mouse_y)
+                UDP_sock.sendto(click_msg.encode('utf-8'), server_addr)
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE: 
+                    print("Hacking - please wait for the balloon to reach its next position before using again")
+                    
+                    bx = b_x
+                    by = b_y
+                    if b_xv < 0:
+                        bx -=3
+                    else:
+                        bx +=3
+                    
+                    if b_yv < 0:
+                        by -= 3
+                    else:
+                        by += 3
 
-
-        ## Update game objects
-
-        b_x = b_x + b_xv * dt
-        b_y = b_y + b_yv * dt
+                    hack_send = "click "+str(int(bx))+" "+str(int(by))
+                    UDP_sock.sendto(hack_send.encode('utf-8'), server_addr)
+            
 
         # handle messages from the server
 
@@ -130,21 +171,47 @@ def run_game():
         # extract the message string and the address of the sender
 
         if you_have_a_message(UDP_sock):
-           received_string, sender = UDP_sock.recvfrom(1024)
-           received_string = received_string.decode('utf-8')
+            received_string, sender = UDP_sock.recvfrom(1024)
+            received_string = received_string.decode('utf-8')
 
-           # Write code to handle "position" messages
+            split_recieved = received_string.split(" ")
+            # Write code to handle "position" messages
+            if "position" in split_recieved:
+                # print(split_recieved)
+                b_x  = int(split_recieved[1])
+                b_y  = int(split_recieved[2])
+                # print(f"BX: {b_x}, BY: {b_y}")
+                b_xv = float(split_recieved[3])
+                b_yv = float(split_recieved[4])     
+                
+                # hack_send = "click "+str(int(b_x))+" "+str(int(b_y))
+                # UDP_sock.sendto(hack_send.encode('utf-8'), server_addr)
 
-           # Write code to handle "hit" messages
+                
 
-           # Write code to handle "scores" messages
+            # Write code to handle "hit" messages
+            elif "hit" in split_recieved:
+                score = int(split_recieved[1])
+                pop_sound.play()
 
- 
+            elif "miss" in split_recieved:
+                score = int(split_recieved[1])
+
+            # Write code to handle "scores" messages
+            elif "scores" in split_recieved:
+                x = 10
+                y = 10
+                display_scores(my_win, x,y, myFont, split_recieved[1:-1])
+        
+            else:
+                raise Exception("Did not recognize recieved String!")
 
         ## Draw picture and update display
 
         my_win.fill(pygame.color.Color("darkblue"))
 
+
+        
 
         # score
         x = 10
@@ -152,16 +219,23 @@ def run_game():
         label = myFont.render("Your score: "+str(score), True, pygame.color.Color("magenta"))
         my_win.blit(label, (x,y))
 
+
+
         # Write code to display other player's scores
 
         # balloon images
         my_win.blit(balloon,(int(b_x), int(b_y)))
 
+        print(f"current_pos: {int(b_x)}, {int(b_y)}, dt: {float(b_xv)}, {float(b_yv)}")
         pygame.display.update()
 
-    ## The game loop ends here.
+    ## The game loop ends here. 
 
     pygame.quit()
+
+    disconnect_message = "disconnect"
+    UDP_sock.sendto(disconnect_message.encode('utf-8'), server_addr)
+
 
 
 ## Call the function run_game.
