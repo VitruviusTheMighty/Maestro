@@ -45,7 +45,10 @@ class Vector:
         """ Make the vector be one unit in length. I am using 10
         pixels as my unit.
         """
-        l = float(self.length())
+        if self.length() > 0:
+            l = float(self.length())
+        else:
+            l = 0.1
         self.x = self.x/l
         self.y = self.y/l
         return self

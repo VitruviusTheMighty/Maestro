@@ -221,7 +221,6 @@ class Game:
         
         p = Pong(self.SCREEN)
         p.play()
-        
 
 
     def playgame(self):

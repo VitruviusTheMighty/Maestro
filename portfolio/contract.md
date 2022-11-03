@@ -92,7 +92,7 @@ To earn an A I will additionally:
 
 | Topic | Know | Want to Know | Learned |
 | ------| ------- | ------ | ------- |
-| Git | x | _ | _ |
+| Git   |    x    |    _   |    _    |
 | Linux  Terminal | x | _ | _ |
 | vim/nano/emacs | x | _ | _ |
 | markdown | x | _ | _ |

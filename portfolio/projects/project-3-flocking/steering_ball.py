@@ -31,7 +31,8 @@ class SteeringBall (MovingBall):
     #     else:
     #         speedlimit
 
-
+    def get_pos(self):
+        return self.p
 
     def draw (self, window):
         # draw the body
@@ -106,5 +107,39 @@ class SteeringBall (MovingBall):
         self.speedlimit *= 1.0125
         # self.speedlimit *= round(( dist_thres - (self.getDistance(target)) ) *  0.0125, 1)
         
+    def cohesion(self, centeroid:Vector, weight):
+        centeroid_pos = centeroid
+        desired_direction = (centeroid_pos - self.p).normalize()
+        max_speed = self.speedlimit.length()
+        desired_velocity = desired_direction * max_speed
+
+        self.steering += [(desired_velocity - self.v) * weight]
+
+        
+    def separation(self, flock:list, weight):
+        """
+        Separates the flock
+        """
+        velocity_adjustment = Vector(0,0)
+        threshold_radius = self.r*5
+
+        for boid in flock:
+            if boid != self:
+                dist = self.getDistance(boid)
+                if dist <= threshold_radius:
+                    desired_direction = (self.p - boid.p).normalize()
+                    max_speed = self.speedlimit.length()
+                    desired_velocity = desired_direction * max_speed
+                    self.steering += [(desired_velocity - self.v)*weight]
+
+    def align(self, flock_list):
+        
+        avg_v = Vector(0,0)
+
+        for boid in flock_list:
+            if boid != self:
+                avg_v += boid.v
+        self.v = avg_v / (len(flock_list) - 1)
+
 
 

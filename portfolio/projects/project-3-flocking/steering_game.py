@@ -14,6 +14,8 @@ from steering_ball import SteeringBall
 from moving_ball_2d import MovingBall
 from world import World
 import math
+import sys
+from button import Button
 
 
 def getCenteroid(flock:list):
@@ -33,7 +35,36 @@ def getCenteroid(flock:list):
 
     return center_of_mass
 
-def run_game(numAgents=10):
+
+# def main():
+#     pygame.init()
+#     width = 1024
+#     height = 768
+#     my_win = pygame.display.set_mode((width,height))
+
+#     title_screen(my_win)
+
+    
+# def title_screen(screen):
+#     while True:
+
+#         MOUSE_POS = pygame.mouse.get_pos()
+#         screen.fill("black")
+
+#         PLAY = Button(image=None, pos=(cx, 300), text_input="TOGGLE AUDIO", font=get_font(25), base_color="White", hovering_color="Green")
+#         for event in pygame.event.get():
+#             if event.type == pygame.QUIT:
+#                 pygame.quit()
+#                 sys.exit()
+#             if event.type == pygame.MOUSEBUTTONDOWN:
+#                 if OPTIONS_BACK.checkForInput(OPTIONS_MOUSE_POS):
+#                     self.main_menu()
+#                 if AUDIOTOGGLE.checkForInput(OPTIONS_MOUSE_POS):
+#                     self.audio_toggle()
+
+
+
+def run_game(screen=None, numAgents=10):
     """
     Runs a steering flock game
     """
@@ -48,6 +79,8 @@ def run_game(numAgents=10):
     ## setting up the game world
     world = World (width, height)
 
+    weight = 1.0/30
+
 
     # our flock
 
@@ -57,12 +90,9 @@ def run_game(numAgents=10):
         ## our character
         x = random.randint(0,width)
         y = random.randint(0,height)
-        c = SteeringBall (x, y, 10, 1, pygame.color.Color("darkorange"), 0, 0)
+        color = (random.randrange(255), random.randrange(255), random.randrange(255))
+        c = SteeringBall (x, y, 10, 1, color, 0, 0)
         flock.append(c)
-
-    # Draw center ball
-    
-
 
     ## the target
     target = MovingBall (150, 175, 20, float('inf'), pygame.color.Color("red"), 0, 0)
@@ -93,20 +123,14 @@ def run_game(numAgents=10):
 ##                mousepos = Vector(mousepos[0],mousepos[1])
 ##                target.p = mousepos
                 
-
-
         mousepos = pygame.mouse.get_pos()
         mousepos = Vector(mousepos[0],mousepos[1])
         target.p = mousepos
-
-
 
         centerVector = getCenteroid(flock)
 
         target2.p = centerVector
         
-        
-
         ## Simulate game world
         target.move (dt, world)
         target.collide_edge (world)
@@ -117,35 +141,33 @@ def run_game(numAgents=10):
         # centerBall.move(dt, world)
         # centerBall.collide_edge(world)
 
-
         # Flee - Arrive - Steer flock
         for c in flock:
             c.steering = []
-
-            # have a distance based method
-
-
             # print(f"Distance: {target.getDistance(c)}. Target: {target.p}, Ball: {c.p}")
-
-
             # Seek - Fleeing behavior
             dist_thres = 100.0
 
             if not c.fleeing:
                 if target.getDistance(c) > dist_thres:
                     # Arrival
-                    c.arrive(target, 1.0/30)
+                    c.arrive(target)
+                    c.cohesion(centerVector, weight)
+                    c.separation(flock, weight)
+                    c.align(flock)
                     c.speedlimit = c.defaultspeed
                 else: c.fleeing = True
             else:
                 if c.fleeing and  target.getDistance(c) < dist_thres*3:
-                    c.flee(target, 1.0/30, dt, world, dist_thres)
+                    c.flee(target, weight, dt, world, dist_thres)
                 else: c.fleeing = False
 
 
             c.apply_steering()
             c.move(dt, world)
             c.collide_edge (world)
+
+            
 
         # update pos for centeroid ball
 
