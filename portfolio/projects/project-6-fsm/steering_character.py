@@ -4,6 +4,7 @@ from moving_ball_2d import MovingBall
 from vector import Vector
 import math
 import random
+import time
 
 class BeakBall (MovingBall):
 
@@ -66,7 +67,7 @@ class BeakBall (MovingBall):
         '''
 
         if not self.seeking:
-            rx, ry = self.__get_rand_target(100)
+            rx, ry = self.__get_rand_target(10)
 
             self.target = Vector(rx, ry)
             self.seeking = True
@@ -78,6 +79,7 @@ class BeakBall (MovingBall):
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             
             """)
+            time.sleep(1)
         if self.seeking:
 
             self.seek(self.target, weight)
