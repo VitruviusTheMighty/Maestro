@@ -14,6 +14,9 @@ class BeakBall (MovingBall):
     speedlimit = Vector(500,500)
 
     steering = []
+    
+    def add_world_params(self, world):
+        self.world = world
 
     def draw (self, window):
         pygame.draw.circle(window, self.color, (int(self.p.x),int(self.p.y)),self.r)
@@ -32,7 +35,6 @@ class BeakBall (MovingBall):
     def __str__ (self):
         return str(self.p)+", "+str(self.v)+", "+str(self.a) 
 
-
     def apply_steering (self):
         for s in self.steering:
             self.v = self.v + s
@@ -42,12 +44,15 @@ class BeakBall (MovingBall):
         """
         Picks a random target some radius away from me
         """
+        assert self.world != None
+
         cx = self.p.x
         cy = self.p.y
 
         theta = random.random() * 2 * math.pi
         x = cx + math.cos(theta) * radius
         y = cy + math.sin(theta) * radius
+
         return x, y
 
     def seek(self, pos:Vector, weight):
@@ -67,7 +72,7 @@ class BeakBall (MovingBall):
         '''
 
         if not self.seeking:
-            rx, ry = self.__get_rand_target(10)
+            rx, ry = self.__get_rand_target(random.randint(10, 100))
 
             self.target = Vector(rx, ry)
             self.seeking = True
@@ -80,11 +85,12 @@ class BeakBall (MovingBall):
             
             """)
             time.sleep(1)
-        if self.seeking:
+
+        else:
 
             self.seek(self.target, weight)
 
-            if self.p == self.target:
+            if self.p.distanceFrom(self.target) < 1.0 or self.isColliding(self.world):
                 self.seeking = False
 
     def loop(self,weight):

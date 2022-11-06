@@ -31,6 +31,7 @@ def run_game():
     x = random.randint(0,width)
     y = random.randint(0,height)
     c = FSMBeakBall (x, y, 10, 1, pygame.color.Color("darkorange"), 0, 0)
+    c.add_world_params(world)
 
     ## a dictionary to remember which keys are pressed
     keymap = {}
@@ -53,7 +54,6 @@ def run_game():
             if event.type == pygame.QUIT:
                 keepGoing = False
 
-
         ## Simulate game world
 
         c.fsm.update (world)
@@ -62,7 +62,6 @@ def run_game():
         c.move(dt, world)
         c.collide_edge (world)
 
-        
         ## Rendering
         # Draw frame
         pygame.draw.rect (my_win, pygame.color.Color("green"), (0,0,width/2,height))

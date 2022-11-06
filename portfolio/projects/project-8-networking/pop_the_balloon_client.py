@@ -45,9 +45,9 @@ def run_game():
 
     UDP_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    # server_host = "localhost"
+    server_host = "localhost"
     
-    server_host = "cslab-25.union.edu"
+    # server_host = "cslab-25.union.edu"
     server_port = 7000
     server_addr = (server_host, server_port)
 

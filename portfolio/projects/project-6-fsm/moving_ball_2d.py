@@ -28,7 +28,6 @@ class MovingBall:
 
     color = pygame.color.Color('darkgreen')
 
-
     def __init__ (self, x, y, r, m, color, xv, yv):
         self.p = Vector(float(x), float(y))
         self.r = r
@@ -38,6 +37,8 @@ class MovingBall:
         self.drawvec = True 
 
         self.seeking = False
+
+        self.world = None
 
     def set_elasticity (self, e):
         self.e = e
@@ -49,6 +50,18 @@ class MovingBall:
         self.clamp_v ()
         self.stop_v ()
         self.p = self.p + (self.v *dt*world.timescale)
+
+    def isColliding(self, world):
+        width = world.width
+        height = world.height
+
+        if self.p.x < 0+self.r or \
+            self.p.x > width-self.r or \
+                self.p.y < 0+self.r or \
+                    self.p.y > height-self.r:
+
+            return True
+        return False
 
 
     def collide_edge (self, world):

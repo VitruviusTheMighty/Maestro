@@ -19,7 +19,7 @@ class Porfolio:
     A central executable for running all games made in CSC 245
     """
 
-    def __init__(self, height, width):
+    def __init__(self, width, height):
         
         self.load_win_dimensions(width, height)
 
@@ -115,5 +115,5 @@ class Porfolio:
 
 if __name__ == "__main__":
 
-    p = Porfolio(600, 800)
+    p = Porfolio(1280, 1080)
     p.portfolio_loop()

@@ -66,8 +66,23 @@ class Vector:
         perp.normalize()
         return perp
 
-        
+    def distanceFrom(self, vector):
+        """
+        Gets the distance between our vector and another
+        """
+        if type(vector) != type(self):
+            raise TypeError("'vector' parameter must be of type Vector")
+
+        dist = math.sqrt(  ( (self.x - vector.x)**2 ) + ( (self.y - vector.y)**2 ) )
+        return dist
+
+
 if __name__ == "__main__":
     v1 = Vector(3,1)
     v2 = v1.getPerpendicularUnit()
+
+    v3 = Vector(4,1)
+    v4 = Vector(5,1)
     print(v1,v2)
+
+    print(v3.distanceFrom(v4))
