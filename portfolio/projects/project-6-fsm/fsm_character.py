@@ -13,7 +13,8 @@ class FSMBeakBall (BeakBall):
 
         # green - wander; red - run
         self.fsm.add_states ([('wandering', lambda:self.wander(1.0/30)), \
-                              ('looping', lambda:self.loop(1.0/30))])
+                              ('looping', lambda:self.loop(1.0/30)), \
+                              ('freezing', lambda:self.freeze(1.0/30))])
 
         self.fsm.add_transitions ('wandering', [(self.test_on_red, 'looping')])
 

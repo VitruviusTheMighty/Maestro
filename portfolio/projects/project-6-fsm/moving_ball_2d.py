@@ -12,7 +12,7 @@ import math
 
 from vector import Vector
 
-class MovingBall :
+class MovingBall:
 
     p = Vector(0.0,0.0)
 
@@ -21,7 +21,6 @@ class MovingBall :
 
     v = Vector(0.0, 0.0)
     a = Vector(0.0, 0.0)
-
 
     e = 0.0
 
@@ -38,6 +37,7 @@ class MovingBall :
         self.v = Vector(float(xv),float(yv))
         self.drawvec = True 
 
+        self.seeking = False
 
     def set_elasticity (self, e):
         self.e = e

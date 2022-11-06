@@ -2,7 +2,8 @@
 import pygame
 from moving_ball_2d import MovingBall
 from vector import Vector
-
+import math
+import random
 
 class BeakBall (MovingBall):
 
@@ -34,29 +35,69 @@ class BeakBall (MovingBall):
     def apply_steering (self):
         for s in self.steering:
             self.v = self.v + s
+        print(f"seek state:  {self.seeking}")
 
+    def __get_rand_target(self, radius):
+        """
+        Picks a random target some radius away from me
+        """
+        cx = self.p.x
+        cy = self.p.y
 
-    def wander(self,weight):
+        theta = random.random() * 2 * math.pi
+        x = cx + math.cos(theta) * radius
+        y = cy + math.sin(theta) * radius
+        return x, y
+
+    def seek(self, pos:Vector, weight):
+        # Seek
+        desired_direction = (pos - self.p).normalize()
+        #multiply direction by max speed
+        max_speed = self.speedlimit.length()
+        desired_velocity = desired_direction * max_speed
+        ## first find the "error" between current velocity and desired velocity, and then multiply that error 
+        ## by the weight, and then add it to steering inputs
+        self.steering += [(desired_velocity - self.v)*weight]
+
+    def wander(self, weight):
         '''
         pick a random target some radius away from me
         and seek it
         '''
-        print("wander:implement me")
-        pass
+
+        if not self.seeking:
+            rx, ry = self.__get_rand_target(100)
+
+            self.target = Vector(rx, ry)
+            self.seeking = True
+            print(f"""
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+            New Target: {str(self.target)}
+
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            
+            """)
+        if self.seeking:
+
+            self.seek(self.target, weight)
+
+            if self.p == self.target:
+                self.seeking = False
 
     def loop(self,weight):
         '''
         agent should move in a corkscrew manner
         '''
-        print("loop: implement me")
-        pass
+        new_v = Vector(self.v.x*weight, self.v.y*weight)
+        self.steering += [(new_v)*weight]
 
     def freeze(self,weight):
         '''
         stop, hammertime
         '''
-        print("freeze: implement me")
-        pass
+        self.v = Vector(0,0,0,0)
+        self.a = Vector(0.0,0.0)
 
 
 

@@ -54,12 +54,10 @@ class SteeringBall (MovingBall):
     def __str__ (self):
         return str(self.p)+", "+str(self.v)+", "+str(self.a) 
 
-
     def apply_steering (self):
         ## add all steering inputs to current velocity vector
         for s in self.steering:
             self.v += s
-
 
     def seek (self, target:MovingBall, weight):
         #find difference between my location and target location 
