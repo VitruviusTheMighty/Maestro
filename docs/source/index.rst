@@ -23,3 +23,13 @@ Contents
    usage
    api
    projects
+
+Project Documentation
+---------------------
+
+.. toctree::
+   :maxdepth: 10
+
+   breakout
+   joust
+   flocking

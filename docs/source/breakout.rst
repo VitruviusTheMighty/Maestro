@@ -1,5 +1,5 @@
-Project-1-Breakout
-==================
+Project-1-Breakout-Documentation
+================================
 **A take on the classic game 'breakout'**
 
 Emphasis on:

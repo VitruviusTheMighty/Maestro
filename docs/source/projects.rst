@@ -12,6 +12,9 @@ Emphasis on:
 - Frame rates in games
 - Game loops
 
+:ref:`Project-1-Breakout-Documentation`
+
+:doc:`/breakout`
 
 project-2-joust
 ---------------
@@ -23,7 +26,9 @@ Emphasis on:
 - Player and Environment Physics
 - Sprite Animations
 
-:ref:`projects/Project-2-Joust`
+:ref:`Project-2-Joust-Documentation`
+
+:doc:`/joust`
 
 project-3-flocking
 ------------------
@@ -33,6 +38,10 @@ Emphasis on:
 
 - MultiAgent Scenarios
 - Flocking behaviors
+
+:ref:`Project-3-Flocking-Documentation`
+
+:doc:`/flocking`
 
 project-4-path-planning
 ------------------------

@@ -1,5 +1,5 @@
-Project-2-Joust
-===============
+Project-2-Joust-Documentation
+=============================
 **A basic bare-bones platformer**
 
 Emphasis on:
