@@ -17,6 +17,11 @@ class FSMBeakBall (BeakBall):
                               ('freezing', lambda:self.freeze(1.0/30))])
 
         self.fsm.add_transitions ('wandering', [(self.test_on_red, 'looping')])
+        self.fsm.add_transitions ('looping', [(self.test_on_green, 'wandering')])
+
+        # self.fsm.add_transitions ('wandering', [(self.test_collide, 'freezing')])
+        # self.fsm.add_transitions ('looping', [(self.test_collide, 'freezing')])
+
 
 
     def execute_actions (self):
@@ -32,6 +37,26 @@ class FSMBeakBall (BeakBall):
     def test_on_red (self, world):
 
         if self.p.x > world.width/2:
+
+            # if self.test_collide(world):
+            #     self.freeze()
+            return True
+        else:
+            return False
+
+    def test_on_green (self, world):
+
+        if self.p.x < world.width/2:
+            # if self.test_collide(world):
+            #     self.freeze()
+            return True
+        else:
+            return False
+
+
+    def test_collide (self, world):
+
+        if self.isColliding(world, self.r):
             return True
         else:
             return False

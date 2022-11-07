@@ -38,8 +38,11 @@ class MovingBall:
 
         self.seeking   = False
         # self.corkscrew = False
-
+        self.leaving_wall = False
+        
         self.world = None
+
+        self.direction = Vector(0,0)
 
     def set_elasticity (self, e):
         self.e = e
@@ -51,16 +54,29 @@ class MovingBall:
         self.stop_v ()
         self.p = self.p + (self.v *dt*world.timescale)
 
-    def isColliding(self, world):
+    def isColliding(self, world, border=0):
+        """
+        Checks if is colliding
+        Border can define an imaginary border for the object to collide with
+        """
         width = world.width
         height = world.height
+        
+        if border > 0:
+            if self.p.x < 0+(self.r)+border or \
+                self.p.x > width-self.r-border or \
+                    self.p.y < 0+self.r+border or \
+                        self.p.y > height-self.r-border:
 
-        if self.p.x < 0+self.r or \
-            self.p.x > width-self.r or \
-                self.p.y < 0+self.r or \
-                    self.p.y > height-self.r:
+                return True
 
-            return True
+        else:    
+            if self.p.x < 0+self.r or \
+                self.p.x > width-self.r or \
+                    self.p.y < 0+self.r or \
+                        self.p.y > height-self.r:
+
+                return True
         return False
 
     def collide_edge (self, world):

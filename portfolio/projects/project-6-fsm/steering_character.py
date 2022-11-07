@@ -31,6 +31,8 @@ class BeakBall (MovingBall):
             arrowvec = arrowvec + self.p
             pygame.draw.line(window,pygame.color.Color("red"),(int(self.p.x),int(self.p.y)),(arrowvec.x,arrowvec.y),2)
 
+            self.direction = arrowvec
+
 
     def __str__ (self):
         return str(self.p)+", "+str(self.v)+", "+str(self.a) 
@@ -77,44 +79,46 @@ class BeakBall (MovingBall):
 
             self.target = Vector(rx, ry)
             self.seeking = True
-            print(f"""
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            # print(f"""
+            # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-            New Target: {str(self.target)}
+            # New Target: {str(self.target)}
 
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            """)
-            time.sleep(1)
+            # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            # """)
 
         else:
             self.seek(self.target, weight)
-            if self.isColliding(self.world):
-                self.reverse_dir(weight)
             if self.p.distanceFrom(self.target) < 1.0:
                 self.seeking = False
 
-    def reverse_dir(self, weight):
-        bx = (self.beak_tip.x - self.p.x)
-        by = (self.beak_tip.y - self.p.y)
 
-        target = Vector(bx, by)
-        desired_direction = (target - self.p).normalize()
-        max_speed = self.speedlimit.length()
-        desired_velocity = desired_direction * max_speed
-        self.steering += [(desired_velocity - self.v)*weight]
 
     def get_direction(self):
         """
         Gets the direction returns a value in degrees
         """
-        x = self.beak_tip.x - self.p.x
-        y = self.beak_tip.y - self.p.y
+
+        x = self.direction.x - self.p.x
+        y = self.direction.y - self.p.y
 
         radians = math.atan2(y, x)
         degrees = math.degrees(radians)
         
         return degrees
 
+    # def get_dir_point(self, degrees):
+        
+    #     dir = self.get_direction()
+
+    #     if dir >0:
+    #         desired_angle = dir+degrees
+    #     else:
+    #         desired_angle = dir-degrees
+
+    #     dist = 10
+
+    
 
     def get_turnpoint(self, degrees, distance=0):   
         """
@@ -130,10 +134,9 @@ class BeakBall (MovingBall):
             desired_angle = dir+degrees
         else:
             desired_angle = dir-degrees
-        
-
-        bx = (self.beak_tip.x - self.p.x)
-        by = (self.beak_tip.y - self.p.y)
+    
+        bx = (self.direction.x - self.p.x)
+        by = (self.direction.y - self.p.y)
 
         if bx >= 0 and by >= 0:
             quad = 1
@@ -144,7 +147,8 @@ class BeakBall (MovingBall):
         elif bx > 0 and by < 0:
             quad = 4
 
-        dist = (self.beak_tip.distanceFrom(self.p)) + distance
+        print(f"Beak: {self.direction.x},{self.direction.y}, Pos: {self.p.x}, {self.p.y} - Quad: {quad}")
+        dist = (self.direction.distanceFrom(self.p)) + distance
 
         turnpoint_len = dist / math.cos(desired_angle)
 
@@ -166,6 +170,7 @@ class BeakBall (MovingBall):
             ty = self.p.y + y_dist
 
 
+
         target = Vector(tx, ty)
         return target
 
@@ -174,7 +179,7 @@ class BeakBall (MovingBall):
         '''
         agent should move in a corkscrew manner
         '''
-        target = self.get_turnpoint(degrees=20)
+        target = self.get_turnpoint(degrees=1)
         # make a target directly in front of beakball
         # dir = self.get_direction()
         # target_x = 3 if dir.x > 1 else -3
@@ -193,6 +198,7 @@ class BeakBall (MovingBall):
         '''
         self.v = Vector(0,0,0,0)
         # self.a = Vector(0.0,0.0)
+        self.leaving_wall = True
 
 
 
