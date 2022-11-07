@@ -1,4 +1,4 @@
-Project-2-Joust 
+Project-2-Joust
 ===============
 **A basic bare-bones platformer**
 

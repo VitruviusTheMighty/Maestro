@@ -23,6 +23,8 @@ Emphasis on:
 - Player and Environment Physics
 - Sprite Animations
 
+:ref:`projects/Project-2-Joust`
+
 project-3-flocking
 ------------------
 **Demonstration of basic flocking algorithms for Agents in games**
