@@ -24,12 +24,11 @@ Contents
    api
    projects
 
-Project Documentation
----------------------
+.. Project Documentation
+.. ---------------------
 
-.. toctree::
-   :maxdepth: 10
+..    :maxdepth: 10
 
-   breakout
-   joust
-   flocking
+..    breakout
+..    joust
+..    flocking

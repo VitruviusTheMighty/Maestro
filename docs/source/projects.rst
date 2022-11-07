@@ -14,7 +14,7 @@ Emphasis on:
 
 :ref:`Project-1-Breakout-Documentation`
 
-:doc:`/breakout`
+.. :doc:`/breakout`
 
 project-2-joust
 ---------------
@@ -28,7 +28,7 @@ Emphasis on:
 
 :ref:`Project-2-Joust-Documentation`
 
-:doc:`/joust`
+.. :doc:`/joust`
 
 project-3-flocking
 ------------------
@@ -41,7 +41,7 @@ Emphasis on:
 
 :ref:`Project-3-Flocking-Documentation`
 
-:doc:`/flocking`
+.. :doc:`/flocking`
 
 project-4-path-planning
 ------------------------
