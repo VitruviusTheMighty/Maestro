@@ -36,13 +36,13 @@ class MovingBall:
         self.v = Vector(float(xv),float(yv))
         self.drawvec = True 
 
-        self.seeking = False
+        self.seeking   = False
+        # self.corkscrew = False
 
         self.world = None
 
     def set_elasticity (self, e):
         self.e = e
-
 
     def move (self, dt, world):
         total_acceleration = self.a + world.gravity
@@ -62,7 +62,6 @@ class MovingBall:
 
             return True
         return False
-
 
     def collide_edge (self, world):
         width = world.width
@@ -148,7 +147,6 @@ class MovingBall:
 
         if self.v.length() < 5:
             self.v = Vector (0,0)
-
         
     def draw (self, window):
         pygame.draw.circle(window, self.color, (int(self.p.x),int(self.p.y)),self.r)

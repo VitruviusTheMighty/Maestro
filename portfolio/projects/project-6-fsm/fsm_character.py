@@ -26,7 +26,7 @@ class FSMBeakBall (BeakBall):
         action = self.fsm.states[self.fsm.current_state]
         action()
 
-        self.apply_steering ()
+        self.apply_steering()
 
 
     def test_on_red (self, world):

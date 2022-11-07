@@ -38,7 +38,7 @@ class BeakBall (MovingBall):
     def apply_steering (self):
         for s in self.steering:
             self.v = self.v + s
-        print(f"seek state:  {self.seeking}")
+        # print(f"seek state:  {self.seeking}")
 
     def __get_rand_target(self, radius):
         """
@@ -56,7 +56,9 @@ class BeakBall (MovingBall):
         return x, y
 
     def seek(self, pos:Vector, weight):
-        # Seek
+        """
+        Seeks something
+        """
         desired_direction = (pos - self.p).normalize()
         #multiply direction by max speed
         max_speed = self.speedlimit.length()
@@ -70,7 +72,6 @@ class BeakBall (MovingBall):
         pick a random target some radius away from me
         and seek it
         '''
-
         if not self.seeking:
             rx, ry = self.__get_rand_target(random.randint(10, 100))
 
@@ -82,30 +83,116 @@ class BeakBall (MovingBall):
             New Target: {str(self.target)}
 
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            
             """)
             time.sleep(1)
 
         else:
-
             self.seek(self.target, weight)
-
-            if self.p.distanceFrom(self.target) < 1.0 or self.isColliding(self.world):
+            if self.isColliding(self.world):
+                self.reverse_dir(weight)
+            if self.p.distanceFrom(self.target) < 1.0:
                 self.seeking = False
+
+    def reverse_dir(self, weight):
+        bx = (self.beak_tip.x - self.p.x)
+        by = (self.beak_tip.y - self.p.y)
+
+        target = Vector(bx, by)
+        desired_direction = (target - self.p).normalize()
+        max_speed = self.speedlimit.length()
+        desired_velocity = desired_direction * max_speed
+        self.steering += [(desired_velocity - self.v)*weight]
+
+    def get_direction(self):
+        """
+        Gets the direction returns a value in degrees
+        """
+        x = self.beak_tip.x - self.p.x
+        y = self.beak_tip.y - self.p.y
+
+        radians = math.atan2(y, x)
+        degrees = math.degrees(radians)
+        
+        return degrees
+
+
+    def get_turnpoint(self, degrees, distance=0):   
+        """
+        Finds a position that is n degrees at a distance x
+        
+        Params:
+            degrees (int/float): Degrees to turn by
+            distance (int/float): Amount to travel, can be 0
+        """
+        dir = self.get_direction()
+
+        if dir >0:
+            desired_angle = dir+degrees
+        else:
+            desired_angle = dir-degrees
+        
+
+        bx = (self.beak_tip.x - self.p.x)
+        by = (self.beak_tip.y - self.p.y)
+
+        if bx >= 0 and by >= 0:
+            quad = 1
+        elif bx <= 0 and by > 0:
+            quad = 2
+        elif bx < 0 and by <= 0:
+            quad = 3
+        elif bx > 0 and by < 0:
+            quad = 4
+
+        dist = (self.beak_tip.distanceFrom(self.p)) + distance
+
+        turnpoint_len = dist / math.cos(desired_angle)
+
+        # Now get the x-dist and y-dist
+        x_dist = math.sin(desired_angle) * turnpoint_len
+        y_dist = math.cos(desired_angle) * turnpoint_len
+
+        if quad == 1:
+            tx = self.p.x + x_dist
+            ty = self.p.y + y_dist
+        elif quad == 2:
+            tx = self.p.x - x_dist
+            ty = self.p.y + y_dist
+        elif quad == 3:
+            tx = self.p.x - x_dist
+            ty = self.p.y - y_dist
+        elif quad == 4:
+            tx = self.p.x + x_dist
+            ty = self.p.y + y_dist
+
+
+        target = Vector(tx, ty)
+        return target
+
 
     def loop(self,weight):
         '''
         agent should move in a corkscrew manner
         '''
-        new_v = Vector(self.v.x*weight, self.v.y*weight)
-        self.steering += [(new_v)*weight]
+        target = self.get_turnpoint(degrees=20)
+        # make a target directly in front of beakball
+        # dir = self.get_direction()
+        # target_x = 3 if dir.x > 1 else -3
+        # target_y = 3 if dir.y > 1 else -3
+        # target = Vector(target_x, target_y)
+
+        desired_direction = (self.p - target).normalize()
+        max_speed = self.speedlimit.length()
+        desired_velocity = desired_direction * max_speed
+        self.steering += [(desired_velocity - self.v)*weight]
+        # print(self.get_direction())
 
     def freeze(self,weight):
         '''
         stop, hammertime
         '''
         self.v = Vector(0,0,0,0)
-        self.a = Vector(0.0,0.0)
+        # self.a = Vector(0.0,0.0)
 
 
 

@@ -171,9 +171,6 @@ def run_game(screen=None, numAgents=10):
 
         # update pos for centeroid ball
 
-
-        
-        
         ## Rendering
         # Draw frame
         my_win.fill(pygame.color.Color("gray14"))
