@@ -61,7 +61,6 @@ def run_game(num_agents=30):
             if event.type == pygame.QUIT:
                 keepGoing = False
 
-        ## Rendering
         
         ## Simulate game world
 
@@ -70,6 +69,7 @@ def run_game(num_agents=30):
             c.execute_actions ()
         
             c.move(dt, world)
+            print()
             c.collide_edge (world)
 
         # Draw frame

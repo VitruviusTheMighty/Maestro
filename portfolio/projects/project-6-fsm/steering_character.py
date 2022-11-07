@@ -38,6 +38,7 @@ class BeakBall (MovingBall):
         return str(self.p)+", "+str(self.v)+", "+str(self.a) 
 
     def apply_steering (self):
+        print(f"steering: {self.steering}")
         for s in self.steering:
             self.v = self.v + s
         # print(f"seek state:  {self.seeking}")
