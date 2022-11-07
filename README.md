@@ -6,8 +6,6 @@
 [*readthedocs Documentation*](https://csc245-maestro.readthedocs.io/en/latest/)
 
 
-
-
 ### PORTFOLIO
 
 *Portfolio located* [**here**](/portfolio.md)

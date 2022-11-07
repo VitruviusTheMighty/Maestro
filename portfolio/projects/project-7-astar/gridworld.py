@@ -43,10 +43,6 @@ class GridWorld:
                 if pygame.K_g in keymap and keymap[pygame.K_g]:
                         self.grid[y][x] = self.grass
                    
-            
-
-                
-
         def draw(self,window):
                 window.fill(pygame.color.Color("green"))
                 for row in range(0,self.height):
@@ -56,7 +52,6 @@ class GridWorld:
                                 terrain = self.grid[row][col]
                                 groundcolor = self.colors[terrain]
                                 pygame.draw.rect(window,groundcolor,pygame.Rect(xcoord,ycoord,self.gridsize,self.gridsize))
-
 
         def inbounds(self,p):
           (x,y) = p

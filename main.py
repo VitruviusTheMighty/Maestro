@@ -107,13 +107,10 @@ class Porfolio:
                         # sys.exit()
             pygame.display.update()
 
-
-            
-
     def switch_screen(self):
         pass
 
 if __name__ == "__main__":
 
-    p = Porfolio(1280, 1080)
+    p = Porfolio(1400, 900)
     p.portfolio_loop()
