@@ -10,6 +10,9 @@
 
 *Portfolio located* [**here**](/portfolio.md)
 
-#
+### CONTRACT
+
+*Contract located* [**here**](/portfolio/contract.md)
+
 ### Contents:
 
