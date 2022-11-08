@@ -6,6 +6,7 @@ import pygame
 import os
 import sys
 from assets.button import Button
+from games.index import *
 # Import all other loops here. 
 # TODO: EVERY game should have a loop that can be imported
 
@@ -98,8 +99,7 @@ class Porfolio:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if GAME_SELECT.checkForInput(MOUSE_POS):
                         # self.playgame()
-                        # TODO: Do a thing
-                        pass
+                        self.game_select_loop()
                     # if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
                     #     self.options()
                     # if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
@@ -107,9 +107,24 @@ class Porfolio:
                         # sys.exit()
             pygame.display.update()
 
+    def game_select_loop(self):
+        self.load_background(use_center=True)
+        while True:
+            pygame.display.set_caption("Portfolio - Game Select")
+            self.render_background()
+            MOUSE_POS = pygame.mouse.get_pos()
+
+            games = []
+            GAME_SELECT = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=(self.center_win_width, 250), 
+                                text_input="GAME SELECT", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
+
+
 
             
 
+    def import_games(self):
+        games = []
+        
     def switch_screen(self):
         pass
 
