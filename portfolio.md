@@ -44,20 +44,20 @@ Access Contract [**HERE**](./portfolio/contract.md)
 | Git                         |    x    |              |         |
 | Linux  Terminal             |    x    |              |         |
 | Markdown                    |    x    |              |         |
-| ReStructuredText            |    x    |              |         |
-| ReadTheDocs Documentation   |    x    |              |         |
+| ReStructuredText            |    x    |              |    x    |
+| ReadTheDocs Documentation   |    x    |              |    x    |
 | Object Oriented Python      |    x    |              |         |
 | List Comprehensions         |    x    |              |         |
 | SSH and SSH Keys            |    x    |              |         |
 | Vector Math                 |    x    |              |         |
-| Flocking Agents             |    x    |              |         |
+| Flocking Agents             |    x    |              |    x    |
 | Finite State Machines       |         |       x      |         |
 | Path Planning               |         |       x      |         |
-| Sprites                     |    x    |              |         |
-| Sprite Sheets and Animation |    x    |              |         |
-| Pygame API for Collisions   |    x    |              |         |
+| Sprites                     |    x    |              |    x    |
+| Sprite Sheets and Animation |    x    |              |    x    |
+| Pygame API for Collisions   |    x    |              |    x    |
 | Pygame API for Music        |    x    |              |         |
-| Making Game Menus in Pygame |    x    |              |         |
+| Making Game Menus in Pygame |    x    |              |    x    |
 | Standards for Game Design   |         |       x      |         |
 | Alternative Inputs for Games|    x    |              |         |
 | Using Bio Activity as Input |    x    |              |         |
