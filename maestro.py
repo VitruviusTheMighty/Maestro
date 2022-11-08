@@ -117,9 +117,6 @@ class Porfolio:
             games = []
             GAME_SELECT = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=(self.center_win_width, 250), 
                                 text_input="GAME SELECT", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
-
-
-
             
 
     def import_games(self):
@@ -130,5 +127,5 @@ class Porfolio:
 
 if __name__ == "__main__":
 
-    p = Porfolio(1280, 1080)
+    p = Porfolio(1400, 900)
     p.portfolio_loop()
