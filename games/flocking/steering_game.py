@@ -108,6 +108,8 @@ class FlockingGame:
         height = my_win.get_height()
         world = World (width, height)
 
+        pygame.display.set_caption("Flocking")
+        
         weight = 1.0/30
 
 
