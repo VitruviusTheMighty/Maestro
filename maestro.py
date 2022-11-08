@@ -6,7 +6,7 @@ import pygame
 import os
 import sys
 from assets.button import Button
-from games.index import JOUST_GAME, BREAKOUT_GAME
+from games.index import JOUST_GAME, BREAKOUT_GAME, FLOCKING_GAME
 # Import all other loops here. 
 # TODO: EVERY game should have a loop that can be imported
 
@@ -82,9 +82,16 @@ class Porfolio:
         TEXT_RECT = TEXT.get_rect(center=pos)
         return TEXT, TEXT_RECT
 
-    def display_text(self, text="", size=45, color="#b68f40", pos=(0,0), custom_font=None):
-        text, text_rect = self.gen_text(text=text, size=size, pos=pos, color=color, custom_font=custom_font)
-        self.SCREEN.blit(text, text_rect)
+    def display_text(self, text="", size=45, color="#b68f40", pos=(0,0), custom_font=None, line_spacing=10):
+        if "\n" in text:
+            text = text.split("\n")
+            for i, line in enumerate(text):
+                y_pos = pos[1]+((size+line_spacing)*i)
+                line, text_rect = self.gen_text(text=line, size=size, pos=(pos[0], y_pos ), color=color, custom_font=custom_font)
+                self.SCREEN.blit(line, text_rect)
+        else:
+            text, text_rect = self.gen_text(text=text, size=size, pos=pos, color=color, custom_font=custom_font)
+            self.SCREEN.blit(text, text_rect)
 
     def prep_portfolio(self, background_filepath=None):
         """
@@ -105,9 +112,9 @@ class Porfolio:
 
             self.render_background()
 
-            self.display_text(text="LEONARDOS", size=50, color=(255,255,255), pos=(self.center_win_width,80), custom_font=r"assets\IBM-Logo.ttf")
+            self.display_text(text="MAESTRO", size=100, color=(255,255,255), pos=(self.center_win_width,150), custom_font=r"assets\IBM-Logo.ttf")
 
-            self.display_text(text="GAME PORTFOLIO", size=50, pos=(self.center_win_width,160))
+            self.display_text(text="AN ENSEMBLE OF GAMES MADE BY LEONARDO", size=30, pos=(self.center_win_width,220))
 
             MENU_MOUSE_POS = pygame.mouse.get_pos()
 
@@ -117,10 +124,13 @@ class Porfolio:
             OPTIONS = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=(self.center_win_width, 500), 
                                 text_input="OPTIONS", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
 
-            QUIT = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=(self.center_win_width, 720), 
+            CREDITS = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=(self.center_win_width, 650), 
+                                text_input="CREDITS", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
+
+            QUIT = Button(image=None, pos=(self.center_win_width, 800), 
                                 text_input="QUIT", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
 
-            for button in [GAME_SELECT, OPTIONS, QUIT]:
+            for button in [GAME_SELECT, OPTIONS, CREDITS, QUIT]:
                 button.changeColor(MENU_MOUSE_POS)
                 button.update(self.SCREEN)
             
@@ -137,6 +147,8 @@ class Porfolio:
                         self.game_select_loop()
                     if OPTIONS.checkForInput(MENU_MOUSE_POS):
                         self.options_menu_loop()
+                    if CREDITS.checkForInput(MENU_MOUSE_POS):
+                        self.credits_loop()
                     if QUIT.checkForInput(MENU_MOUSE_POS):
                         pygame.quit()
                         sys.exit()
@@ -147,8 +159,8 @@ class Porfolio:
         while True:
             pygame.display.set_caption("Portfolio - Game Select")
             self.render_background()
-            self.display_text(text="GAME SELECT", size=50, pos=(self.center_win_width,50))
-            self.display_text(text="Press ESC to return to Main Menu", size=10, color=(255,255,255), pos=(self.center_win_width,100))
+            self.display_text(text="GAME SELECT", size=50, pos=(self.center_win_width,80))
+            self.display_text(text="Press ESC to return to Main Menu", size=10, color=(255,255,255), pos=(self.center_win_width,120))
 
 
             MOUSE_POS = pygame.mouse.get_pos()
@@ -157,8 +169,17 @@ class Porfolio:
                                 text_input="BREAKOUT", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
             JOUST = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=(self.center_win_width//2, 450), 
                                 text_input="JOUST", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
+
+            FLOCKING = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=((self.center_win_width//2) + self.center_win_width, 300), 
+                                text_input="FLOCKING", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
             
-            for button in [BREAKOUT, JOUST]:
+            FSM = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=((self.center_win_width//2) + self.center_win_width, 450), 
+                                text_input="FSM", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
+            
+            BACKTOMAIN = Button(image=None, pos=(self.center_win_width, 700), 
+                                text_input="MAIN MENU", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
+
+            for button in [BREAKOUT, JOUST, FLOCKING, FSM, BACKTOMAIN]:
                 button.changeColor(MOUSE_POS)
                 button.update(self.SCREEN)
 
@@ -176,6 +197,13 @@ class Porfolio:
                     if JOUST.checkForInput(MOUSE_POS):
                         # print("play joust")
                         self.launch_joust()
+                    if FLOCKING.checkForInput(MOUSE_POS):
+                        self.launch_flocking()
+                    if FSM.checkForInput(MOUSE_POS):
+                        # self.launch_flocking()
+                        print("launch FINITE STATE MACHINES")
+                    if BACKTOMAIN.checkForInput(MOUSE_POS):
+                        self.portfolio_loop()
                         
             pygame.display.update() # ESSENTIAL FOR CHANING MENUS!
 
@@ -189,7 +217,7 @@ class Porfolio:
 
             MOUSE_POS = pygame.mouse.get_pos()
 
-            BACKTOMAIN = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=(self.center_win_width, 700), 
+            BACKTOMAIN = Button(image=None, pos=(self.center_win_width, 700), 
                                 text_input="MAIN MENU", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
             
             TOGGLE_MUSIC = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=(self.center_win_width, 350), 
@@ -213,6 +241,39 @@ class Porfolio:
                         self.portfolio_loop()
             pygame.display.update() # ESSENTIAL FOR CHANING MENUS!
 
+    def credits_loop(self):
+        while True:
+            pygame.display.set_caption("Portfolio - Credits")
+            self.render_background()
+            self.display_text(text="Portfolio of games made by Leonardo Ferrisi 23' for CSC245\nDuring Fall Term 2022 at Union College\n--\nBuilt using Pygame\nAnd a bunch of other fun stuff!", size=20, pos=(self.center_win_width,50))
+            self.display_text(text="Press ESC to return to Main Menu", size=10, color=(255,255,255), pos=(self.center_win_width,self.win_height-30))
+
+            MOUSE_POS = pygame.mouse.get_pos()
+
+            VIEW_CONTRACT = Button(image=None, pos=(self.center_win_width, 600), 
+                                text_input="VIEW CONTRACT", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
+
+            BACKTOMAIN = Button(image=None, pos=(self.center_win_width, 700), 
+                                text_input="MAIN MENU", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
+            
+            for button in [VIEW_CONTRACT, BACKTOMAIN]:
+                button.changeColor(MOUSE_POS)
+                button.update(self.SCREEN)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type==pygame.KEYDOWN:
+                    if event.key==pygame.K_ESCAPE: 
+                        self.portfolio_loop()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if VIEW_CONTRACT.checkForInput(MOUSE_POS):
+                        print("send to contract page")
+                    if BACKTOMAIN.checkForInput(MOUSE_POS):
+                        self.portfolio_loop()
+            pygame.display.update() # ESSENTIAL FOR CHANING MENUS!
+
     def import_games(self):
         games = []
         
@@ -229,6 +290,11 @@ class Porfolio:
         b = BREAKOUT_GAME(width=self.win_width, height=self.win_height, cheats=False, multiball=False, useSquares=True, sfx=False, music=False, world=self.SCREEN)
         b.load_game_select(menu_select_func=self.game_select_loop)
         b.run()
+
+    def launch_flocking(self):
+        f = FLOCKING_GAME(screen=self.SCREEN)
+        f.load_game_select(menu_select_func=self.game_select_loop)
+        f.run_game()
 
 if __name__ == "__main__":
 
