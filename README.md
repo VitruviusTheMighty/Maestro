@@ -3,7 +3,7 @@
 ## csc245-f22 - Leonardo Ferrisi
 
 ### Documenation Page
-[*readthedocs Documentation*](https://csc245-maestro.readthedocs.io/en/latest/)
+[*readthedocs Documentation*](https://csc245-maestro.readthedocs.io/en/latest/index.html)
 
 
 ### PORTFOLIO

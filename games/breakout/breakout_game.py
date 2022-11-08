@@ -26,8 +26,10 @@ class Breakout3000:
     
     - Leonardo Ferrisi
     """
-    def __init__(self, width=1400, height=900, fullscreen=False, cheats=False, multiball=False, useSquares=False, sfx=True, music=False, world=None):
+    def __init__(self, width=1400, height=900, cheats=False, multiball=False, useSquares=False, sfx=True, music=False, world=None):
         pygame.init()
+        
+        self.world = world
         
         self.score = 0
         self.lives = 3
@@ -46,11 +48,12 @@ class Breakout3000:
         if cheats: 
             self.lives = math.inf
             self.paddle_speed = 10
-        if fullscreen: 
-            info = pygame.display.Info()
-            # print(f"Screen is {info.current_w} x {info.current_h}")
-            self.display = pygame.display.set_mode((info.current_w, info.current_h), pygame.FULLSCREEN)
-        else: self.display = pygame.display.set_mode((width, height), pygame.RESIZABLE)
+        # if fullscreen: 
+        #     info = pygame.display.Info()
+        #     # print(f"Screen is {info.current_w} x {info.current_h}")
+        #     self.display = pygame.display.set_mode((info.current_w, info.current_h), pygame.FULLSCREEN)
+        if not self.world: self.display = pygame.display.set_mode((width, height), pygame.RESIZABLE)
+        else: self.display = self.world
         pygame.display.set_caption("Breakout3000")
         self.sfx = sfx
         if sfx:
@@ -212,8 +215,11 @@ class Breakout3000:
             if event.type == pygame.QUIT: 
                 self.keepPlaying = False 
             elif event.type==pygame.KEYDOWN:
-                if event.key==pygame.K_ESCAPE: 
-                    self.keepPlaying=False
+                if event.key == pygame.K_ESCAPE:
+                    if self.menu != None:
+                        self.menu()
+                    else:
+                        pygame.quit()
 
         if self.score == self.max_score:
                 self.display_text(position=Vector(self.display.get_width()//2, self.display.get_height()//2 ), text="YOU WIN!", color="white")
@@ -246,6 +252,10 @@ class Breakout3000:
             self.paddle.moveLeft()
         if keys[pygame.K_RIGHT]:
             self.paddle.moveRight()
+
+    def load_game_select(self, menu_select_func):
+
+        self.menu = menu_select_func
 
     def run(self):  
         """
@@ -282,5 +292,5 @@ class Breakout3000:
         pygame.quit()
 
 if __name__ == "__main__":
-    b3k = Breakout3000(fullscreen=False, cheats=False, multiball=False, useSquares=True, sfx=True, music=True)
+    b3k = Breakout3000(cheats=False, multiball=False, useSquares=True, sfx=True, music=True)
     b3k.run()

@@ -6,7 +6,7 @@ import pygame
 import os
 import sys
 from assets.button import Button
-from games.index import JOUST_GAME
+from games.index import JOUST_GAME, BREAKOUT_GAME
 # Import all other loops here. 
 # TODO: EVERY game should have a loop that can be imported
 
@@ -51,8 +51,12 @@ class Porfolio:
             self.music_is_live = True
 
     def toggle_music(self):
-        if self.music_is_live: pygame.mixer.music.set_volume(0.0)
-        else: pygame.mixer.music.set_volume(5.0)
+        if self.music_is_live: 
+            pygame.mixer.music.set_volume(0.0)
+            self.music_is_live = False
+        else: 
+            pygame.mixer.music.set_volume(5.0)
+            self.music_is_live = True
 
     def load_background(self, use_center=True):
         
@@ -73,13 +77,13 @@ class Porfolio:
         else:
             self.SCREEN.fill("black")
 
-    def gen_text(self, text="", size=45, color="#b68f40", pos=(0,0)):
-        TEXT = get_font(size=size).render(text, True, color)
+    def gen_text(self, text="", size=45, color="#b68f40", pos=(0,0), custom_font=None):
+        TEXT = get_font(size=size, font_path=custom_font).render(text, True, color)
         TEXT_RECT = TEXT.get_rect(center=pos)
         return TEXT, TEXT_RECT
 
-    def display_text(self, text="", size=45, color="#b68f40", pos=(0,0)):
-        text, text_rect = self.gen_text(text=text, size=size, pos=pos, color=color)
+    def display_text(self, text="", size=45, color="#b68f40", pos=(0,0), custom_font=None):
+        text, text_rect = self.gen_text(text=text, size=size, pos=pos, color=color, custom_font=custom_font)
         self.SCREEN.blit(text, text_rect)
 
     def prep_portfolio(self, background_filepath=None):
@@ -101,7 +105,7 @@ class Porfolio:
 
             self.render_background()
 
-            self.display_text(text="LEONARDO'S", size=30, color=(255,255,255), pos=(self.center_win_width,100))
+            self.display_text(text="LEONARDOS", size=50, color=(255,255,255), pos=(self.center_win_width,80), custom_font=r"assets\IBM-Logo.ttf")
 
             self.display_text(text="GAME PORTFOLIO", size=50, pos=(self.center_win_width,160))
 
@@ -110,7 +114,13 @@ class Porfolio:
             GAME_SELECT = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=(self.center_win_width, 350), 
                                 text_input="GAME SELECT", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
 
-            for button in [GAME_SELECT]:
+            OPTIONS = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=(self.center_win_width, 500), 
+                                text_input="OPTIONS", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
+
+            QUIT = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=(self.center_win_width, 720), 
+                                text_input="QUIT", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
+
+            for button in [GAME_SELECT, OPTIONS, QUIT]:
                 button.changeColor(MENU_MOUSE_POS)
                 button.update(self.SCREEN)
             
@@ -125,7 +135,13 @@ class Porfolio:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if GAME_SELECT.checkForInput(MENU_MOUSE_POS):
                         self.game_select_loop()
-            pygame.display.update()
+                    if OPTIONS.checkForInput(MENU_MOUSE_POS):
+                        self.options_menu_loop()
+                    if QUIT.checkForInput(MENU_MOUSE_POS):
+                        pygame.quit()
+                        sys.exit()
+            pygame.display.update() # ESSENTIAL FOR CHANING MENUS!
+
 
     def game_select_loop(self):
         while True:
@@ -155,13 +171,47 @@ class Porfolio:
                         self.portfolio_loop()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if BREAKOUT.checkForInput(MOUSE_POS):
-                        print("play breakout")
+                        # print("play breakout")
+                        self.launch_breakout()
                     if JOUST.checkForInput(MOUSE_POS):
                         # print("play joust")
                         self.launch_joust()
                         
-            pygame.display.update()
+            pygame.display.update() # ESSENTIAL FOR CHANING MENUS!
 
+
+    def options_menu_loop(self):
+        while True:
+            pygame.display.set_caption("Portfolio - Options")
+            self.render_background()
+            self.display_text(text="OPTIONS", size=50, pos=(self.center_win_width,50))
+            self.display_text(text="Press ESC to return to Main Menu", size=10, color=(255,255,255), pos=(self.center_win_width,100))
+
+            MOUSE_POS = pygame.mouse.get_pos()
+
+            BACKTOMAIN = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=(self.center_win_width, 700), 
+                                text_input="MAIN MENU", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
+            
+            TOGGLE_MUSIC = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=(self.center_win_width, 350), 
+                                text_input="TOGGLE MUSIC", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
+
+            for button in [TOGGLE_MUSIC, BACKTOMAIN]:
+                button.changeColor(MOUSE_POS)
+                button.update(self.SCREEN)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type==pygame.KEYDOWN:
+                    if event.key==pygame.K_ESCAPE: 
+                        self.portfolio_loop()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if TOGGLE_MUSIC.checkForInput(MOUSE_POS):
+                        self.toggle_music()
+                    if BACKTOMAIN.checkForInput(MOUSE_POS):
+                        self.portfolio_loop()
+            pygame.display.update() # ESSENTIAL FOR CHANING MENUS!
 
     def import_games(self):
         games = []
@@ -174,6 +224,11 @@ class Porfolio:
         j = JOUST_GAME(width=self.win_width, height=self.win_height, world=self.SCREEN) 
         j.load_game_select(menu_select_func=self.game_select_loop)
         j.run()
+
+    def launch_breakout(self):
+        b = BREAKOUT_GAME(width=self.win_width, height=self.win_height, cheats=False, multiball=False, useSquares=True, sfx=False, music=False, world=self.SCREEN)
+        b.load_game_select(menu_select_func=self.game_select_loop)
+        b.run()
 
 if __name__ == "__main__":
 
