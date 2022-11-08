@@ -5,7 +5,7 @@ Welcome to Leonardo's CSC245 documentation!
 
 
 
-Check out the :doc:`usage` section for further information, including
+Check out the :doc:`setup` section for further information, including
 how to :ref:`installation` the project.
 
 .. note::
@@ -20,15 +20,14 @@ Contents
 .. toctree::
    :maxdepth: 10
 
-   usage
-   api
+   setup
    projects
 
-.. Project Documentation
-.. ---------------------
+Project Documentation
+---------------------
+.. toctree::
+   :maxdepth: 10
 
-..    :maxdepth: 10
-
-..    breakout
-..    joust
-..    flocking
+   breakout
+   joust
+   flocking

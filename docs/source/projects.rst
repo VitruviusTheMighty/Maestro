@@ -1,5 +1,10 @@
-Projects
-========
+Projects-Outline
+================
+
+*NOTE!* This Outline contains the actual game projects.
+        Documentation for class exercises such as `baselines` and `collisions` are excluded
+
+|
 
 project-1-breakout
 --------------------
@@ -43,8 +48,16 @@ Emphasis on:
 
 .. :doc:`/flocking`
 
+project-4-finite-state-machines
+-------------------------------
+**Gamified demonstration of Finite State Machines**
+
+Emphasis on:
+
+- Finite State Machines
+
 project-4-path-planning
-------------------------
+-------------------------------
 **Gamified demonstration of path finding algorithms for AI**
 
 Emphasis on:
@@ -64,3 +77,4 @@ Emphasis on:
 - Python package development
 - Biosensing
 - Design of software packages
+- Menus
