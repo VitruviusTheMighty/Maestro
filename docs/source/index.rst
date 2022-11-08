@@ -22,6 +22,8 @@ Contents
 
    setup
    projects
+   game_dev
+   maestro
 
 Project Documentation
 ---------------------
