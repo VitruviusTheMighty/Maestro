@@ -1,5 +1,8 @@
 from pickle import FALSE
 import pygame
+import os
+
+DIRNAME = os.path.dirname(__file__)
 
 try:
     from box import Box
@@ -37,6 +40,8 @@ class Game:
             self.world = world
 
             self.menu = None
+
+            self.background = None
 
     def handle_collisions(self, player:Player):
         
@@ -94,6 +99,9 @@ class Game:
 
         self.menu = menu_select_func
 
+    def load_background(self, background_path="couch_background.png"):
+        
+        self.background = pygame.image.load(background_path)
 
     def run(self):
 
@@ -143,7 +151,10 @@ class Game:
 
             active_sprite_list.update() # update
 
-            Game_screen.fill(pygame.color.Color("gray14")) 
+            
+            if self.background != None: Game_screen.blit(self.background, (0,0))  
+            else: Game_screen.fill(pygame.color.Color("gray14")) 
+
             active_sprite_list.draw(Game_screen)
 
             clock.tick(30)
@@ -153,5 +164,6 @@ class Game:
 
 
 if __name__ == "__main__":
-    g = Game()
+    g = Game(width=1400, height=900)
+    g.load_background(os.path.join(DIRNAME,"couch_background2.png"))
     g.run()

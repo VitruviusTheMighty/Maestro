@@ -284,6 +284,8 @@ class Porfolio:
     def launch_joust(self):
         j = JOUST_GAME(width=self.win_width, height=self.win_height, world=self.SCREEN) 
         j.load_game_select(menu_select_func=self.game_select_loop)
+        bg_path = os.path.join(DIRNAME, r"games\joust\couch_background2.png")
+        j.load_background(background_path=bg_path)
         j.run()
 
     def launch_breakout(self):
