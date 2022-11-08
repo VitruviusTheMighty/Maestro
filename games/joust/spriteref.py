@@ -4,9 +4,13 @@ from pygame.transform import scale
 try:
     from spritesheet_functions import SpriteSheet
     from vector import Vector
-except:
-    from salto.spritesheet_functions import SpriteSheet
-    from salto.vector import Vector
+except ModuleNotFoundError:
+    try:
+        from joust.spritesheet_functions import SpriteSheet
+        from joust.vector import Vector
+    except:
+        from games.joust.spritesheet_functions import SpriteSheet
+        from games.joust.vector import Vector
 
 import time
 import os

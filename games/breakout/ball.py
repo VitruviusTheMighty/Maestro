@@ -1,6 +1,17 @@
-from paddle import Paddle
 import pygame
-from vector import Vector
+
+try:
+    from paddle import Paddle
+    from vector import Vector
+except ModuleNotFoundError:
+    try:
+        from breakout.paddle import Paddle
+        from breakout.vector import Vector
+    except:
+        from games.breakout.paddle import Paddle
+        from games.breakout.vector import Vector
+
+
 
 class Ball(pygame.sprite.Sprite):
     """

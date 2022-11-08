@@ -6,7 +6,6 @@
 ## A very simple vector class.
 
 import math
-from re import I
 
 class Vector:
 

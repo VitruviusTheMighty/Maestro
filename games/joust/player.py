@@ -3,9 +3,13 @@ import pygame
 try:
     from vector import Vector
     from spriteref import CatParams
-except:
-    from salto.vector import Vector
-    from salto.spriteref import CatParams
+except ModuleNotFoundError:
+    try:
+        from joust.vector import Vector
+        from joust.spriteref import CatParams
+    except:
+        from games.joust.vector import Vector
+        from games.joust.spriteref import CatParams
 
 class Player(pygame.sprite.Sprite):
     

@@ -4,8 +4,11 @@ import random
 
 try:
     from vector import Vector
-except:
-    from salto.vector import Vector
+except ModuleNotFoundError:
+    try:
+        from joust.vector import Vector
+    except:
+        from games.joust.vector import Vector
 
 class Box(pygame.sprite.Sprite):
 

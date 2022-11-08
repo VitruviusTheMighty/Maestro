@@ -5,10 +5,19 @@ try:
     from box import Box
     from player import Player
     from vector import Vector
-except:
-    from salto.box import Box
-    from salto.player import Player
-    from salto.vector import Vector
+except ModuleNotFoundError:
+    try:
+        from joust.box import Box
+        from joust.player import Player
+        from joust.vector import Vector
+    except:
+        from games.joust.box import Box
+        from games.joust.player import Player
+        from games.joust.vector import Vector
+
+    # raise ImportError("Failed to import packages")
+
+
 
 
 class Game:
@@ -26,6 +35,8 @@ class Game:
             self.platforms = pygame.sprite.Group()
 
             self.world = world
+
+            self.menu = None
 
     def handle_collisions(self, player:Player):
         
@@ -54,11 +65,16 @@ class Game:
                 player.go_right()
     
             if event.key == pygame.K_ESCAPE:
-                pygame.quit()
+                if self.menu != None:
+                    self.menu()
+                else:
+                    pygame.quit()
 
             if event.key == pygame.K_UP or event.key == pygame.K_SPACE:
                 # player jump
                 player.jump()
+
+                
 
             if event.key == pygame.K_DOWN:
                 # player down
@@ -73,6 +89,10 @@ class Game:
         # b.v.x = -1
         self.platforms.add(b)
         self.boxes.append(b)
+
+    def load_game_select(self, menu_select_func):
+
+        self.menu = menu_select_func
 
 
     def run(self):
@@ -113,6 +133,7 @@ class Game:
                 if event.type == pygame.QUIT: # If user clicked close
                     ACTIVE = False # Flag that we are done so we exit this loop
 
+                
                 self.handle_keypress_events(event, player)
 
             # handle collisions

@@ -6,25 +6,30 @@ import pygame
 import os
 import sys
 from assets.button import Button
-from games.index import *
+from games.index import JOUST_GAME
 # Import all other loops here. 
 # TODO: EVERY game should have a loop that can be imported
 
 DIRNAME = os.path.dirname(__file__)
 
-def get_font(size): # Returns Press-Start-2P in the desired size
-    return pygame.font.Font(os.path.join(DIRNAME, "assets/font.ttf"), size)
+def get_font(size, font_path=None): # Returns Press-Start-2P in the desired size
+    if font_path!=None: return pygame.font.Font(os.path.join(DIRNAME, font_path), size)
+    else: return pygame.font.Font(os.path.join(DIRNAME, "assets/font.ttf"), size)
 
 class Porfolio:
     """
     A central executable for running all games made in CSC 245
     """
 
-    def __init__(self, width, height):
+    def __init__(self, width, height, background_filepath=None, music_path=None):
         
         self.load_win_dimensions(width, height)
 
-        self.prep_portfolio()
+        self.prep_portfolio(background_filepath)
+
+        self.load_background()
+        
+        self.load_music(music_path)
 
     def load_win_dimensions(self, x, y):
         """
@@ -34,6 +39,20 @@ class Porfolio:
         self.win_width  = x  # x
         self.center_win_height = y // 2
         self.center_win_width  = x // 2
+
+    def load_music(self, music_path):
+        self.music_is_live = False
+
+        if music_path != None:
+            pygame.mixer.init()
+            pygame.mixer.music.load(os.path.join(DIRNAME, music_path))
+            pygame.mixer.music.play(loops=-1)
+
+            self.music_is_live = True
+
+    def toggle_music(self):
+        if self.music_is_live: pygame.mixer.music.set_volume(0.0)
+        else: pygame.mixer.music.set_volume(5.0)
 
     def load_background(self, use_center=True):
         
@@ -49,6 +68,7 @@ class Porfolio:
 
     def render_background(self):
         if self.background != None:
+            self.SCREEN.fill("black")
             self.SCREEN.blit(self.background, self.bg_coords)
         else:
             self.SCREEN.fill("black")
@@ -74,58 +94,88 @@ class Porfolio:
         """
         Run the main portfolio loop
         """
-        self.load_background(use_center=True)
-
+        # self.load_background(use_center=True)
         while True:
-            pygame.display.set_caption("Portfolio - Main Menu")
+            
+            pygame.display.set_caption("Main Menu")
+
             self.render_background()
 
-            MOUSE_POS = pygame.mouse.get_pos()
+            self.display_text(text="LEONARDO'S", size=30, color=(255,255,255), pos=(self.center_win_width,100))
 
-            GAME_SELECT = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=(self.center_win_width, 250), 
+            self.display_text(text="GAME PORTFOLIO", size=50, pos=(self.center_win_width,160))
+
+            MENU_MOUSE_POS = pygame.mouse.get_pos()
+
+            GAME_SELECT = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=(self.center_win_width, 350), 
                                 text_input="GAME SELECT", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
 
-
-            self.display_text(text="Portfolio", size=50, pos=(self.center_win_width,100))
-
             for button in [GAME_SELECT]:
-                button.changeColor(MOUSE_POS)
+                button.changeColor(MENU_MOUSE_POS)
                 button.update(self.SCREEN)
             
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+                if event.type==pygame.KEYDOWN:
+                    if event.key==pygame.K_ESCAPE: 
+                        pygame.quit()
+                        sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if GAME_SELECT.checkForInput(MOUSE_POS):
-                        # self.playgame()
+                    if GAME_SELECT.checkForInput(MENU_MOUSE_POS):
                         self.game_select_loop()
-                    # if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    #     self.options()
-                    # if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    #     pygame.quit()
-                        # sys.exit()
             pygame.display.update()
 
     def game_select_loop(self):
-        self.load_background(use_center=True)
         while True:
             pygame.display.set_caption("Portfolio - Game Select")
             self.render_background()
+            self.display_text(text="GAME SELECT", size=50, pos=(self.center_win_width,50))
+            self.display_text(text="Press ESC to return to Main Menu", size=10, color=(255,255,255), pos=(self.center_win_width,100))
+
+
             MOUSE_POS = pygame.mouse.get_pos()
 
-            games = []
-            GAME_SELECT = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=(self.center_win_width, 250), 
-                                text_input="GAME SELECT", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
+            BREAKOUT = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=(self.center_win_width//2, 300), 
+                                text_input="BREAKOUT", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
+            JOUST = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=(self.center_win_width//2, 450), 
+                                text_input="JOUST", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
             
+            for button in [BREAKOUT, JOUST]:
+                button.changeColor(MOUSE_POS)
+                button.update(self.SCREEN)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type==pygame.KEYDOWN:
+                    if event.key==pygame.K_ESCAPE: 
+                        self.portfolio_loop()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if BREAKOUT.checkForInput(MOUSE_POS):
+                        print("play breakout")
+                    if JOUST.checkForInput(MOUSE_POS):
+                        # print("play joust")
+                        self.launch_joust()
+                        
+            pygame.display.update()
+
 
     def import_games(self):
         games = []
         
     def switch_screen(self):
         pass
+    
+    # Launch Games
+    def launch_joust(self):
+        j = JOUST_GAME(width=self.win_width, height=self.win_height, world=self.SCREEN) 
+        j.load_game_select(menu_select_func=self.game_select_loop)
+        j.run()
 
 if __name__ == "__main__":
 
-    p = Porfolio(1400, 900)
+    p = Porfolio(1400, 900, background_filepath=r"assets\neon_scanlines2.png", music_path=r"assets\Raving Energy.mp3")
     p.portfolio_loop()
