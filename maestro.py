@@ -5,8 +5,10 @@ Leonardo Ferrisi 23'
 import pygame
 import os
 import sys
+import webbrowser
+
 from assets.button import Button
-from games.index import JOUST_GAME, BREAKOUT_GAME, FLOCKING_GAME, FSM_GAME
+from games.index import JOUST_GAME, BREAKOUT_GAME, FLOCKING_GAME, FSM_GAME, CTRL_GAME
 # Import all other loops here. 
 # TODO: EVERY game should have a loop that can be imported
 
@@ -165,21 +167,31 @@ class Porfolio:
 
             MOUSE_POS = pygame.mouse.get_pos()
 
-            BREAKOUT = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=(self.center_win_width//2, 300), 
+            BREAKOUT   = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=(self.center_win_width//2, 250), 
                                 text_input="BREAKOUT", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
-            JOUST = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=(self.center_win_width//2, 450), 
-                                text_input="JOUST", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
 
-            FLOCKING = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=((self.center_win_width//2) + self.center_win_width, 300), 
+            JOUST      = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=(self.center_win_width//2, 400), 
+                                text_input="JOUST", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
+            
+            FLOCKING   = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=((self.center_win_width//2) + self.center_win_width, 250), 
                                 text_input="FLOCKING", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
             
-            FSM = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=((self.center_win_width//2) + self.center_win_width, 450), 
+            FSM        = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=((self.center_win_width//2) + self.center_win_width, 400), 
                                 text_input="FSM", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
+
+            PATH       = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=(self.center_win_width//2, 550), 
+                                text_input="PATH", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
+
+            NET        = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=((self.center_win_width//2) + self.center_win_width, 550), 
+                                text_input="NET", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
             
-            BACKTOMAIN = Button(image=None, pos=(self.center_win_width, 700), 
+            CTRL       = Button(image=pygame.image.load(os.path.join(DIRNAME, "assets//Play Rect.png")), pos=(self.center_win_width, 700), 
+                                text_input="CTRL", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
+            
+            BACKTOMAIN = Button(image=None, pos=(self.center_win_width, 820), 
                                 text_input="MAIN MENU", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
 
-            for button in [BREAKOUT, JOUST, FLOCKING, FSM, BACKTOMAIN]:
+            for button in [BREAKOUT, JOUST, FLOCKING, FSM, PATH, NET, CTRL, BACKTOMAIN]:
                 button.changeColor(MOUSE_POS)
                 button.update(self.SCREEN)
 
@@ -201,6 +213,13 @@ class Porfolio:
                         self.launch_flocking()
                     if FSM.checkForInput(MOUSE_POS):
                         self.launch_fsm()
+                    if PATH.checkForInput(MOUSE_POS):
+                        print("launch PATH")
+                    if NET.checkForInput(MOUSE_POS):
+                        print("launch NET")
+                    if CTRL.checkForInput(MOUSE_POS):
+                        # print("launch CTRL")
+                        self.launch_ctrl()
                     if BACKTOMAIN.checkForInput(MOUSE_POS):
                         self.portfolio_loop()              
             pygame.display.update() # ESSENTIAL FOR CHANING MENUS!
@@ -249,11 +268,14 @@ class Porfolio:
 
             VIEW_CONTRACT = Button(image=None, pos=(self.center_win_width, 600), 
                                 text_input="VIEW CONTRACT", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
+            
+            VIEW_DOCUMENTATION = Button(image=None, pos=(self.center_win_width, 500), 
+                                text_input="VIEW DOCUMENTATION", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
 
             BACKTOMAIN = Button(image=None, pos=(self.center_win_width, 700), 
                                 text_input="MAIN MENU", font=get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
             
-            for button in [VIEW_CONTRACT, BACKTOMAIN]:
+            for button in [VIEW_CONTRACT, VIEW_DOCUMENTATION ,BACKTOMAIN]:
                 button.changeColor(MOUSE_POS)
                 button.update(self.SCREEN)
 
@@ -267,6 +289,9 @@ class Porfolio:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if VIEW_CONTRACT.checkForInput(MOUSE_POS):
                         print("send to contract page")
+                        webbrowser.open('https://github.com/VitruviusTheMighty/Maestro/blob/main/portfolio/contract.md')
+                    if VIEW_DOCUMENTATION.checkForInput(MOUSE_POS):
+                        webbrowser.open('https://csc245-maestro.readthedocs.io/en/latest/index.html#')
                     if BACKTOMAIN.checkForInput(MOUSE_POS):
                         self.portfolio_loop()
             pygame.display.update() # ESSENTIAL FOR CHANING MENUS!
@@ -299,6 +324,13 @@ class Porfolio:
         fs = FSM_GAME(world=self.SCREEN)
         fs.load_game_select(menu_select_func=self.game_select_loop)
         fs.run_game()
+
+    def launch_ctrl(self):
+        c = CTRL_GAME(world=self.SCREEN)
+        c.load_game_select(menu_select_func=self.game_select_loop)
+        c.main_menu()
+
+        
 
 if __name__ == "__main__":
 

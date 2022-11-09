@@ -47,7 +47,7 @@ class BeakBall (MovingBall):
         return str(self.p)+", "+str(self.v)+", "+str(self.a) 
 
     def apply_steering (self):
-        print(f"steering: {self.steering}")
+        # print(f"steering: {self.steering}")
         for s in self.steering:
             self.v = self.v + s
         # print(f"seek state:  {self.seeking}")
@@ -157,7 +157,7 @@ class BeakBall (MovingBall):
         elif bx > 0 and by < 0:
             quad = 4
 
-        print(f"Beak: {self.direction.x},{self.direction.y}, Pos: {self.p.x}, {self.p.y} - Quad: {quad}")
+        # print(f"Beak: {self.direction.x},{self.direction.y}, Pos: {self.p.x}, {self.p.y} - Quad: {quad}")
         dist = (self.direction.distanceFrom(self.p)) + distance
 
         turnpoint_len = dist / math.cos(desired_angle)
