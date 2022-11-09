@@ -6,7 +6,7 @@ import pygame
 import os
 import sys
 from assets.button import Button
-from games.index import JOUST_GAME, BREAKOUT_GAME, FLOCKING_GAME
+from games.index import JOUST_GAME, BREAKOUT_GAME, FLOCKING_GAME, FSM_GAME
 # Import all other loops here. 
 # TODO: EVERY game should have a loop that can be imported
 
@@ -200,8 +200,7 @@ class Porfolio:
                     if FLOCKING.checkForInput(MOUSE_POS):
                         self.launch_flocking()
                     if FSM.checkForInput(MOUSE_POS):
-                        # self.launch_flocking()
-                        print("launch FINITE STATE MACHINES")
+                        self.launch_fsm()
                     if BACKTOMAIN.checkForInput(MOUSE_POS):
                         self.portfolio_loop()              
             pygame.display.update() # ESSENTIAL FOR CHANING MENUS!
@@ -295,6 +294,11 @@ class Porfolio:
         f = FLOCKING_GAME(screen=self.SCREEN)
         f.load_game_select(menu_select_func=self.game_select_loop)
         f.run_game()
+
+    def launch_fsm(self):
+        fs = FSM_GAME(world=self.SCREEN)
+        fs.load_game_select(menu_select_func=self.game_select_loop)
+        fs.run_game()
 
 if __name__ == "__main__":
 
