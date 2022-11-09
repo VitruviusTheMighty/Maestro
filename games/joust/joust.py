@@ -43,32 +43,48 @@ class Game:
 
             self.background = None
 
+            self.falling = False
+
+    def handle_falling(self):
+        if self.falling:
+            pass
+
+    def handle_states(self):
+        """
+        Hanndle all player states
+        """
+        pass
+
     def handle_collisions(self, player:Player):
-        
         
         hits = pygame.sprite.spritecollide(player , self.platforms, False)
 
-        if hits:
-            for box in self.boxes:
-                collides = pygame.sprite.collide_mask(player, box)
-                # print(f"collides? {collides}")
-                if player.v.y > 0:
-                    if collides:
-                        if not player.onPlatform:  # TODO: Reimplement such that onPlatform is specific to box
-                            player.v.y = 0
-                            player.onPlatform = True
-                        player.pos.y = box.rect.y - player.rect.h + 1 # keep them colliding
+        if not self.falling:
+            if hits:
+                for box in self.boxes:
+                    collides = pygame.sprite.collide_mask(player, box)
+                    # print(f"collides? {collides}")
+                    if player.v.y > 0:
+                        if collides:
+                            if not player.onPlatform:  # TODO: Reimplement such that onPlatform is specific to box
+                                player.v.y = 0
+                                player.onPlatform = True
+                            player.pos.y = box.rect.y - player.rect.h + 1 # keep them colliding
 
+            else:
+                player.onPlatform = False
         else:
-            player.onPlatform = False
+                player.onPlatform = False
 
     def handle_keypress_events(self, event:pygame.event.Event, player:Player):
+        
+        # handle drop state
+        
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 player.go_left()
             if event.key == pygame.K_RIGHT:
                 player.go_right()
-    
             if event.key == pygame.K_ESCAPE:
                 if self.menu != None:
                     self.menu()
@@ -79,11 +95,10 @@ class Game:
                 # player jump
                 player.jump()
 
-                
-
             if event.key == pygame.K_DOWN:
-                # player down
-                pass
+                player.onPlatform = False
+                player.onObject = False
+                player.set_yv(player.gravitational_acceleration)
 
         if event.type == pygame.KEYUP:
             player.stop_x()
@@ -117,19 +132,27 @@ class Game:
 
         # Create sprites
         active_sprite_list = pygame.sprite.Group()
+        box_list = pygame.sprite.Group()
+
         player = Player(Game_screen)
         player.set_speed(self.player_speed)
 
-        self.addbox('red', Vector(90, 20), Vector(500 ,750))
-        self.addbox('blue', Vector(90, 20), Vector(850 ,650))
-        self.addbox('green', Vector(90, 20), Vector(350 ,550))
+        # self.addbox('red', Vector(90, 20), Vector(500 ,750))
+        self.addbox('black', Vector(300, 20), Vector(710 ,515))
+        self.addbox('black', Vector(300, 20), Vector(365 ,515))
 
+        self.addbox('black', Vector(315, 20), Vector(350 ,780))
+        self.addbox('black', Vector(315, 20), Vector(710 ,780))
+
+
+        self.addbox('black', Vector(85, 20), Vector(210 ,610))
+        self.addbox('black', Vector(85, 20), Vector(1090 ,610))
 
 
         active_sprite_list.add(player)
 
         for box in self.boxes:
-            active_sprite_list.add(box)
+            box_list.add(box)
 
 
         ACTIVE = True
@@ -155,7 +178,10 @@ class Game:
             if self.background != None: Game_screen.blit(self.background, (0,0))  
             else: Game_screen.fill(pygame.color.Color("gray14")) 
 
+            box_list.draw(Game_screen)
+
             active_sprite_list.draw(Game_screen)
+
 
             clock.tick(30)
             pygame.display.flip()
@@ -165,5 +191,5 @@ class Game:
 
 if __name__ == "__main__":
     g = Game(width=1400, height=900)
-    g.load_background(os.path.join(DIRNAME,"couch_background2.png"))
+    g.load_background(os.path.join(DIRNAME,"wallpaper_couch.png"))
     g.run()

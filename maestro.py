@@ -203,10 +203,8 @@ class Porfolio:
                         # self.launch_flocking()
                         print("launch FINITE STATE MACHINES")
                     if BACKTOMAIN.checkForInput(MOUSE_POS):
-                        self.portfolio_loop()
-                        
+                        self.portfolio_loop()              
             pygame.display.update() # ESSENTIAL FOR CHANING MENUS!
-
 
     def options_menu_loop(self):
         while True:
@@ -284,7 +282,7 @@ class Porfolio:
     def launch_joust(self):
         j = JOUST_GAME(width=self.win_width, height=self.win_height, world=self.SCREEN) 
         j.load_game_select(menu_select_func=self.game_select_loop)
-        bg_path = os.path.join(DIRNAME, r"games\joust\couch_background2.png")
+        bg_path = os.path.join(DIRNAME, r"games\joust\wallpaper_couch.png")
         j.load_background(background_path=bg_path)
         j.run()
 

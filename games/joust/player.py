@@ -55,6 +55,8 @@ class Player(pygame.sprite.Sprite):
         # self.platform_floor = None
         # self.platform       = None
         self.onPlatform     = False
+
+        self.dropping       = False
     # Loading methods
 
     def set_speed(self, val):
@@ -201,8 +203,10 @@ class Player(pygame.sprite.Sprite):
             self.set_yv(val=0)
             self.pos.y = self.main_floor - self.rect.h
 
+            # if self.dropping: self.dropping = False
 
         else:
+            # if not self.dropping:
             if self.jumping and self.v.y >= 0: 
                 # print("Setting jump to false")
                 self.jumping = False
@@ -214,6 +218,9 @@ class Player(pygame.sprite.Sprite):
                 if self.jumping and self.v.y < 0: # JUMP DECAY
                     self.change_yv(self.jump_decay) # Make this some change able variable called jump decay
                     # print(f"Decreasing, yv - {self.v.y}")
+            # else:
+            #     self.set_yv(val=self.gravitational_acceleration)
+
 
                 
         
