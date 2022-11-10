@@ -102,8 +102,6 @@ class BeakBall (MovingBall):
             if self.p.distanceFrom(self.target) < 1.0:
                 self.seeking = False
 
-
-
     def get_direction(self):
         """
         Gets the direction returns a value in degrees
@@ -117,98 +115,22 @@ class BeakBall (MovingBall):
         
         return degrees
 
-    # def get_dir_point(self, degrees):
-        
-    #     dir = self.get_direction()
-
-    #     if dir >0:
-    #         desired_angle = dir+degrees
-    #     else:
-    #         desired_angle = dir-degrees
-
-    #     dist = 10
-
-    
-
-    def get_turnpoint(self, degrees, distance=0):   
-        """
-        Finds a position that is n degrees at a distance x
-        
-        Params:
-            degrees (int/float): Degrees to turn by
-            distance (int/float): Amount to travel, can be 0
-        """
-        dir = self.get_direction()
-
-        if dir >0:
-            desired_angle = dir+degrees
-        else:
-            desired_angle = dir-degrees
-    
-        bx = (self.direction.x - self.p.x)
-        by = (self.direction.y - self.p.y)
-
-        if bx >= 0 and by >= 0:
-            quad = 1
-        elif bx <= 0 and by > 0:
-            quad = 2
-        elif bx < 0 and by <= 0:
-            quad = 3
-        elif bx > 0 and by < 0:
-            quad = 4
-
-        # print(f"Beak: {self.direction.x},{self.direction.y}, Pos: {self.p.x}, {self.p.y} - Quad: {quad}")
-        dist = (self.direction.distanceFrom(self.p)) + distance
-
-        turnpoint_len = dist / math.cos(desired_angle)
-
-        # Now get the x-dist and y-dist
-        x_dist = math.sin(desired_angle) * turnpoint_len
-        y_dist = math.cos(desired_angle) * turnpoint_len
-
-        if quad == 1:
-            tx = self.p.x + x_dist
-            ty = self.p.y + y_dist
-        elif quad == 2:
-            tx = self.p.x - x_dist
-            ty = self.p.y + y_dist
-        elif quad == 3:
-            tx = self.p.x - x_dist
-            ty = self.p.y - y_dist
-        elif quad == 4:
-            tx = self.p.x + x_dist
-            ty = self.p.y + y_dist
-
-
-
-        target = Vector(tx, ty)
-        return target
-
-
     def loop(self,weight):
         '''
         agent should move in a corkscrew manner
-        '''
-        target = self.get_turnpoint(degrees=1)
-        # make a target directly in front of beakball
-        # dir = self.get_direction()
-        # target_x = 3 if dir.x > 1 else -3
-        # target_y = 3 if dir.y > 1 else -3
-        # target = Vector(target_x, target_y)
+        '''        
+        if self.v.isZero(): self.v = Vector(50,50)
 
-        desired_direction = (self.p - target).normalize()
-        max_speed = self.speedlimit.length()
-        desired_velocity = desired_direction * max_speed
-        self.steering += [(desired_velocity - self.v)*weight]
-        # print(self.get_direction())
+        desired_velocity = Vector(self.v.y*-1, self.v.x) * self.speedlimit.length()
+        self.v = desired_velocity
+        self.steering += [(desired_velocity)*weight]
 
     def freeze(self,weight):
         '''
         stop, hammertime
         '''
-        self.v = Vector(0,0,0,0)
         # self.a = Vector(0.0,0.0)
-        self.leaving_wall = True
+        self.v = Vector(self.v.y*-1, self.v.x*-1)
 
 
 

@@ -33,8 +33,8 @@ Access Contract [**HERE**](./portfolio/contract.md)
 
 ### Final Projects
 
-- [mind-games](portfolio\projects\mind-games)
-- [CTRL](portfolio\projects\ctrl)
+- [*MAESTRO* the collection of all games detailed in this portfolio](https://csc245-maestro.readthedocs.io/en/latest/maestro.html)
+- [CTRL: A Pong Game to train your psychic abilites with!](games\ctrl)
 - [simple-pygame-menus](portfolio\projects\simple-pygame-menus)
 
 # KWL (Know, Want to Know, Learned) Chart
