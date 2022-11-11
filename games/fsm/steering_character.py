@@ -130,7 +130,9 @@ class BeakBall (MovingBall):
         stop, hammertime
         '''
         # self.a = Vector(0.0,0.0)
-        self.v = Vector(self.v.y*-1, self.v.x*-1)
+        # self.v = Vector(self.v.y*-1, self.v.x*-1)
+
+        self.v = Vector(0,0)
 
 
 
