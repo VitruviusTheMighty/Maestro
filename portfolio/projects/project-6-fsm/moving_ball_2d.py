@@ -14,7 +14,7 @@ try:
     from vector import Vector
 except ModuleNotFoundError:
     try:
-        from fsm.vector import Vector
+        from vector import Vector
     except:
         from games.fsm.vector import Vector
 

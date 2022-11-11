@@ -18,9 +18,9 @@ try:
 
 except ModuleNotFoundError:
     try:
-        from fsm.vector import Vector
-        from fsm.fsm_character import FSMBeakBall
-        from fsm.world import World
+        from vector import Vector
+        from fsm_character import FSMBeakBall
+        from world import World
     except:
         from games.fsm.vector import Vector
         from games.fsm.fsm_character import FSMBeakBall

@@ -9,8 +9,8 @@ try:
     from moving_ball_2d import MovingBall
 except ModuleNotFoundError:
     try:
-        from fsm.vector import Vector
-        from fsm.moving_ball_2d import MovingBall
+        from vector import Vector
+        from moving_ball_2d import MovingBall
     except:
         from games.fsm.vector import Vector
         from games.fsm.moving_ball_2d import MovingBall

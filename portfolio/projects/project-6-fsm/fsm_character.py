@@ -4,8 +4,8 @@ try:
 
 except ModuleNotFoundError:
     try:
-        from fsm.steering_character import BeakBall
-        from fsm.fsm import FSM
+        from steering_character import BeakBall
+        from fsm import FSM
     except:
         from games.fsm.steering_character import BeakBall
         from games.fsm.fsm import FSM
