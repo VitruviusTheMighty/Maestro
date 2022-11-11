@@ -45,10 +45,7 @@ class Vector:
         """ Make the vector be one unit in length. I am using 10
         pixels as my unit.
         """
-        if self.length() > 0:
-            l = float(self.length())
-        else:
-            l = 0.1
+        l = float(self.length())
         self.x = self.x/l
         self.y = self.y/l
         return self
@@ -69,8 +66,25 @@ class Vector:
         perp.normalize()
         return perp
 
-        
+    def distanceFrom(self, vector):
+        """
+        Gets the distance between our vector and another
+        """
+        if type(vector) != type(self):
+            raise TypeError("'vector' parameter must be of type Vector")
+
+        dist = math.sqrt(  ( (self.x - vector.x)**2 ) + ( (self.y - vector.y)**2 ) )
+        return dist
+
+    def isZero(self):
+
+        return self.x==0 and self.y==0
 if __name__ == "__main__":
     v1 = Vector(3,1)
     v2 = v1.getPerpendicularUnit()
+
+    v3 = Vector(4,1)
+    v4 = Vector(5,1)
     print(v1,v2)
+
+    print(v3.distanceFrom(v4))
