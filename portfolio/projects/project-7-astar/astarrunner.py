@@ -1,4 +1,5 @@
 from heapq import heappush, heappop
+from gridworld import GridWorld
 import pygame
 import time
 
@@ -37,7 +38,7 @@ class HeapNode:
 
 class AStarRunner:
 
-    def __init__ (self, grid):
+    def __init__ (self, grid:GridWorld):
 
         self.grid = grid
 

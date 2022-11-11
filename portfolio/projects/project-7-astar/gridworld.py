@@ -80,11 +80,17 @@ class GridWorld:
                 '''given a point p, return a vector of all the neighboring points'''
                 (x,y) = p
                 outvec = []
-                north = (x,y - 1)
-                south = (x,y + 1)
-                east = (x + 1, y)
-                west = (x - 1,y)
-                coords = [north,south,east,west]
+                
+                north     = (x,y-1)
+                south     = (x,y+1)
+                east      = (x+1,y)
+                west      = (x-1,y)
+                northeast = (x+1,y-1)
+                northwest = (x-1,y-1)
+                southeast = (x+1,y+1)
+                southwest = (x-1,y+1)
+
+                coords = [northeast,north,northwest,east,west,southeast,south,southwest]
                 #only put something in the outvec if it is a legitimate point
                 #i.e. don't return walls or out-of-bounds
                 outvec = [loc for loc in coords if self.isLegitimate(loc)]
@@ -100,18 +106,25 @@ class GridWorld:
                                   
         def manhattan(self,startp,endp):
                 '''given two points, return manhattan distance of two points'''
-                pass
+                
+                (endx,endy) = endp
+                (startx,starty) = startp
+
+                xdiff = abs(endx-startx)
+                ydiff = abs(endy-starty)
+
+                return xdiff + ydiff
         
         def estimate_distance(self,start,end):
-#                return self.manhattan(start,end)
-                 return self.distance(start,end)
+               return self.manhattan(start,end)
+                # return self.distance(start,end)
 
         def find_closest_gridloc(self,p):
                 '''given a point in (high resolution) game space, return the closest grid point'''
                 x,y = p
                 xval = int(x/self.gridsize)
                 yval = int(y/self.gridsize)
-                #print "endpoint is :",x,y, "(",xval,",",yval,")"
+                print(f"endpoint is :({x},{y}), ({xval}, {yval}) ")
                 return (xval,yval)
                                                  
                 
