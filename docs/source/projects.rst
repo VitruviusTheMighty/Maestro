@@ -66,15 +66,44 @@ Emphasis on:
 - Breadth First Search
 - A* Search (astar)
 
-final-project *mind-games*
---------------------------
-**A python package to simplify the process of adding biosensing to your games!**
+final-projects *CTRL* , *MAESTRO*, and *simplepygamemenus*
+---------------------------------------------------------
+
+*CTRL*
+~~~~~~
 
 Emphasis on:
 
 - Alternative input 
 - Parallel programming
-- Python package development
 - Biosensing
+
+*MAESTRO*
+~~~~~~~~~~
+
+:ref:`MAESTRO`
+
+Emphasis on:
+
+- Game Design
+- Sound Design
+- User Interfaces
+- Menus
+
+*simplepygamemenus*
+~~~~~~~~~~~~~~~~~~~
+
+Installable using `pip install simplepygamemenus`
+
+Checkout git-repo at (https://github.com/LeonardoFerrisi/simplepygamemenus-gitrepo)
+
+Further API Documentation available at (https://leonardoferrisi.github.io/simplepygamemenus-gitrepo/)
+
+Emphasis on:
+
 - Design of software packages
 - Menus
+- User Interface Design
+- Documentation
+- API Fundamentals
+

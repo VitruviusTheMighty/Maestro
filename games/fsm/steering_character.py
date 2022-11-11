@@ -119,10 +119,13 @@ class BeakBall (MovingBall):
         '''
         agent should move in a corkscrew manner
         '''        
-        if self.v.isZero(): self.v = Vector(50,50)
+        if self.v.isZero() < 1.0 : 
+            self.v = (Vector(1.0,1.0).normalize() * 0.1)  * self.speedlimit.length()
+        # else:
+        #     if self.v.length() < self.speedlimit.length():
 
-        desired_velocity = Vector(self.v.y*-1, self.v.x) * self.speedlimit.length()
-        self.v = desired_velocity
+
+        desired_velocity = Vector(self.v.y, self.v.x*-1) * self.speedlimit.length()
         self.steering += [(desired_velocity)*weight]
 
     def freeze(self,weight):
