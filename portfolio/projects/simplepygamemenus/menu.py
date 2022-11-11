@@ -2,6 +2,12 @@
 SIMPLE PYGAME MENU
 
 A python package for simplifying the process of importing your pygame menus
+
+Some Rules:
+
+    - Make the main menu first!
+    - If you want to be able to switch back to the previous menu, set the main parameter in Menu() to the previous menu
+
 """
 from button import Button
 import os
@@ -19,13 +25,15 @@ class Menu:
     A constructor for menus
     """
     
-    def __init__(self, caption="A Simple Pygame Menu", title="MENU", world:pygame.Surface=None, background=None):
+    def __init__(self, caption="A Simple Pygame Menu", title="MENU", world:pygame.Surface=None, background=None, displaytitle=True, main=None, showESCKEYhint=True):
         """
         Parameters:
             caption            (str):
             title              (str):
             world   (pygame.Surface): The pygame surface object
             background         (str): The local path to a background file
+            displaytitle      (bool): Display the title?
+            main              (Menu): Add a main menu to return to with escape
         """
         self.caption         = caption
         self.title           = title
@@ -40,8 +48,14 @@ class Menu:
             if background is not None: background_path = os.path.join(DIRNAME, background)
             else: background_path=None
             self.prepSCREEN(background_filepath=background_path)
-        self.add_text(text=self.title, x=50, y=self.center_win_width, size=30, color=(0,0,0))
+        self.add_text(text=self.title, x=self.center_win_width, y=80, size=30, color=(255,255,255))
 
+        if main is not None:
+            if not isinstance(main, self.__class__): raise ValueError("Main Menu must be instance of Menu object")
+            self.main = main
+            if showESCKEYhint: self.add_text(text="Press ESC to return to the previous menu", x=self.center_win_width, y=10, size=10, color=(255,255,255))
+        else: self.main = None
+                
     def load_win_dimensions(self, x, y):
         """
         Given an x, y input - load them as the instance variables for window height and width
@@ -98,9 +112,12 @@ class Menu:
                     pygame.quit()
                     sys.exit()
                 if event.type==pygame.KEYDOWN:
-                    if event.key==pygame.K_ESCAPE: 
-                        pygame.quit()
-                        sys.exit()
+                    if event.key==pygame.K_ESCAPE:
+                        if self.main is None: 
+                            pygame.quit()
+                            sys.exit()
+                        else:
+                            self.main.run_menu()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     # Handle button press
                     for button_set in self.buttons:
@@ -162,18 +179,23 @@ class Menu:
             text, text_rect = self.gen_text(text=text, size=size, pos=pos, color=color, custom_font=custom_font)
             self.SCREEN.blit(text, text_rect)
 
+    def go_back(self):
+        if self.main is not None: 
+            self.main.run_menu()
 
 if __name__ == "__main__":
 
-    b = Menu()
-    b.add_button(label="exit", x=250, y=250, fontsize=30, function=sys.exit)
+    main = Menu()
+    main.add_text(text="TEST", x=250, y=20, size=30)
+    b_menu = Menu(main=main, title="other menu", showESCKEYhint=True)
+    main.add_button(label="Fortnite", x=250, y=250, fontsize=30, function=b_menu.run_menu)
+    b_menu.add_button(label="exit", x=250, y=250, fontsize=30, function=sys.exit)
 
+    next_menu = Menu(title="NEXT",main=b_menu)
+    b_menu.add_button(label="next menu", x=250, y=400, fontsize=30, basecolor=(0,255,0), hovercolor=(255,255,255), function=next_menu.run_menu)
 
-
-    m = Menu()
-    m.add_button(label="Fortnite", x=250, y=250, fontsize=30, function=b.run_menu)
-    m.add_text(text="TEST", x=250, y=20, size=30)
-    m.run_menu()
+    
+    main.run_menu()
 
     
 
