@@ -1,11 +1,5 @@
 
-try:
-    from vector import Vector
-except ModuleNotFoundError:
-    try:
-        from fsm.vector import Vector
-    except:
-        from games.fsm.vector import Vector
+from vector import Vector
 
 class World:
 
@@ -16,5 +10,4 @@ class World:
         self.width = width
         self.height = height
         self.timescale = 1/1000
-
         

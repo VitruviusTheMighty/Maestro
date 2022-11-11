@@ -11,10 +11,20 @@
 import pygame
 import random
 
-from vector import Vector
-from fsm_character import FSMBeakBall
-from world import World
+try:
+    from vector import Vector
+    from fsm_character import FSMBeakBall
+    from world import World
 
+except ModuleNotFoundError:
+    try:
+        from fsm.vector import Vector
+        from fsm.fsm_character import FSMBeakBall
+        from fsm.world import World
+    except:
+        from games.fsm.vector import Vector
+        from games.fsm.fsm_character import FSMBeakBall
+        from games.fsm.world import World
 
 class FSM_GAME:
 
@@ -30,6 +40,10 @@ class FSM_GAME:
             self.width  = world.get_width()
             self.height = world.get_height()
 
+    def load_game_select(self, menu_select_func):
+
+        self.menu = menu_select_func
+        
     def run_game(self):
         
          ## Initialize the pygame submodules and set up the display window.
@@ -77,6 +91,12 @@ class FSM_GAME:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     keepGoing = False
+                if event.type==pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        if self.menu != None:
+                            self.menu()
+                        else:
+                            pygame.quit()
 
             ## Simulate game world
 

@@ -10,7 +10,13 @@
 import pygame
 import math
 
-from vector import Vector
+try:
+    from vector import Vector
+except ModuleNotFoundError:
+    try:
+        from fsm.vector import Vector
+    except:
+        from games.fsm.vector import Vector
 
 class MovingBall:
 
@@ -85,15 +91,21 @@ class MovingBall:
         if self.p.x < 0+self.r:
             self.p.x = self.r
             self.v.x *= -1
+            self.v.y *= -1
         elif self.p.x > width-self.r:
             self.p.x = width-self.r
             self.v.x *= -1
+            self.v.y *= -1
         if self.p.y < 0+self.r:
             self.p.y = self.r
             self.v.y *= -1
+            self.v.x *= -1
+
         elif self.p.y > height-self.r:
             self.p.y = height-self.r
             self.v.y *= -1
+            self.v.x *= -1
+
 
 
     def collide_object (self, other):

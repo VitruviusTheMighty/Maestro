@@ -76,7 +76,9 @@ class Vector:
         dist = math.sqrt(  ( (self.x - vector.x)**2 ) + ( (self.y - vector.y)**2 ) )
         return dist
 
+    def isZero(self):
 
+        return self.x==0 and self.y==0
 if __name__ == "__main__":
     v1 = Vector(3,1)
     v2 = v1.getPerpendicularUnit()

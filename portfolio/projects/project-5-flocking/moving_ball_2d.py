@@ -10,15 +10,19 @@
 import pygame
 import math
 
-try:
-    from vector import Vector
-except ModuleNotFoundError:
-    try:
-        from fsm.vector import Vector
-    except:
-        from games.fsm.vector import Vector
+from vector import Vector
 
-class MovingBall:
+def getDistance(v1:Vector, v2:Vector) -> float:
+    """
+    Gets the distance between two vectors
+    """
+    distx = (v2.x - v1.x)
+    disty = (v2.y - v1.y)
+
+    return math.sqrt(distx**2) + math.sqrt(disty**2)
+
+
+class MovingBall :
 
     p = Vector(0.0,0.0)
 
@@ -42,14 +46,6 @@ class MovingBall:
         self.v = Vector(float(xv),float(yv))
         self.drawvec = True 
 
-        self.seeking   = False
-        # self.corkscrew = False
-        self.leaving_wall = False
-        
-        self.world = None
-
-        self.direction = Vector(0,0)
-
     def set_elasticity (self, e):
         self.e = e
 
@@ -60,53 +56,21 @@ class MovingBall:
         self.stop_v ()
         self.p = self.p + (self.v *dt*world.timescale)
 
-    def isColliding(self, world, border=0):
-        """
-        Checks if is colliding
-        Border can define an imaginary border for the object to collide with
-        """
-        width = world.width
-        height = world.height
-        
-        if border > 0:
-            if self.p.x < 0+(self.r)+border or \
-                self.p.x > width-self.r-border or \
-                    self.p.y < 0+self.r+border or \
-                        self.p.y > height-self.r-border:
-
-                return True
-
-        else:    
-            if self.p.x < 0+self.r or \
-                self.p.x > width-self.r or \
-                    self.p.y < 0+self.r or \
-                        self.p.y > height-self.r:
-
-                return True
-        return False
-
     def collide_edge (self, world):
         width = world.width
         height = world.height
         if self.p.x < 0+self.r:
             self.p.x = self.r
             self.v.x *= -1
-            self.v.y *= -1
         elif self.p.x > width-self.r:
             self.p.x = width-self.r
             self.v.x *= -1
-            self.v.y *= -1
         if self.p.y < 0+self.r:
             self.p.y = self.r
             self.v.y *= -1
-            self.v.x *= -1
-
         elif self.p.y > height-self.r:
             self.p.y = height-self.r
             self.v.y *= -1
-            self.v.x *= -1
-
-
 
     def collide_object (self, other):
         """ Check whether there is a collision with another object. If
@@ -118,7 +82,6 @@ class MovingBall:
             j = (-(1+self.e)*self.v.minus(o.v).dot(n))/(n.dot(n)*(1/self.m + 1/o.m))
             self.apply_impulse (j, n)
             o.apply_impulse (-j, n)
-
 
     def collide (self, other):
         """
@@ -139,12 +102,10 @@ class MovingBall:
         else:
             return None
 
-
     def apply_impulse (self, j, n):
         """ j is the impulse; n the collision normal, i.e. the
         direction along which the impact happens."""
         self.v = self.v + n * (j / self.m)
-
 
     def repair_position (self, rel_pos, other):
         """ If two objects overlap, move them apart so that they are
@@ -162,21 +123,21 @@ class MovingBall:
             self.p = self.p + (rel_pos*repair*(other.m/(self.m+other.m)))
             other.p = other.p + (rel_pos* -1 * repair*(self.m/(self.m+other.m)))
 
-
     def clamp_v (self):
         """ Reset the velocity in either dimension to the speed limit
         if it should be faster than the speed limit."""
         if self.v.length() > self.speedlimit.length():
             self.v = self.v.normalize() * (self.speedlimit.length())
 
-
     def stop_v (self):
         """ Reset the velocity to 0 if it gets very close. """
-
         if self.v.length() < 5:
             self.v = Vector (0,0)
-        
+
     def draw (self, window):
         pygame.draw.circle(window, self.color, (int(self.p.x),int(self.p.y)),self.r)
 
-
+    def getDistance(self, otherBall) -> float:
+        """Gets the distance between this and another ball"""
+        # assert isinstance(otherBall, type(self))
+        return getDistance(self.p, otherBall.p)
