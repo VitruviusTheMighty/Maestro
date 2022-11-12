@@ -8,24 +8,38 @@
 import pygame
 import random
 
-from vector import Vector
+try:
+    from gridworld import GridWorld
+    from vector import Vector
+    from astarrunner import *
+    from navigating_character import NaviBeakBall
 
-from gridworld import GridWorld
-from astarrunner import *
+except ModuleNotFoundError:
+    try:
+        from path.vector import Vector
+        from path.gridworld import GridWorld
+        from path.astarrunner import *
+        from path.navigating_character import NaviBeakBall
 
-from navigating_character import NaviBeakBall
+    except:
+        from games.path.vector import Vector
+        from games.path.gridworld import GridWorld
+        from games.path.astarrunner import *
+        from games.path.navigating_character import NaviBeakBall
+
 
 from simplepygamemenus.menu import Menu
 
 class PathPlanning:
 
-    def __init__(self, screen:pygame.Surface=None, x=1000, y=800, gridscale=50, menu_func=None, localmenu=False):
-
+    def __init__(self, screen:pygame.Surface=None, x=1000, y=800, gridscale=50, menu_func=None, localmenu=False, parent=None):
+        
         if screen is None:
             # set our own world
             self.SCREEN = pygame.display.set_mode((x,y)) 
             
         else: self.SCREEN = screen
+        self.parent = parent
         self.preflight(gridscale, menu_func, localmenu)
 
     def preflight(self, gridscale, menu_function, doLocalMenu=False):
@@ -53,7 +67,8 @@ class PathPlanning:
             self.menu_func()
 
     def create_menu(self):
-        self.main = Menu(caption="Path Planning", title="Path Planning Demo", world=self.SCREEN)
+        
+        self.main = Menu(caption="Path Planning", title="Path Planning Demo", world=self.SCREEN, main=self.parent)
 
         self.create_instruction_menu()
 

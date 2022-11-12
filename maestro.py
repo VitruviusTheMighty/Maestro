@@ -8,7 +8,7 @@ import sys
 import webbrowser
 
 from assets.button import Button
-from games.index import JOUST_GAME, BREAKOUT_GAME, FLOCKING_GAME, FSM_GAME, CTRL_GAME
+from games.index import JOUST_GAME, BREAKOUT_GAME, FLOCKING_GAME, FSM_GAME, CTRL_GAME, PATH_GAME
 # Import all other loops here. 
 # TODO: EVERY game should have a loop that can be imported
 
@@ -214,7 +214,7 @@ class Porfolio:
                     if FSM.checkForInput(MOUSE_POS):
                         self.launch_fsm()
                     if PATH.checkForInput(MOUSE_POS):
-                        print("launch PATH")
+                        self.launch_path()
                     if NET.checkForInput(MOUSE_POS):
                         print("launch NET")
                     if CTRL.checkForInput(MOUSE_POS):
@@ -329,6 +329,11 @@ class Porfolio:
         c = CTRL_GAME(world=self.SCREEN)
         c.load_game_select(menu_select_func=self.game_select_loop)
         c.main_menu()
+
+    def launch_path(self):
+        p = PATH_GAME(screen=self.SCREEN, localmenu=True)
+        p.main.modify_ESC_behavior(function=self.game_select_loop)
+        p.play()
 
         
 
