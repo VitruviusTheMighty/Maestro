@@ -5,7 +5,9 @@ import math
 from vector import Vector
 
 class GridWorld:
-
+        """
+        Holds information about the world
+        """
 
         gravity = Vector(0,10) #useless here, but required for compatability
         grass = 0
@@ -124,7 +126,7 @@ class GridWorld:
                 x,y = p
                 xval = int(x/self.gridsize)
                 yval = int(y/self.gridsize)
-                print(f"endpoint is :({x},{y}), ({xval}, {yval}) ")
+                # print(f"endpoint is :({x},{y}), ({xval}, {yval}) ")
                 return (xval,yval)
                                                  
                 
