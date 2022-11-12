@@ -19,6 +19,22 @@ except ModuleNotFoundError:
         from games.breakout.vector import Vector
         from games.breakout.brick import Brick
 
+from simplepygamemenus.menu import Menu
+
+def runBREAKOUT3k(menu_func):
+    b3k = Breakout3000(cheats=False, multiball=False, useSquares=True, sfx=False, music=False)
+    b3k.load_game_select(menu_func)
+    b3k.run()
+
+class b3kRunner:
+
+    def __init__(self, main_menu=None):
+        self.main_menu = main_menu
+
+    def run_game(self):
+        b3k = Breakout3000(cheats=False, multiball=False, useSquares=True, sfx=False, music=False)
+        if self.main_menu is not None: b3k.load_game_select(self.main_menu)
+        b3k.run()
 
 class Breakout3000:
     """
@@ -233,8 +249,10 @@ class Breakout3000:
 
         if self.lives == 0:
             self.display_text(position=Vector(self.center_coords[0],self.center_coords[1]), text="YOU DIED", color="red")
-            pygame.time.wait(3000)
+            
             self.keepPlaying = False
+
+            self.show_play_again_menu()
 
     def _evaluate_positions(self):
         """
@@ -291,6 +309,12 @@ class Breakout3000:
 
         pygame.quit()
 
+    def show_play_again_menu(self):
+        self.play_again_menu = Menu(caption="play breakout again?", title="Play Again?", world=self.world)
+        b3k = b3kRunner(main_menu=self.menu)
+        self.play_again_menu.add_button(label="YES", function=b3k.run_game, x=self.WIDTH//2, y=self.HEIGHT//2, basecolor=(255,255,255), hovercolor=(255,255,25))
+        self.play_again_menu.add_button(label="NO", function=self.menu, x=self.WIDTH//2, y=self.HEIGHT//2+200, basecolor=(255,255,255), hovercolor=(255,255,25))
+        self.play_again_menu.run_menu()
+
 if __name__ == "__main__":
-    b3k = Breakout3000(cheats=False, multiball=False, useSquares=True, sfx=True, music=True)
-    b3k.run()
+    runBREAKOUT3k()
