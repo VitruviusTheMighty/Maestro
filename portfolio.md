@@ -35,7 +35,7 @@ Access Contract [**HERE**](./portfolio/contract.md)
 
 - [*MAESTRO* the collection of all games detailed in this portfolio](https://csc245-maestro.readthedocs.io/en/latest/maestro.html)
 - [CTRL: A Pong Game to train your psychic abilites with!](games\ctrl)
-- [simple-pygame-menus](portfolio\projects\simple-pygame-menus)
+- [simple-pygame-menus](https://github.com/LeonardoFerrisi/simplepygamemenus-gitrepo)
 
 # KWL (Know, Want to Know, Learned) Chart
 
@@ -52,17 +52,17 @@ Access Contract [**HERE**](./portfolio/contract.md)
 | Vector Math                 |    x    |              |         |
 | Flocking Agents             |    x    |              |    x    |
 | Finite State Machines       |         |       x      |         |
-| Path Planning               |         |       x      |         |
+| Path Planning               |    x    |              |    x    |
 | Sprites                     |    x    |              |    x    |
 | Sprite Sheets and Animation |    x    |              |    x    |
 | Pygame API for Collisions   |    x    |              |    x    |
 | Pygame API for Music        |    x    |              |         |
 | Making Game Menus in Pygame |    x    |              |    x    |
-| Standards for Game Design   |         |       x      |         |
+| Standards for Game Design   |    x    |              |    x    |
 | Alternative Inputs for Games|    x    |              |         |
 | Using Bio Activity as Input |    x    |              |         |
 
-##### Currently Completed: 17/20 (**85%**)
+##### Currently Completed: 19/20 (**95%**)
 
 ---------------------------------
 

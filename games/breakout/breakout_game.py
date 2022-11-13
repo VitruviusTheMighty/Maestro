@@ -1,6 +1,7 @@
 import pygame
 import math
 import os
+import time
 
 try:
     from paddle import Paddle
@@ -249,7 +250,7 @@ class Breakout3000:
 
         if self.lives == 0:
             self.display_text(position=Vector(self.center_coords[0],self.center_coords[1]), text="YOU DIED", color="red")
-            
+            time.sleep(1)
             self.keepPlaying = False
 
             self.show_play_again_menu()

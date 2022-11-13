@@ -28,19 +28,19 @@ To earn a **C** I will need to :
 To earn a B, I will additionally:
 
 - [x] Meet 80% of my KWL objectives
-- [] complete and submit 75% of all game programming assignments
-- [] complete and submit all in-class assignments  
+- [x] complete and submit 75% of all game programming assignments
+- [x] complete and submit all in-class assignments  
 - [x] complete at least one challenge for each programming assignment
-- [] complete a final game project that demonstrates 60% of the concepts I've learned in the class
+- [x] complete a final game project that demonstrates 60% of the concepts I've learned in the class
 - [x] Assist a minimum of 2 students in software development related tasks
 
 To earn an A I will additionally:
 
-- [] Meet 90% of my KWL objectives
+- [x] Meet 90% of my KWL objectives
 - [] submit clearly documented revisions **where needed** for relevant programming assignments
 - [x] complete at least three challenges from programming assignments
 - [] complete a final game project that demonstrates 70% of the concepts I've learned in the class
-- [] Write a minumum of 1 python add-ons or packages utilizing some concept I've mastered independently of course material to be applied to game development
+- [x] Write a minumum of 1 python add-ons or packages utilizing some concept I've mastered independently of course material to be applied to game development
 - [x] Assist a minimum of 2 students in software development related tasks
 - [x] Complete a game demonstrating my expertise in using bioactity with real-time systems, while also have a good game design, and being in an engaging, playable state 
 - [x] Create a single executable game/menu that can run 7/8 of all games created as game assignments
@@ -61,17 +61,17 @@ To earn an A I will additionally:
 | Vector Math                 |    x    |              |         |
 | Flocking Agents             |    x    |              |    x    |
 | Finite State Machines       |         |       x      |         |
-| Path Planning               |         |       x      |         |
+| Path Planning               |    x    |              |    x    |
 | Sprites                     |    x    |              |    x    |
 | Sprite Sheets and Animation |    x    |              |    x    |
 | Pygame API for Collisions   |    x    |              |    x    |
 | Pygame API for Music        |    x    |              |         |
 | Making Game Menus in Pygame |    x    |              |    x    |
-| Standards for Game Design   |         |       x      |         |
+| Standards for Game Design   |    x    |              |    x    |
 | Alternative Inputs for Games|    x    |              |         |
 | Using Bio Activity as Input |    x    |              |         |
 
-### Currently Completed: 17/20 (**85%**)
+### Currently Completed: 19/20 (**95%**)
 
 # Receipts
 
@@ -88,12 +88,12 @@ To earn an A I will additionally:
 | Vector Math                 |https://github.com/VitruviusTheMighty/Maestro/blob/main/portfolio/testing/steering/steer_demo.py |
 | Flocking Agents             |https://csc245-maestro.readthedocs.io/en/latest/flocking.html         |
 | Finite State Machines       |                                                                      |
-| Path Planning               |                                                                      |
+| Path Planning               |https://github.com/VitruviusTheMighty/Maestro/tree/main/portfolio/projects/project-7-astar|
 | Sprites                     |https://csc245-maestro.readthedocs.io/en/latest/joust.html            |
 | Sprite Sheets and Animation |https://github.com/VitruviusTheMighty/Maestro/tree/main/portfolio/projects/project-4-joust|
 | Pygame API for Collisions   |https://github.com/VitruviusTheMighty/Maestro/tree/main/portfolio/projects/project-3-collisions|
 | Pygame API for Music        |https://github.com/VitruviusTheMighty/Maestro/blob/main/maestro.py|
-| Making Game Menus in Pygame |https://github.com/VitruviusTheMighty/Maestro/blob/main/maestro.py|
+| Making Game Menus in Pygame |https://github.com/LeonardoFerrisi/simplepygamemenus-gitrepo|
 | Standards for Game Design   |https://github.com/VitruviusTheMighty/Maestro/blob/main/maestro.py|
 | Alternative Inputs for Games|https://github.com/VitruviusTheMighty/Maestro/blob/main/game-jam/CTRL.py|
 | Using Bio Activity as Input |https://github.com/VitruviusTheMighty/Maestro/blob/main/game-jam/espr.py|
