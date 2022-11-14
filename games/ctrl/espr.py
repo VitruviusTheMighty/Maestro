@@ -22,7 +22,8 @@ class ESPPong:
 
     def __init__(self, display:pygame.Surface, speed=1, esp_threshold=0.8):
         
-        self.bg = pygame.image.load(os.path.join(DIRNAME, "assets//bg.png"))
+        self.background = pygame.image.load(os.path.join(DIRNAME, "assets//bg_large.png"))
+        self.bg = pygame.image.load(os.path.join(DIRNAME, "assets//bg_large.png"))
         self.FPS = 120  
         self.default_speed = speed
         self.SPEED = self.default_speed
@@ -30,7 +31,7 @@ class ESPPong:
         self.PAD_SPEED = 0.5
         
         # paddle and line dimensions
-        self.PADDLE_SIZE = 50 # Thickness of paddle
+        self.PADDLE_SIZE = 100 # Thickness of paddle
         self.PADDLE_XCOORD = 20 # x coordinate
         self.FPSCLOCK = pygame.time.Clock() # for custom frame rate
 
@@ -43,6 +44,8 @@ class ESPPong:
         self.WIN_W = display.get_width()
         self.cx = self.WIN_W//2
         self.cy = self.WIN_H//2
+        self.load_background_coords(use_center=True)
+
 
         self.EDGE_W = 10
 
@@ -75,13 +78,32 @@ class ESPPong:
         else:
             text, text_rect = self.gen_text(text=text, size=size, pos=pos, color=color, custom_font=custom_font)
             self.DISPLAYSURF.blit(text, text_rect)
+    
+    def load_background_coords(self, use_center=True) -> None:
+        """
+        Loads the background coordinates
 
+            Parameters:
+                `use_center` (bool): Default is True. Declares whether to center background or not
+        """
+    
+        self.background_coords = (0,0)
+        if self.background is not None:
+            bg_x = self.background.get_width()
+            bg_y = self.background.get_height()
+
+            cbg_x = bg_x // 2
+            cbg_y = bg_y // 2
+            
+            if use_center: 
+                coords = ((self.cx-cbg_x),(self.cy-cbg_y))   
+                self.background_coords = coords
     # ==========================================
     # Brainflow methods
 
     def perform_preflight(self, board, serial_port=''):
 
-        self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg_large.png")), (0,0))
+        self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg_large.png")), self.background_coords)
         self.display_text("Connecting. Please Hold..", size=30, pos=(self.cx, self.cy))
         pygame.display.update()
 
@@ -97,11 +119,17 @@ class ESPPong:
                 raise TypeError("Expected Serial Port, but got '' ")
 
         print(f"Board {board} connected")
-        self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg_large.png")), (0,0))
+        self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg_large.png")), self.background_coords)
         self.display_text("Connected", size=30, pos=(self.cx, self.cy))
         pygame.display.update()
         time.sleep(1)
-        self.prep_ml()
+
+        try:
+            self.prep_ml()
+        except:
+            self.concentration.release_all()
+            self.prep_ml()
+
         print("ML Prep completed")
         self.start_stream()
         print("Successfully streaming")
@@ -115,15 +143,18 @@ class ESPPong:
     def end_session(self):
         if self.connected:
             self.board.stop_stream()
+            self.board.release_session()
+            time.sleep(1)
             self.board.release_all_sessions()
-    
+            time.sleep(1)
+
     def mod_ESC_behavior(self, function):
         # self.training_main_menu.modify_ESC_behavior(function=function)
         self.primary_menu_call = function
 
     def connect_muse(self):
         params = BrainFlowInputParams ()
-        self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg_large.png")), (0,0))
+        self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg_large.png")), self.background_coords)
 
         self.display_text("Attempting Connection...", size=30, pos=(self.cx, 350))
         pygame.display.update()
@@ -133,17 +164,21 @@ class ESPPong:
             self.board = BoardShim(BoardIds.MUSE_2_BOARD.value, params)
             self.master_board_id = self.board.get_board_id ()
             self.sampling_rate = BoardShim.get_sampling_rate (self.master_board_id)
-            self.board.prepare_session ()
+            try:
+                self.board.prepare_session ()
+            except:
+                self.board.release_all_sessions()
+                self.board.prepare_session()
             print("connected successfully")
             self.connected = True
             time.sleep(1)
-            self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg_large.png")), (0,0))
+            self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg_large.png")), self.background_coords)
             self.display_text("Connected to MUSE", size=30, pos=(self.cx, 350))
             pygame.display.update()
 
 
         except:
-            self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg_large.png")), (0,0))
+            self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg_large.png")), self.background_coords)
             print("Failed to find muse...")
             self.display_text("Couldnt find any boards. Exiting...", size=30, pos=(self.cx, 350))
             self.board.release_all_sessions()
@@ -164,14 +199,14 @@ class ESPPong:
         self.board.prepare_session()
         self.connected = True
 
-        self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg.png")), (0,0))
+        self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg.png")), self.background_coords)
         self.display_text("Connected to CYTON", size=30, pos=(self.cx, self.cy))
         pygame.display.update()
 
     def prep_ml(self):
         print("\nPrepping ML...\n")
         # calc concentration
-        concentration_params = BrainFlowModelParams (BrainFlowMetrics.CONCENTRATION.value, BrainFlowClassifiers.KNN.value)
+        concentration_params = BrainFlowModelParams (BrainFlowMetrics.CONCENTRATION.value, BrainFlowClassifiers.REGRESSION.value)
         self.concentration = MLModel(concentration_params)
         self.concentration.prepare()
         self.ml_prepped = True
@@ -183,13 +218,12 @@ class ESPPong:
         BoardShim.log_message (LogLevels.LEVEL_INFO.value, 'start sleeping in the main thread')
         if not self.ml_prepped:
             self.prep_ml()
-        self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg.png")), (0,0))
-        self.display_text("STREAM STARTED. WELCOME.", size=10, pos=(300, 300))
+        self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg_large.png")), self.background_coords)
+        self.display_text("STREAM STARTED. WELCOME.", size=30, pos=(self.cx, 300))
         pygame.display.update()
         time.sleep(2)
-        self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg.png")), (0,0))
-        self.display_text("PLEASE ALLOW ANOTHER FEW SECONDS FOR THE RINGBUFFER TO FILL", size=10, pos=(350, 300))
-        self.display_text("SECONDS FOR THE RINGBUFFER TO FILL", size=10, pos=(350, 310))
+        self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg.png")), self.background_coords)
+        self.display_text("PLEASE ALLOW ANOTHER FEW SECONDS FOR THE RINGBUFFER TO FILL", size=10, pos=(self.cx, 300))
         pygame.display.update()
         time.sleep(2)
 
@@ -219,7 +253,7 @@ class ESPPong:
 
     def draw_board(self):
         self.DISPLAYSURF.fill(BLACK) # fill screen with black
-        self.DISPLAYSURF.blit(self.bg, (0,0))
+        self.DISPLAYSURF.blit(self.bg, self.background_coords)
 
     # draws the paddle on the board
     def place_paddle(self, paddle:pygame.Rect):
@@ -380,7 +414,7 @@ class ESPPong:
 
         
 
-        pygame.mouse.set_visible(0) # cursor gone
+        # pygame.mouse.set_visible(0) # cursor gone
 
         key = 0 # determines keyboard input
 
@@ -423,7 +457,7 @@ class ESPPong:
                 self.DISPLAYSURF.blit(display_text, display_rect)
             
 
-            self.display_text("THRES", pos=(self.cx, self.WIN_H-60), size=20)
+            self.display_text("THRES", pos=(self.cx, self.WIN_H-70), size=20)
 
             UP = Button(image=None, pos=(self.cx-100, self.WIN_H-30), 
                                 text_input="▲", font=self.get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
@@ -441,17 +475,24 @@ class ESPPong:
                 if event.type == QUIT: # quitting the game
                     pygame.quit()
                     sys.exit()
-                elif event.type == KEYDOWN: # pressed key 
+                if event.type == KEYDOWN: # pressed key 
                     if event.key == pygame.K_ESCAPE: 
+                        
+                        self.end_session()
 
                         if self.primary_menu_call is not None: self.primary_menu_call()
                         else:
                             pygame.quit()
                             sys.exit()
                     key = self.keydown_paddle(event)
-                elif event.type == KEYUP: # lifted key
+                if event.type == KEYUP: # lifted key
                     key = 0
                     self.SPEED = self.default_speed
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if UP.checkForInput(MOUSE_POS):
+                        self.FOCUS_THRES += 0.1
+                    if DOWN.checkForInput(MOUSE_POS):
+                        self.FOCUS_THRES -= 0.1
 
             pygame.display.update() # refresh screen
             self.FPSCLOCK.tick(self.FPS) # set framerate

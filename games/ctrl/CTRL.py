@@ -198,15 +198,12 @@ class Game:
                     if CONNECT_MUSE.checkForInput(MOUSE_POS):
                         MUSE_ID = 38
                         p = ESPPong(self.SCREEN)
-
+                        p.mod_ESC_behavior(function=self.variant_main_menu.run_menu)
                         p.perform_preflight(board=MUSE_ID)
 
                         p.play()
-                    # if CONNECT_OBCI.checkForInput(MOUSE_POS):
-                    #     self.options()
                     if BACK.checkForInput(MOUSE_POS):
                         self.start_ctrl()
-            # Show buttons
             pygame.display.update()
     
     def playkeys(self):

@@ -133,6 +133,7 @@ class PsychicTraining:
         if self.connected:
             self.board.stop_stream()
             self.board.release_all_sessions()
+            self.concentration.release_all()
 
     def minimal_muse_connect(self):
         BoardShim.enable_board_logger ()
@@ -170,8 +171,13 @@ class PsychicTraining:
                 self.board = BoardShim(38, params)
                 self.master_board_id = self.board.get_board_id ()
                 self.sampling_rate = BoardShim.get_sampling_rate (38)
+                try:
+                    self.board.prepare_session ()
+                except:
+                    self.board.release_all_sessions()
+                    self.board.prepare_session()
+
                 self.connected = True
-                print("ALIVE")
                 self.SCREEN.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg_large.png")), (0,0))
                 self.display_text("Connected to MUSE", size=30, pos=(self.cx, 350))
                 pygame.display.update()
@@ -187,8 +193,11 @@ class PsychicTraining:
                     else:
                         pygame.quit()
                         sys.exit()
-            self.board.prepare_session()
-            self.prep_ml()
+            try:
+                self.prep_ml()
+            except:
+                self.concentration.release_all()
+                self.prep_ml()
             print("ML Prep completed")
 
             self.start_stream()
@@ -214,12 +223,11 @@ class PsychicTraining:
         if not self.ml_prepped:
             self.prep_ml()
         self.SCREEN.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg_large.png")), (0,0))
-        self.display_text("STREAM STARTED. WELCOME.", size=10, pos=(self.cx, 300))
+        self.display_text("STREAM STARTED. WELCOME.", size=30, pos=(self.cx, 300))
         pygame.display.update()
         time.sleep(2)
         self.SCREEN.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg_large.png")), (0,0))
-        self.display_text("PLEASE ALLOW ANOTHER FEW SECONDS FOR THE RINGBUFFER TO FILL", size=10, pos=(350, 300))
-        self.display_text("SECONDS FOR THE RINGBUFFER TO FILL", size=10, pos=(self.cx, 310))
+        self.display_text("PLEASE ALLOW ANOTHER FEW SECONDS FOR THE RINGBUFFER TO FILL", size=15, pos=(self.cx, 300))
         pygame.display.update()
         time.sleep(2)
     
@@ -252,8 +260,8 @@ class PsychicTraining:
         if not self.connected:
 
             def run_muse_then_play():
-                # self.connect_muse()
-                self.minimal_muse_connect()
+                self.connect_muse()
+                # self.minimal_muse_connect()
                 self.run_psychic_training()
 
             self.training_main_menu.add_button("Connect MUSE", x=self.cx, y=self.cy-200, function=run_muse_then_play, basecolor=(255,255,255), hovercolor=(182,143, 64))
