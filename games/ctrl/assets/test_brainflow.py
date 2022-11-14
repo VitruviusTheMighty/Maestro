@@ -10,7 +10,7 @@ def main():
   
 
     params = BrainFlowInputParams()
-    params.serial_port = 'COM3'
+    params.serial_port = '/dev/ttyACM0'
 
     board = BoardShim(22, params)
     board.prepare_session()

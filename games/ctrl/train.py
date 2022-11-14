@@ -16,7 +16,7 @@ DIRNAME = os.path.dirname(__file__)
 
 class PsychicTraining:
 
-    def __init__(self, display:pygame.Surface, threshold=0.8):
+    def __init__(self, display:pygame.Surface, threshold=0.8, serialPort=None):
         
         pygame.init()
         self.SCREEN = display
@@ -51,6 +51,9 @@ class PsychicTraining:
         self.streaming = False
         self.ml_prepped = False
         self.connected  = False
+
+        self.serialPort = serialPort
+
 
         self.create_TRAINING_MENU()
 
@@ -110,6 +113,8 @@ class PsychicTraining:
 
         if board==38:
             self.connect_muse()
+        elif board==22:
+            self.connect_muse_local(serialPort=self.serialPort)
         elif board==0:
             if serial_port != '':
                 self.connect_cyton(serial_port=serial_port)
@@ -207,6 +212,62 @@ class PsychicTraining:
             self.display_text("Connected to MUSE", size=30, pos=(self.cx, 350))
             pygame.display.update()
 
+    def connect_muse_local(self, serialPort='/dev/ttyACM0',doExitBehavior=False):
+
+        self.prep_brainflow()
+        print("brainflow prepped")
+
+        params = BrainFlowInputParams ()
+        self.SCREEN.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg_large.png")), (0,0))
+
+        self.display_text("Attempting Connection...", size=30, pos=(self.cx, 350))
+        pygame.display.update()
+
+        if not self.connected:
+            try:
+                params.serial_port = serialPort
+                self.board = BoardShim(22, params)
+                self.master_board_id = self.board.get_board_id ()
+                self.sampling_rate = BoardShim.get_sampling_rate (22)
+                try:
+                    print("attempting to prep session")
+                    self.board.prepare_session ()
+                except:
+                    print("attempting other to prep session")
+
+                    self.board.release_all_sessions()
+                    self.board.prepare_session()
+
+                self.connected = True
+                self.SCREEN.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg_large.png")), (0,0))
+                self.display_text("Connected to MUSE", size=30, pos=(self.cx, 350))
+                pygame.display.update()
+            except:
+                self.SCREEN.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg_large.png")), (0,0))
+                self.display_text("Couldnt find any boards. Exiting...", size=30, pos=(self.cx, 350))
+                self.board.release_all_sessions()
+                pygame.display.update()
+                time.sleep(2)
+                print("EXITING")
+                if not doExitBehavior:
+                    if self.primary_menu_call is not None: self.primary_menu_call()
+                    else:
+                        pygame.quit()
+                        sys.exit()
+            try:
+                self.prep_ml()
+            except:
+                self.concentration.release_all()
+                self.prep_ml()
+            print("ML Prep completed")
+
+            self.start_stream()
+            print("Successfully streaming")
+        else:
+            self.SCREEN.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg_large.png")), (0,0))
+            self.display_text("Connected to MUSE", size=30, pos=(self.cx, 350))
+            pygame.display.update()
+
     def prep_ml(self):
         print("\nPrepping ML...\n")
         # calc concentration
@@ -261,10 +322,17 @@ class PsychicTraining:
 
             def run_muse_then_play():
                 self.connect_muse()
-                # self.minimal_muse_connect()
+                # self.connect_muse_local()
+                self.run_psychic_training()
+
+
+            def run_localmuse_then_play():
+                self.connect_muse_local(serialPort=self.serialPort)
                 self.run_psychic_training()
 
             self.training_main_menu.add_button("Connect MUSE", x=self.cx, y=self.cy-200, function=run_muse_then_play, basecolor=(255,255,255), hovercolor=(182,143, 64))
+            self.training_main_menu.add_text(text=f"Connect Muse using serial port: {self.serialPort}", x=self.cx, y=self.cy+200, size=20)
+            self.training_main_menu.add_button("Connect MUSEBLED", x=self.cx, y=self.cy+300, fontsize=20,function=run_localmuse_then_play, basecolor=(255,255,255), hovercolor=(182,143, 64))
 
         else:
             self.training_main_menu.add_button("PLAY", x=self.cx, y=250, function=self.run_psychic_training, basecolor=(255,255,255), hovercolor=(182,143, 64))
@@ -417,23 +485,19 @@ class PsychicTraining:
 
 if __name__ == "__main__":
     screen = pygame.display.set_mode((1400,900))
-    p = PsychicTraining(display=screen)
+    
+
+    # TO FIND WHAT SERIAL PORT YOU MIGHT BE USING
+
+    # ON UBUNTU USE:
+
+    # dmesg | grep USB
+    # Typically our BLE dongle is listed as: cdc_acm 1-1:1.0: ttyACM0: USB ACM device
+    
+    p = PsychicTraining(display=screen, serialPort='/dev/ttyACM0')
+
+
+
     # p.run_psychic_training()
     p.run_TRAINGING_MENU()
-    # BoardShim.enable_board_logger ()
-    # DataFilter.enable_data_logger ()
-    # MLModel.enable_ml_logger ()
-    # # self.EEG_WIN_SIZE = 5
-    # params = BrainFlowInputParams ()
-    # try:
-    #     board = BoardShim(38, params)
-    #     master_board_id = board.get_board_id ()
-    #     sampling_rate = BoardShim.get_sampling_rate (38)
-    #     board.prepare_session()
-    #     connected = True
-    # except:
-    #     board.release_all_sessions()
-    #     print("EXITING")        
-    #     pygame.quit()
-    #     sys.exit()
 

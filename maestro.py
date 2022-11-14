@@ -114,7 +114,7 @@ class Porfolio:
 
             self.render_background()
 
-            self.display_text(text="MAESTRO", size=100, color=(255,255,255), pos=(self.center_win_width,150), custom_font=r"assets\IBM-Logo.ttf")
+            self.display_text(text="MAESTRO", size=100, color=(255,255,255), pos=(self.center_win_width,150), custom_font=r"assets//IBM-Logo.ttf")
 
             self.display_text(text="AN ENSEMBLE OF GAMES MADE BY LEONARDO", size=30, pos=(self.center_win_width,220))
 
@@ -306,7 +306,7 @@ class Porfolio:
     def launch_joust(self):
         j = JOUST_GAME(width=self.win_width, height=self.win_height, world=self.SCREEN) 
         j.load_game_select(menu_select_func=self.game_select_loop)
-        bg_path = os.path.join(DIRNAME, r"games\joust\wallpaper_couch.png")
+        bg_path = os.path.join(DIRNAME, r"games//joust//wallpaper_couch.png")
         j.load_background(background_path=bg_path)
         j.run()
 
@@ -339,5 +339,5 @@ class Porfolio:
 
 if __name__ == "__main__":
 
-    p = Porfolio(1400, 900, background_filepath=r"assets\neon_scanlines2.png", music_path=r"assets\Raving Energy.mp3")
+    p = Porfolio(1400, 900, background_filepath=r"assets//neon_scanlines2.png", music_path=r"assets//Raving Energy.mp3")
     p.portfolio_loop()
