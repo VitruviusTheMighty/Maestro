@@ -328,7 +328,7 @@ class Porfolio:
     def launch_ctrl(self):
         c = CTRL_GAME(world=self.SCREEN)
         c.load_game_select(menu_select_func=self.game_select_loop)
-        c.main_menu()
+        c.start_ctrl()
 
     def launch_path(self):
         p = PATH_GAME(screen=self.SCREEN, localmenu=True)

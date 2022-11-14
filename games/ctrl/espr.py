@@ -11,6 +11,8 @@ from brainflow.exit_codes import *
 
 import time
 
+from simplepygamemenus.menu import Button
+
 DIRNAME = os.path.dirname(__file__)
 
 BLACK = (0, 0, 0)
@@ -39,6 +41,8 @@ class ESPPong:
 
         self.WIN_H = display.get_height()
         self.WIN_W = display.get_width()
+        self.cx = self.WIN_W//2
+        self.cy = self.WIN_H//2
 
         self.EDGE_W = 10
 
@@ -49,27 +53,36 @@ class ESPPong:
         self.connected = False
         self.ml_prepped = False
         self.streaming = False
+        self.primary_menu_call = None
 
     # ==============================
-    def get_font(self, size): # Returns Press-Start-2P in the desired size
-        return pygame.font.Font(os.path.join(DIRNAME, "assets/font.ttf"), size)
+    def get_font(self, size, font_path=None): # Returns Press-Start-2P in the desired size
+        if font_path!=None: return pygame.font.Font(os.path.join(DIRNAME, font_path), size)
+        else: return pygame.font.Font(os.path.join(DIRNAME, "assets/font.ttf"), size)
 
-    def gen_text(self, text="", size=45, color="#b68f40", pos=(0,0)):
-        TEXT = self.get_font(size=size).render(text, True, color)
+    def gen_text(self, text="", size=45, color="#b68f40", pos=(0,0), custom_font=None):
+        TEXT = self.get_font(size=size, font_path=custom_font).render(text, True, color)
         TEXT_RECT = TEXT.get_rect(center=pos)
         return TEXT, TEXT_RECT
 
-    def display_text(self, text="", size=45, color="#b68f40", pos=(0,0)):
-        text, text_rect = self.gen_text(text=text, size=size, pos=pos, color=color)
-        self.DISPLAYSURF.blit(text, text_rect)
+    def display_text(self, text="", size=45, color="#b68f40", pos=(0,0), custom_font=None, line_spacing=10):
+        if "\n" in text:
+            text = text.split("\n")
+            for i, line in enumerate(text):
+                y_pos = pos[1]+((size+line_spacing)*i)
+                line, text_rect = self.gen_text(text=line, size=size, pos=(pos[0], y_pos ), color=color, custom_font=custom_font)
+                self.DISPLAYSURF.blit(line, text_rect)
+        else:
+            text, text_rect = self.gen_text(text=text, size=size, pos=pos, color=color, custom_font=custom_font)
+            self.DISPLAYSURF.blit(text, text_rect)
 
     # ==========================================
     # Brainflow methods
 
     def perform_preflight(self, board, serial_port=''):
 
-        self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg.png")), (0,0))
-        self.display_text("Connecting. Please Hold..", size=10, pos=(350, 350))
+        self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg_large.png")), (0,0))
+        self.display_text("Connecting. Please Hold..", size=30, pos=(self.cx, self.cy))
         pygame.display.update()
 
         self.prep_brainflow()
@@ -84,7 +97,10 @@ class ESPPong:
                 raise TypeError("Expected Serial Port, but got '' ")
 
         print(f"Board {board} connected")
-
+        self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg_large.png")), (0,0))
+        self.display_text("Connected", size=30, pos=(self.cx, self.cy))
+        pygame.display.update()
+        time.sleep(1)
         self.prep_ml()
         print("ML Prep completed")
         self.start_stream()
@@ -96,26 +112,47 @@ class ESPPong:
         MLModel.enable_ml_logger ()
         self.EEG_WIN_SIZE = 5
 
+    def end_session(self):
+        if self.connected:
+            self.board.stop_stream()
+            self.board.release_all_sessions()
+    
+    def mod_ESC_behavior(self, function):
+        # self.training_main_menu.modify_ESC_behavior(function=function)
+        self.primary_menu_call = function
+
     def connect_muse(self):
         params = BrainFlowInputParams ()
+        self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg_large.png")), (0,0))
+
+        self.display_text("Attempting Connection...", size=30, pos=(self.cx, 350))
+        pygame.display.update()
+
 
         try:
             self.board = BoardShim(BoardIds.MUSE_2_BOARD.value, params)
             self.master_board_id = self.board.get_board_id ()
             self.sampling_rate = BoardShim.get_sampling_rate (self.master_board_id)
             self.board.prepare_session ()
+            print("connected successfully")
             self.connected = True
-
-            self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg.png")), (0,0))
-            self.display_text("Connected to MUSE", size=10, pos=(350, 350))
-            pygame.display.update()
-        except:
-            self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg.png")), (0,0))
-            self.display_text("Couldnt find any boards", size=10, pos=(350, 350))
-            pygame.display.update()
             time.sleep(1)
-            pygame.quit()
-            sys.exit()
+            self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg_large.png")), (0,0))
+            self.display_text("Connected to MUSE", size=30, pos=(self.cx, 350))
+            pygame.display.update()
+
+
+        except:
+            self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg_large.png")), (0,0))
+            print("Failed to find muse...")
+            self.display_text("Couldnt find any boards. Exiting...", size=30, pos=(self.cx, 350))
+            self.board.release_all_sessions()
+            pygame.display.update()
+            time.sleep(2)
+            if self.primary_menu_call is not None: self.primary_menu_call()
+            else:
+                pygame.quit()
+                sys.exit()
 
     def connect_cyton(self, serial_port="COM4"):
         params = BrainFlowInputParams ()
@@ -128,7 +165,7 @@ class ESPPong:
         self.connected = True
 
         self.DISPLAYSURF.blit(pygame.image.load(os.path.join(DIRNAME, f"assets//bg.png")), (0,0))
-        self.display_text("Connected to CYTON", size=10, pos=(350, 350))
+        self.display_text("Connected to CYTON", size=30, pos=(self.cx, self.cy))
         pygame.display.update()
 
     def prep_ml(self):
@@ -348,32 +385,16 @@ class ESPPong:
         key = 0 # determines keyboard input
 
         while True: # game loop
-            for event in pygame.event.get():
-                if event.type == QUIT: # quitting the game
-                    pygame.quit()
-                    sys.exit()
-                # elif event.type == MOUSEMOTION: # mouse / touchpad controls p1
-                #     mouse_x, mouse_y = event.pos
-                #     paddle1.y = mouse_y
+            
 
-                elif event.type == KEYDOWN: # pressed key 
-                    if event.key == pygame.K_ESCAPE: 
-                        pygame.quit()
-                        sys.exit()
-                    key = self.keydown_paddle(event)
+            MOUSE_POS = pygame.mouse.get_pos()
 
-                    
-
-                elif event.type == KEYUP: # lifted key
-                    key = 0
-                    self.SPEED = self.default_speed
+            
+                
             self.esp_ball(dir_x)
 
             paddle1.y += key
             
-            
-            
-
             # draw everything
             self.draw_board()
             self.place_paddle(paddle1)
@@ -398,12 +419,44 @@ class ESPPong:
             if self.INFLUENCED:
                 display_text = self.BASICFONT.render("INFLUENCING BALL", True, (255,255,0))
                 display_rect = display_text.get_rect() # generate rect
-                display_rect.center = (350, 350) # position rect
+                display_rect.center = (self.cx, self.cy) # position rect
                 self.DISPLAYSURF.blit(display_text, display_rect)
             
 
+            self.display_text("THRES", pos=(self.cx, self.WIN_H-60), size=20)
+
+            UP = Button(image=None, pos=(self.cx-100, self.WIN_H-30), 
+                                text_input="▲", font=self.get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
+
+            self.display_text(f"{round(self.FOCUS_THRES,2)}", pos=(self.cx, self.WIN_H-30))
+
+            DOWN = Button(image=None, pos=(self.cx+100, self.WIN_H-30), 
+                                text_input="▼", font=self.get_font(30), base_color="#d7fcd4", hovering_color="#b68f40")
+
+            for button in [UP, DOWN]:
+                button.changeColor(MOUSE_POS)
+                button.update(self.DISPLAYSURF)
+
+            for event in pygame.event.get():
+                if event.type == QUIT: # quitting the game
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == KEYDOWN: # pressed key 
+                    if event.key == pygame.K_ESCAPE: 
+
+                        if self.primary_menu_call is not None: self.primary_menu_call()
+                        else:
+                            pygame.quit()
+                            sys.exit()
+                    key = self.keydown_paddle(event)
+                elif event.type == KEYUP: # lifted key
+                    key = 0
+                    self.SPEED = self.default_speed
+
             pygame.display.update() # refresh screen
             self.FPSCLOCK.tick(self.FPS) # set framerate
+
+
 
 if __name__ == "__main__":
     
