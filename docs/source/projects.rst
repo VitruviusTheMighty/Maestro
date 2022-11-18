@@ -69,8 +69,8 @@ Emphasis on:
 final-projects *CTRL* , *MAESTRO*, and *simplepygamemenus*
 ----------------------------------------------------------
 
-*CTRL*
-~~~~~~
+*CTRL* - *Final Project*
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :ref:`CTRL` 
 
