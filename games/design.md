@@ -61,6 +61,8 @@ The main game of CTRL is CTRL. But the game sports three different modes to play
 
 ### Concept Art / Design
 
+See https://csc245-maestro.readthedocs.io/en/latest/ctrl.html
+
 ### Challenges
 
 - Getting the value of concentration estimated in real time
