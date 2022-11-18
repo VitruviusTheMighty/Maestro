@@ -67,7 +67,7 @@ Emphasis on:
 - A* Search (astar)
 
 final-projects *CTRL* , *MAESTRO*, and *simplepygamemenus*
----------------------------------------------------------
+----------------------------------------------------------
 
 *CTRL*
 ~~~~~~
