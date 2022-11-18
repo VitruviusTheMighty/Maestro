@@ -150,7 +150,7 @@ def run_game():
 
         pos = "position "+str(int(b_x))+" "+str(int(b_y))+" "+str(float(b_speed_x))+" "+str(float(b_speed_y))+" "+str(num)
 
-        print(f"current_pos: {int(b_x)}, {int(b_y)}, dt: {float(b_speed_x)}, {float(b_speed_y)}")
+        # print(f"current_pos: {int(b_x)}, {int(b_y)}, dt: {float(b_speed_x)}, {float(b_speed_y)}")
 
         scores = make_scores_msg(client_d)
 
