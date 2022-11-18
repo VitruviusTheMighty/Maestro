@@ -24,7 +24,8 @@ Contents
    projects
    game_dev
    maestro
-
+   ctrl
+   
 Project Documentation
 ---------------------
 .. toctree::

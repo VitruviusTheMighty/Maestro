@@ -72,6 +72,8 @@ final-projects *CTRL* , *MAESTRO*, and *simplepygamemenus*
 *CTRL*
 ~~~~~~
 
+:ref:`CTRL` 
+
 Emphasis on:
 
 - Alternative input 
