@@ -37,9 +37,9 @@ To earn a B, I will additionally:
 To earn an A I will additionally:
 
 - [x] Meet 90% of my KWL objectives
-- [] submit clearly documented revisions **where needed** for relevant programming assignments
+- [x] submit clearly documented revisions **where needed** for relevant programming assignments
 - [x] complete at least three challenges from programming assignments
-- [] complete a final game project that demonstrates 70% of the concepts I've learned in the class
+- [x] complete a final game project that demonstrates 70% of the concepts I've learned in the class
 - [x] Write a minumum of 1 python add-ons or packages utilizing some concept I've mastered independently of course material to be applied to game development
 - [x] Assist a minimum of 2 students in software development related tasks
 - [x] Complete a game demonstrating my expertise in using bioactity with real-time systems, while also have a good game design, and being in an engaging, playable state 
