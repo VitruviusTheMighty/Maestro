@@ -19,17 +19,17 @@ Access Contract [**HERE**](./portfolio/contract.md)
 
 ##### Baseline Projects
 
-- [Baselines](portfolio\projects\project-1-baselines)
-- [Collisions](portfolio\projects\project-3-collisions)
+- [Baselines](https://github.com/VitruviusTheMighty/Maestro/tree/main/portfolio/projects/project-1-baselines)
+- [Collisions](https://github.com/VitruviusTheMighty/Maestro/tree/main/portfolio/projects/project-3-collisions)
 
 ##### Actual Projects
 
-- [Breakout](portfolio\projects\project-2-breakout)
-- [Joust](portfolio\projects\project-4-joust)
-- [Flocking](portfolio\projects\project-5-flocking)
-- [Finite State Machines](portfolio\projects\project-6-fsm)
-- [Path Planning](portfolio\projects\project-7-astar)
-- [Networking](portfolio\projects\project-8-networking)
+- [Breakout](https://github.com/VitruviusTheMighty/Maestro/tree/main/portfolio/projects/project-2-breakout)
+- [Joust](https://github.com/VitruviusTheMighty/Maestro/tree/main/portfolio/projects/project-4-joust)
+- [Flocking](https://github.com/VitruviusTheMighty/Maestro/tree/main/portfolio/projects/project-5-flocking)
+- [Finite State Machines](https://github.com/VitruviusTheMighty/Maestro/tree/main/portfolio/projects/project-6-fsm)
+- [Path Planning](https://github.com/VitruviusTheMighty/Maestro/tree/main/portfolio/projects/project-7-astar)
+- [Networking](https://github.com/VitruviusTheMighty/Maestro/tree/main/portfolio/projects/project-8-networking)
 
 ### Final Projects
 
