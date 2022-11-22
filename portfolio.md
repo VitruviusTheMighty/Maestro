@@ -51,7 +51,7 @@ Access Contract [**HERE**](./portfolio/contract.md)
 | SSH and SSH Keys            |    x    |              |         |
 | Vector Math                 |    x    |              |         |
 | Flocking Agents             |    x    |              |    x    |
-| Finite State Machines       |         |       x      |         |
+| Finite State Machines       |    x    |              |         |
 | Path Planning               |    x    |              |    x    |
 | Sprites                     |    x    |              |    x    |
 | Sprite Sheets and Animation |    x    |              |    x    |
@@ -62,7 +62,7 @@ Access Contract [**HERE**](./portfolio/contract.md)
 | Alternative Inputs for Games|    x    |              |         |
 | Using Bio Activity as Input |    x    |              |         |
 
-##### Currently Completed: 19/20 (**95%**)
+##### Currently Completed: 20/20 (**100%**)
 
 ---------------------------------
 

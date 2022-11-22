@@ -60,7 +60,7 @@ To earn an A I will additionally:
 | SSH and SSH Keys            |    x    |              |         |
 | Vector Math                 |    x    |              |         |
 | Flocking Agents             |    x    |              |    x    |
-| Finite State Machines       |         |       x      |         |
+| Finite State Machines       |    x    |              |    x    |
 | Path Planning               |    x    |              |    x    |
 | Sprites                     |    x    |              |    x    |
 | Sprite Sheets and Animation |    x    |              |    x    |
@@ -71,7 +71,7 @@ To earn an A I will additionally:
 | Alternative Inputs for Games|    x    |              |         |
 | Using Bio Activity as Input |    x    |              |         |
 
-### Currently Completed: 19/20 (**95%**)
+### Currently Completed: 20/20 (**100%**)
 
 # Receipts
 
@@ -79,7 +79,7 @@ To earn an A I will additionally:
 | ----------------------------|----------------------------------------------------------------------|
 | Git                         |    https://github.com/VitruviusTheMighty/Maestro                     |
 | Linux  Terminal             |              `TODO: Tutorial for linux terminal`                     |
-| Markdown                    |             `TODO: Tutorial for markdown`                            |
+| Markdown                    |        **View this document or any other .md file in this repo**     |
 | ReStructuredText            | https://github.com/VitruviusTheMighty/Maestro/tree/main/docs/source  |
 | ReadTheDocs Documentation   | https://csc245-maestro.readthedocs.io/en/latest/                     |
 | Object Oriented Python      | https://github.com/VitruviusTheMighty/Maestro/blob/main/maestro.py   |
