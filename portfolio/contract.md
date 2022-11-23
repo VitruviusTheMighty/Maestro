@@ -97,3 +97,10 @@ To earn an A I will additionally:
 | Standards for Game Design   |https://github.com/VitruviusTheMighty/Maestro/blob/main/maestro.py|
 | Alternative Inputs for Games|https://github.com/VitruviusTheMighty/Maestro/blob/main/game-jam/CTRL.py|
 | Using Bio Activity as Input |https://github.com/VitruviusTheMighty/Maestro/blob/main/game-jam/espr.py|
+
+
+# Bid
+
+Based off of the completed material above, those refenced in portfolio - the grade I am bidding for is an **A**
+
+I have completed all KWL objectives I set out to completed and in addition, produced a useful tool for designing pygame menus and also used what I learned to make a central game capable of playing most of the games made this term.
