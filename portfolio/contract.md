@@ -78,12 +78,12 @@ To earn an A I will additionally:
 | Topic                       |                  Receipt                                             |
 | ----------------------------|----------------------------------------------------------------------|
 | Git                         |    https://github.com/VitruviusTheMighty/Maestro                     |
-| Linux  Terminal             |              `TODO: Tutorial for linux terminal`                     |
+| Linux  Terminal             |                                   |
 | Markdown                    |        **View this document or any other .md file in this repo**     |
 | ReStructuredText            | https://github.com/VitruviusTheMighty/Maestro/tree/main/docs/source  |
 | ReadTheDocs Documentation   | https://csc245-maestro.readthedocs.io/en/latest/                     |
 | Object Oriented Python      | https://github.com/VitruviusTheMighty/Maestro/blob/main/maestro.py   |
-| List Comprehensions         |            `TODO: Tutorial for list comprehensions`                  |
+| List Comprehensions         | Maeastro as well as most of the games in this document incorporate list comphrehnension |
 | SSH and SSH Keys            | https://github.com/VitruviusTheMighty/Maestro/commits/main           |
 | Vector Math                 |https://github.com/VitruviusTheMighty/Maestro/blob/main/portfolio/testing/steering/steer_demo.py |
 | Flocking Agents             |https://csc245-maestro.readthedocs.io/en/latest/flocking.html         |
