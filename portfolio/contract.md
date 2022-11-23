@@ -87,7 +87,7 @@ To earn an A I will additionally:
 | SSH and SSH Keys            | https://github.com/VitruviusTheMighty/Maestro/commits/main           |
 | Vector Math                 |https://github.com/VitruviusTheMighty/Maestro/blob/main/portfolio/testing/steering/steer_demo.py |
 | Flocking Agents             |https://csc245-maestro.readthedocs.io/en/latest/flocking.html         |
-| Finite State Machines       |                                                                      |
+| Finite State Machines       |                       https://github.com/VitruviusTheMighty/Maestro/tree/main/portfolio/projects/project-6-fsm    |
 | Path Planning               |https://github.com/VitruviusTheMighty/Maestro/tree/main/portfolio/projects/project-7-astar|
 | Sprites                     |https://csc245-maestro.readthedocs.io/en/latest/joust.html            |
 | Sprite Sheets and Animation |https://github.com/VitruviusTheMighty/Maestro/tree/main/portfolio/projects/project-4-joust|
