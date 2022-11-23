@@ -78,7 +78,7 @@ To earn an A I will additionally:
 | Topic                       |                  Receipt                                             |
 | ----------------------------|----------------------------------------------------------------------|
 | Git                         |    https://github.com/VitruviusTheMighty/Maestro                     |
-| Linux  Terminal             |                                   |
+| Linux  Terminal             |                 [Set up rules and commands that I found helpful](https://github.com/VitruviusTheMighty/Maestro/blob/main/portfolio/linux-term-cheatsheet.md) |
 | Markdown                    |        **View this document or any other .md file in this repo**     |
 | ReStructuredText            | https://github.com/VitruviusTheMighty/Maestro/tree/main/docs/source  |
 | ReadTheDocs Documentation   | https://csc245-maestro.readthedocs.io/en/latest/                     |
